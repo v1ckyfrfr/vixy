@@ -37,8 +37,6 @@ function toggleTheme() {
   }
 
   if (typeof showToast === "function") {
-    showToast(
-      isCurrentlyLight ? "Dark mode enabled" : "Light mode enabled",
-    );
+    showToast(isCurrentlyLight ? "Dark mode enabled" : "Light mode enabled");
   }
 }
