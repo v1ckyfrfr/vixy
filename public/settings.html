@@ -1,455 +1,634 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="description" content="Vixy-AI — Account settings">
-  <title>Settings — Vixy-AI</title>
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="styles/style.css">
-  <script src="js/theme.js"></script>
-  <style>
-    .settings-stack {
-      display: flex;
-      flex-direction: column;
-      gap: 12px;
-      max-width: 640px;
-    }
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="description" content="Vixy-AI — Account settings" />
+    <title>Settings — Vixy-AI</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="styles/style.css" />
+    <script src="js/theme.js"></script>
+    <style>
+      .settings-stack {
+        display: flex;
+        flex-direction: column;
+        gap: 12px;
+        max-width: 640px;
+      }
 
-    .settings-card {
-      background: var(--surface);
-      border: 1px solid var(--border-subtle);
-      border-radius: var(--radius);
-      overflow: hidden;
-      transition: border-color 0.2s;
-    }
+      .settings-card {
+        background: var(--surface);
+        border: 1px solid var(--border-subtle);
+        border-radius: var(--radius);
+        overflow: hidden;
+        transition: border-color 0.2s;
+      }
 
-    .settings-card:hover { border-color: var(--border); }
-    .settings-card.danger { border-color: rgba(239, 68, 68, 0.15); }
-    .settings-card.danger:hover { border-color: rgba(239, 68, 68, 0.3); }
+      .settings-card:hover {
+        border-color: var(--border);
+      }
+      .settings-card.danger {
+        border-color: rgba(239, 68, 68, 0.15);
+      }
+      .settings-card.danger:hover {
+        border-color: rgba(239, 68, 68, 0.3);
+      }
 
-    .settings-card-header {
-      display: flex;
-      align-items: center;
-      gap: 12px;
-      padding: 16px 20px;
-      border-bottom: 1px solid var(--border-subtle);
-    }
+      .settings-card-header {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        padding: 16px 20px;
+        border-bottom: 1px solid var(--border-subtle);
+      }
 
-    .settings-icon {
-      width: 30px;
-      height: 30px;
-      border-radius: var(--radius-sm);
-      background: var(--accent-faint);
-      border: 1px solid rgba(16, 163, 127, 0.2);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      flex-shrink: 0;
-    }
+      .settings-icon {
+        width: 30px;
+        height: 30px;
+        border-radius: var(--radius-sm);
+        background: var(--accent-faint);
+        border: 1px solid rgba(16, 163, 127, 0.2);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        flex-shrink: 0;
+      }
 
-    .settings-icon svg { width: 13px; height: 13px; color: var(--accent); }
+      .settings-icon svg {
+        width: 13px;
+        height: 13px;
+        color: var(--accent);
+      }
 
-    .settings-icon.danger {
-      background: rgba(239, 68, 68, 0.1);
-      border-color: rgba(239, 68, 68, 0.2);
-    }
+      .settings-icon.danger {
+        background: rgba(239, 68, 68, 0.1);
+        border-color: rgba(239, 68, 68, 0.2);
+      }
 
-    .settings-icon.danger svg { color: #f87171; }
+      .settings-icon.danger svg {
+        color: #f87171;
+      }
 
-    .settings-title { font-size: 0.9rem; font-weight: 600; }
-    .settings-desc { font-size: 0.78rem; color: var(--text-muted); margin-top: 2px; }
+      .settings-title {
+        font-size: 0.9rem;
+        font-weight: 600;
+      }
+      .settings-desc {
+        font-size: 0.78rem;
+        color: var(--text-muted);
+        margin-top: 2px;
+      }
 
-    .settings-body { padding: 20px; }
+      .settings-body {
+        padding: 20px;
+      }
 
-    .input-grid {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 12px;
-      margin-bottom: 14px;
-    }
+      .input-grid {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 12px;
+        margin-bottom: 14px;
+      }
 
-    .field { display: flex; flex-direction: column; gap: 5px; }
+      .field {
+        display: flex;
+        flex-direction: column;
+        gap: 5px;
+      }
 
-    /* Toggle switch */
-    .toggle-row {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      gap: 16px;
-    }
+      /* Toggle switch */
+      .toggle-row {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        gap: 16px;
+      }
 
-    .toggle-info { flex: 1; }
-    .toggle-label { font-size: 0.875rem; font-weight: 500; }
-    .toggle-hint { font-size: 0.78rem; color: var(--text-muted); margin-top: 2px; }
+      .toggle-info {
+        flex: 1;
+      }
+      .toggle-label {
+        font-size: 0.875rem;
+        font-weight: 500;
+      }
+      .toggle-hint {
+        font-size: 0.78rem;
+        color: var(--text-muted);
+        margin-top: 2px;
+      }
 
-    .toggle {
-      position: relative;
-      width: 40px;
-      height: 22px;
-      flex-shrink: 0;
-    }
+      .toggle {
+        position: relative;
+        width: 40px;
+        height: 22px;
+        flex-shrink: 0;
+      }
 
-    .toggle input { opacity: 0; width: 0; height: 0; position: absolute; }
+      .toggle input {
+        opacity: 0;
+        width: 0;
+        height: 0;
+        position: absolute;
+      }
 
-    .toggle-track {
-      position: absolute;
-      inset: 0;
-      background: var(--surface-2);
-      border-radius: 22px;
-      cursor: pointer;
-      transition: background 0.2s;
-      border: 1px solid var(--border);
-    }
+      .toggle-track {
+        position: absolute;
+        inset: 0;
+        background: var(--surface-2);
+        border-radius: 22px;
+        cursor: pointer;
+        transition: background 0.2s;
+        border: 1px solid var(--border);
+      }
 
-    .toggle-track::before {
-      content: '';
-      position: absolute;
-      width: 16px;
-      height: 16px;
-      left: 2px;
-      top: 2px;
-      background: var(--text-muted);
-      border-radius: 50%;
-      transition: transform 0.2s, background 0.2s;
-    }
+      .toggle-track::before {
+        content: "";
+        position: absolute;
+        width: 16px;
+        height: 16px;
+        left: 2px;
+        top: 2px;
+        background: var(--text-muted);
+        border-radius: 50%;
+        transition:
+          transform 0.2s,
+          background 0.2s;
+      }
 
-    .toggle input:checked + .toggle-track { background: var(--accent); border-color: var(--accent-dim); }
-    .toggle input:checked + .toggle-track::before { transform: translateX(18px); background: #fff; }
+      .toggle input:checked + .toggle-track {
+        background: var(--accent);
+        border-color: var(--accent-dim);
+      }
+      .toggle input:checked + .toggle-track::before {
+        transform: translateX(18px);
+        background: #fff;
+      }
 
-    /* Form message */
-    .form-msg {
-      padding: 10px 14px;
-      border-radius: var(--radius-sm);
-      font-size: 0.82rem;
-      display: none;
-      align-items: center;
-      gap: 8px;
-      margin-bottom: 12px;
-    }
+      /* Form message */
+      .form-msg {
+        padding: 10px 14px;
+        border-radius: var(--radius-sm);
+        font-size: 0.82rem;
+        display: none;
+        align-items: center;
+        gap: 8px;
+        margin-bottom: 12px;
+      }
 
-    .form-msg.error {
-      display: flex;
-      background: rgba(239, 68, 68, 0.1);
-      border: 1px solid rgba(239, 68, 68, 0.2);
-      color: #f87171;
-    }
+      .form-msg.error {
+        display: flex;
+        background: rgba(239, 68, 68, 0.1);
+        border: 1px solid rgba(239, 68, 68, 0.2);
+        color: #f87171;
+      }
 
-    .form-msg.success {
-      display: flex;
-      background: rgba(16, 163, 127, 0.1);
-      border: 1px solid rgba(16, 163, 127, 0.2);
-      color: var(--accent);
-    }
+      .form-msg.success {
+        display: flex;
+        background: rgba(16, 163, 127, 0.1);
+        border: 1px solid rgba(16, 163, 127, 0.2);
+        color: var(--accent);
+      }
 
-    .avatar-preview {
-      display: flex;
-      align-items: center;
-      gap: 16px;
-      margin-bottom: 16px;
-    }
+      .avatar-preview {
+        display: flex;
+        align-items: center;
+        gap: 16px;
+        margin-bottom: 16px;
+      }
 
-    .avatar-circle {
-      width: 56px;
-      height: 56px;
-      border-radius: 50%;
-      background: var(--accent);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 1.4rem;
-      font-weight: 600;
-      color: #fff;
-      flex-shrink: 0;
-    }
+      .avatar-circle {
+        width: 56px;
+        height: 56px;
+        border-radius: 50%;
+        background: var(--accent);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 1.4rem;
+        font-weight: 600;
+        color: #fff;
+        flex-shrink: 0;
+      }
 
-    .avatar-info { font-size: 0.82rem; color: var(--text-muted); }
+      .avatar-info {
+        font-size: 0.82rem;
+        color: var(--text-muted);
+      }
 
-    @media (max-width: 640px) {
-      .input-grid { grid-template-columns: 1fr; }
-    }
-  </style>
-</head>
-<body>
-
-<aside class="sidebar">
-  <div class="sidebar-header">
-    <div class="sidebar-logo">
-      <div class="logo-icon">
-        <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
-          <path stroke-width="2" d="M12 2a10 10 0 100 20A10 10 0 0012 2zm0 0v20M2 12h20"/>
-        </svg>
+      @media (max-width: 640px) {
+        .input-grid {
+          grid-template-columns: 1fr;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <aside class="sidebar">
+      <div class="sidebar-header">
+        <div class="sidebar-logo">
+          <div class="logo-icon">
+            <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path
+                stroke-width="2"
+                d="M12 2a10 10 0 100 20A10 10 0 0012 2zm0 0v20M2 12h20"
+              />
+            </svg>
+          </div>
+          Vixy-AI
+        </div>
       </div>
-      Vixy-AI
-    </div>
-  </div>
 
-  <div class="sidebar-nav-section">
-    <div class="nav-section-label">Navigation</div>
-    <a href="/dashboard.html" class="nav-link">
-      <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
-        <rect x="3" y="3" width="7" height="7" rx="1" stroke-width="2"/>
-        <rect x="14" y="3" width="7" height="7" rx="1" stroke-width="2"/>
-        <rect x="3" y="14" width="7" height="7" rx="1" stroke-width="2"/>
-        <rect x="14" y="14" width="7" height="7" rx="1" stroke-width="2"/>
-      </svg>
-      Dashboard
-    </a>
-    <a href="/chat.html" class="nav-link">
-      <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
-        <path stroke-width="2" d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2z"/>
-      </svg>
-      Chat with Vixy
-    </a>
-    <a href="/settings.html" class="nav-link active">
-      <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
-        <circle cx="12" cy="12" r="3" stroke-width="2"/>
-        <path stroke-width="2" d="M19.4 15a1.65 1.65 0 00.33 1.82l.06.06a2 2 0 010 2.83 2 2 0 01-2.83 0l-.06-.06a1.65 1.65 0 00-1.82-.33 1.65 1.65 0 00-1 1.51V21a2 2 0 01-4 0v-.09A1.65 1.65 0 009 19.4a1.65 1.65 0 00-1.82.33l-.06.06a2 2 0 01-2.83-2.83l.06-.06A1.65 1.65 0 004.68 15a1.65 1.65 0 00-1.51-1H3a2 2 0 010-4h.09A1.65 1.65 0 004.6 9a1.65 1.65 0 00-.33-1.82l-.06-.06a2 2 0 012.83-2.83l.06.06A1.65 1.65 0 009 4.68a1.65 1.65 0 001-1.51V3a2 2 0 014 0v.09a1.65 1.65 0 001 1.51 1.65 1.65 0 001.82-.33l.06-.06a2 2 0 012.83 2.83l-.06.06A1.65 1.65 0 0019.4 9a1.65 1.65 0 001.51 1H21a2 2 0 010 4h-.09a1.65 1.65 0 00-1.51 1z"/>
-      </svg>
-      Settings
-    </a>
-  </div>
-
-  <div class="sidebar-footer">
-    <div class="user-menu" onclick="window.location.href='/settings.html'">
-      <div class="user-avatar" id="sidebarAvatar">U</div>
-      <div class="user-info">
-        <div class="user-name" id="sidebarName">Loading...</div>
-        <div class="user-email" id="sidebarEmail">—</div>
-      </div>
-    </div>
-  </div>
-</aside>
-
-<main class="main">
-  <div class="page-header">
-    <h1 class="page-title">Settings</h1>
-    <p class="page-subtitle">Manage your account and preferences.</p>
-  </div>
-
-  <div class="settings-stack">
-
-    <!-- Profile card -->
-    <div class="settings-card">
-      <div class="settings-card-header">
-        <div class="settings-icon">
+      <div class="sidebar-nav-section">
+        <div class="nav-section-label">Navigation</div>
+        <a href="/dashboard.html" class="nav-link">
           <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path stroke-width="2" d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"/>
-            <circle cx="12" cy="7" r="4" stroke-width="2"/>
+            <rect x="3" y="3" width="7" height="7" rx="1" stroke-width="2" />
+            <rect x="14" y="3" width="7" height="7" rx="1" stroke-width="2" />
+            <rect x="3" y="14" width="7" height="7" rx="1" stroke-width="2" />
+            <rect x="14" y="14" width="7" height="7" rx="1" stroke-width="2" />
           </svg>
-        </div>
-        <div>
-          <div class="settings-title">Profile</div>
-          <div class="settings-desc">Your account information</div>
-        </div>
+          Dashboard
+        </a>
+        <a href="/chat.html" class="nav-link">
+          <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path
+              stroke-width="2"
+              d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2z"
+            />
+          </svg>
+          Chat with Vixy
+        </a>
+        <a href="/settings.html" class="nav-link active">
+          <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <circle cx="12" cy="12" r="3" stroke-width="2" />
+            <path
+              stroke-width="2"
+              d="M19.4 15a1.65 1.65 0 00.33 1.82l.06.06a2 2 0 010 2.83 2 2 0 01-2.83 0l-.06-.06a1.65 1.65 0 00-1.82-.33 1.65 1.65 0 00-1 1.51V21a2 2 0 01-4 0v-.09A1.65 1.65 0 009 19.4a1.65 1.65 0 00-1.82.33l-.06.06a2 2 0 01-2.83-2.83l.06-.06A1.65 1.65 0 004.68 15a1.65 1.65 0 00-1.51-1H3a2 2 0 010-4h.09A1.65 1.65 0 004.6 9a1.65 1.65 0 00-.33-1.82l-.06-.06a2 2 0 012.83-2.83l.06.06A1.65 1.65 0 009 4.68a1.65 1.65 0 001-1.51V3a2 2 0 014 0v.09a1.65 1.65 0 001 1.51 1.65 1.65 0 001.82-.33l.06-.06a2 2 0 012.83 2.83l-.06.06A1.65 1.65 0 0019.4 9a1.65 1.65 0 001.51 1H21a2 2 0 010 4h-.09a1.65 1.65 0 00-1.51 1z"
+            />
+          </svg>
+          Settings
+        </a>
       </div>
-      <div class="settings-body">
-        <div class="avatar-preview">
-          <div class="avatar-circle" id="avatarPreview">U</div>
-          <div>
-            <div style="font-weight:500;font-size:0.9rem;" id="profileName">—</div>
-            <div class="avatar-info" id="profileEmailDisplay">—</div>
-            <div class="avatar-info">ID: <span id="profileIdDisplay">—</span></div>
+
+      <div class="sidebar-footer">
+        <div
+          class="user-menu"
+          onclick="window.location.href = '/settings.html'"
+        >
+          <div class="user-avatar" id="sidebarAvatar">U</div>
+          <div class="user-info">
+            <div class="user-name" id="sidebarName">Loading...</div>
+            <div class="user-email" id="sidebarEmail">—</div>
           </div>
         </div>
       </div>
-    </div>
+    </aside>
 
-    <!-- Change Password -->
-    <div class="settings-card">
-      <div class="settings-card-header">
-        <div class="settings-icon">
-          <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <rect x="3" y="11" width="18" height="11" rx="2" stroke-width="2"/>
-            <path stroke-width="2" d="M7 11V7a5 5 0 0110 0v4"/>
-          </svg>
-        </div>
-        <div>
-          <div class="settings-title">Change Password</div>
-          <div class="settings-desc">Update your account password</div>
-        </div>
+    <main class="main">
+      <div class="page-header">
+        <h1 class="page-title">Settings</h1>
+        <p class="page-subtitle">Manage your account and preferences.</p>
       </div>
-      <div class="settings-body">
-        <div id="pwMsg" class="form-msg"></div>
-        <div class="input-grid">
-          <div class="field">
-            <label class="input-label" for="newPass">New Password</label>
-            <input type="password" id="newPass" class="input" placeholder="Min. 8 characters" autocomplete="new-password">
+
+      <div class="settings-stack">
+        <!-- Profile card -->
+        <div class="settings-card">
+          <div class="settings-card-header">
+            <div class="settings-icon">
+              <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path
+                  stroke-width="2"
+                  d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"
+                />
+                <circle cx="12" cy="7" r="4" stroke-width="2" />
+              </svg>
+            </div>
+            <div>
+              <div class="settings-title">Profile</div>
+              <div class="settings-desc">Your account information</div>
+            </div>
           </div>
-          <div class="field">
-            <label class="input-label" for="confirmPass">Confirm Password</label>
-            <input type="password" id="confirmPass" class="input" placeholder="Repeat new password" autocomplete="new-password">
+          <div class="settings-body">
+            <div class="avatar-preview">
+              <div class="avatar-circle" id="avatarPreview">U</div>
+              <div>
+                <div
+                  style="font-weight: 500; font-size: 0.9rem"
+                  id="profileName"
+                >
+                  —
+                </div>
+                <div class="avatar-info" id="profileEmailDisplay">—</div>
+                <div class="avatar-info">
+                  ID: <span id="profileIdDisplay">—</span>
+                </div>
+              </div>
+            </div>
           </div>
         </div>
-        <button class="btn btn-primary" onclick="savePassword()" id="savePwBtn">Save Password</button>
-      </div>
-    </div>
 
-    <!-- Appearance -->
-    <div class="settings-card">
-      <div class="settings-card-header">
-        <div class="settings-icon">
-          <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <circle cx="12" cy="12" r="5" stroke-width="2"/>
-            <line x1="12" y1="1" x2="12" y2="3" stroke-width="2"/>
-            <line x1="12" y1="21" x2="12" y2="23" stroke-width="2"/>
-            <line x1="4.22" y1="4.22" x2="5.64" y2="5.64" stroke-width="2"/>
-            <line x1="18.36" y1="18.36" x2="19.78" y2="19.78" stroke-width="2"/>
-            <line x1="1" y1="12" x2="3" y2="12" stroke-width="2"/>
-            <line x1="21" y1="12" x2="23" y2="12" stroke-width="2"/>
-            <line x1="4.22" y1="19.78" x2="5.64" y2="18.36" stroke-width="2"/>
-            <line x1="18.36" y1="5.64" x2="19.78" y2="4.22" stroke-width="2"/>
-          </svg>
-        </div>
-        <div>
-          <div class="settings-title">Appearance</div>
-          <div class="settings-desc">Customize your visual experience</div>
-        </div>
-      </div>
-      <div class="settings-body">
-        <div class="toggle-row">
-          <div class="toggle-info">
-            <div class="toggle-label">Dark Mode</div>
-            <div class="toggle-hint">Toggle between light and dark theme</div>
+        <!-- Change Password -->
+        <div class="settings-card">
+          <div class="settings-card-header">
+            <div class="settings-icon">
+              <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <rect
+                  x="3"
+                  y="11"
+                  width="18"
+                  height="11"
+                  rx="2"
+                  stroke-width="2"
+                />
+                <path stroke-width="2" d="M7 11V7a5 5 0 0110 0v4" />
+              </svg>
+            </div>
+            <div>
+              <div class="settings-title">Change Password</div>
+              <div class="settings-desc">Update your account password</div>
+            </div>
           </div>
-          <label class="toggle">
-            <input type="checkbox" id="darkToggle" onchange="toggleTheme()">
-            <span class="toggle-track"></span>
-          </label>
+          <div class="settings-body">
+            <div id="pwMsg" class="form-msg"></div>
+            <div class="input-grid">
+              <div class="field">
+                <label class="input-label" for="newPass">New Password</label>
+                <input
+                  type="password"
+                  id="newPass"
+                  class="input"
+                  placeholder="Min. 8 characters"
+                  autocomplete="new-password"
+                />
+              </div>
+              <div class="field">
+                <label class="input-label" for="confirmPass"
+                  >Confirm Password</label
+                >
+                <input
+                  type="password"
+                  id="confirmPass"
+                  class="input"
+                  placeholder="Repeat new password"
+                  autocomplete="new-password"
+                />
+              </div>
+            </div>
+            <button
+              class="btn btn-primary"
+              onclick="savePassword()"
+              id="savePwBtn"
+            >
+              Save Password
+            </button>
+          </div>
+        </div>
+
+        <!-- Appearance -->
+        <div class="settings-card">
+          <div class="settings-card-header">
+            <div class="settings-icon">
+              <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <circle cx="12" cy="12" r="5" stroke-width="2" />
+                <line x1="12" y1="1" x2="12" y2="3" stroke-width="2" />
+                <line x1="12" y1="21" x2="12" y2="23" stroke-width="2" />
+                <line
+                  x1="4.22"
+                  y1="4.22"
+                  x2="5.64"
+                  y2="5.64"
+                  stroke-width="2"
+                />
+                <line
+                  x1="18.36"
+                  y1="18.36"
+                  x2="19.78"
+                  y2="19.78"
+                  stroke-width="2"
+                />
+                <line x1="1" y1="12" x2="3" y2="12" stroke-width="2" />
+                <line x1="21" y1="12" x2="23" y2="12" stroke-width="2" />
+                <line
+                  x1="4.22"
+                  y1="19.78"
+                  x2="5.64"
+                  y2="18.36"
+                  stroke-width="2"
+                />
+                <line
+                  x1="18.36"
+                  y1="5.64"
+                  x2="19.78"
+                  y2="4.22"
+                  stroke-width="2"
+                />
+              </svg>
+            </div>
+            <div>
+              <div class="settings-title">Appearance</div>
+              <div class="settings-desc">Customize your visual experience</div>
+            </div>
+          </div>
+          <div class="settings-body">
+            <div class="toggle-row">
+              <div class="toggle-info">
+                <div class="toggle-label">Dark Mode</div>
+                <div class="toggle-hint">
+                  Toggle between light and dark theme
+                </div>
+              </div>
+              <label class="toggle">
+                <input
+                  type="checkbox"
+                  id="darkToggle"
+                  onchange="toggleTheme()"
+                />
+                <span class="toggle-track"></span>
+              </label>
+            </div>
+          </div>
+        </div>
+
+        <!-- Session -->
+        <div class="settings-card">
+          <div class="settings-card-header">
+            <div class="settings-icon">
+              <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path
+                  stroke-width="2"
+                  d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"
+                />
+              </svg>
+            </div>
+            <div>
+              <div class="settings-title">Session & Security</div>
+              <div class="settings-desc">Manage your active session</div>
+            </div>
+          </div>
+          <div class="settings-body">
+            <p
+              style="
+                font-size: 0.84rem;
+                color: var(--text-muted);
+                margin-bottom: 14px;
+              "
+            >
+              Your session is protected by JWT and expires in 8 hours. Sign out
+              to invalidate your current session.
+            </p>
+            <button class="btn btn-ghost" onclick="logout()">
+              <svg
+                width="14"
+                height="14"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  stroke-width="2"
+                  d="M9 21H5a2 2 0 01-2-2V5a2 2 0 012-2h4M16 17l5-5-5-5M21 12H9"
+                />
+              </svg>
+              Sign Out
+            </button>
+          </div>
+        </div>
+
+        <!-- Danger Zone -->
+        <div class="settings-card danger">
+          <div class="settings-card-header">
+            <div class="settings-icon danger">
+              <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path
+                  stroke-width="2"
+                  d="M10.29 3.86L1.82 18a2 2 0 001.71 3h16.94a2 2 0 001.71-3L13.71 3.86a2 2 0 00-3.42 0z"
+                />
+                <line x1="12" y1="9" x2="12" y2="13" stroke-width="2" />
+                <line x1="12" y1="17" x2="12.01" y2="17" stroke-width="2" />
+              </svg>
+            </div>
+            <div>
+              <div class="settings-title" style="color: #f87171">
+                Danger Zone
+              </div>
+              <div class="settings-desc">Irreversible account actions</div>
+            </div>
+          </div>
+          <div class="settings-body">
+            <p
+              style="
+                font-size: 0.84rem;
+                color: var(--text-muted);
+                margin-bottom: 14px;
+              "
+            >
+              Signing out will clear your session token from this device.
+            </p>
+            <button class="btn btn-danger" onclick="logout()">
+              Sign Out of Account
+            </button>
+          </div>
         </div>
       </div>
-    </div>
+    </main>
 
-    <!-- Session -->
-    <div class="settings-card">
-      <div class="settings-card-header">
-        <div class="settings-icon">
-          <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path stroke-width="2" d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
-          </svg>
-        </div>
-        <div>
-          <div class="settings-title">Session & Security</div>
-          <div class="settings-desc">Manage your active session</div>
-        </div>
-      </div>
-      <div class="settings-body">
-        <p style="font-size:0.84rem;color:var(--text-muted);margin-bottom:14px;">
-          Your session is protected by JWT and expires in 8 hours.
-          Sign out to invalidate your current session.
-        </p>
-        <button class="btn btn-ghost" onclick="logout()">
-          <svg width="14" height="14" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path stroke-width="2" d="M9 21H5a2 2 0 01-2-2V5a2 2 0 012-2h4M16 17l5-5-5-5M21 12H9"/>
-          </svg>
-          Sign Out
-        </button>
-      </div>
-    </div>
+    <div class="toast" id="toast"></div>
 
-    <!-- Danger Zone -->
-    <div class="settings-card danger">
-      <div class="settings-card-header">
-        <div class="settings-icon danger">
-          <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path stroke-width="2" d="M10.29 3.86L1.82 18a2 2 0 001.71 3h16.94a2 2 0 001.71-3L13.71 3.86a2 2 0 00-3.42 0z"/>
-            <line x1="12" y1="9" x2="12" y2="13" stroke-width="2"/>
-            <line x1="12" y1="17" x2="12.01" y2="17" stroke-width="2"/>
-          </svg>
-        </div>
-        <div>
-          <div class="settings-title" style="color:#f87171;">Danger Zone</div>
-          <div class="settings-desc">Irreversible account actions</div>
-        </div>
-      </div>
-      <div class="settings-body">
-        <p style="font-size:0.84rem;color:var(--text-muted);margin-bottom:14px;">
-          Signing out will clear your session token from this device.
-        </p>
-        <button class="btn btn-danger" onclick="logout()">Sign Out of Account</button>
-      </div>
-    </div>
+    <script>
+      const token = localStorage.getItem("token");
+      if (!token) window.location.href = "/";
 
-  </div>
-</main>
+      async function loadProfile() {
+        try {
+          const res = await fetch("/api/auth/profile", {
+            headers: { Authorization: `Bearer ${token}` },
+          });
 
-<div class="toast" id="toast"></div>
+          if (res.status === 401 || res.status === 403) {
+            logout();
+            return;
+          }
+          if (!res.ok) return;
 
-<script>
-  const token = localStorage.getItem('token');
-  if (!token) window.location.href = '/';
+          const { user } = await res.json();
+          if (!user) {
+            logout();
+            return;
+          }
 
-  async function loadProfile() {
-    try {
-      const res = await fetch('/api/auth/profile', {
-        headers: { Authorization: `Bearer ${token}` }
-      });
+          const name = user.username || "User";
+          const initial = name.charAt(0).toUpperCase();
 
-      if (res.status === 401 || res.status === 403) { logout(); return; }
-      if (!res.ok) return;
+          document.getElementById("avatarPreview").textContent = initial;
+          document.getElementById("profileName").textContent = name;
+          document.getElementById("profileEmailDisplay").textContent =
+            user.email || "—";
+          document.getElementById("profileIdDisplay").textContent =
+            user.id || "—";
 
-      const { user } = await res.json();
-      if (!user) { logout(); return; }
+          document.getElementById("sidebarAvatar").textContent = initial;
+          document.getElementById("sidebarName").textContent = name;
+          document.getElementById("sidebarEmail").textContent =
+            user.email || "—";
+        } catch (e) {}
+      }
 
-      const name = user.username || 'User';
-      const initial = name.charAt(0).toUpperCase();
+      loadProfile();
 
-      document.getElementById('avatarPreview').textContent = initial;
-      document.getElementById('profileName').textContent = name;
-      document.getElementById('profileEmailDisplay').textContent = user.email || '—';
-      document.getElementById('profileIdDisplay').textContent = user.id || '—';
+      // toggleTheme() is now defined in js/theme.js — no duplicate needed here
 
-      document.getElementById('sidebarAvatar').textContent = initial;
-      document.getElementById('sidebarName').textContent = name;
-      document.getElementById('sidebarEmail').textContent = user.email || '—';
-    } catch(e) {}
-  }
+      function showPwMsg(text, type) {
+        const el = document.getElementById("pwMsg");
+        el.className = `form-msg ${type}`;
+        el.innerHTML =
+          type === "error"
+            ? `<svg width="14" height="14" fill="none" stroke="currentColor" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10" stroke-width="2"/><line x1="12" y1="8" x2="12" y2="12" stroke-width="2"/><line x1="12" y1="16" x2="12.01" y2="16" stroke-width="2"/></svg><span>${text}</span>`
+            : `<svg width="14" height="14" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-width="2" d="M22 11.08V12a10 10 0 11-5.93-9.14"/><polyline stroke-width="2" points="22 4 12 14.01 9 11.01"/></svg><span>${text}</span>`;
+      }
 
-  loadProfile();
+      function savePassword() {
+        const p = document.getElementById("newPass").value;
+        const c = document.getElementById("confirmPass").value;
 
-  // toggleTheme() is now defined in js/theme.js — no duplicate needed here
+        if (!p) return showPwMsg("Please enter a new password.", "error");
+        if (p.length < 8)
+          return showPwMsg("Password must be at least 8 characters.", "error");
+        if (!/[a-zA-Z]/.test(p))
+          return showPwMsg(
+            "Password must contain at least one letter.",
+            "error",
+          );
+        if (!/[0-9]/.test(p))
+          return showPwMsg(
+            "Password must contain at least one number.",
+            "error",
+          );
+        if (p !== c) return showPwMsg("Passwords don't match.", "error");
 
+        // TODO: wire up to /api/auth/change-password endpoint
+        showPwMsg("Password saved successfully!", "success");
+        document.getElementById("newPass").value = "";
+        document.getElementById("confirmPass").value = "";
+        setTimeout(() => {
+          document.getElementById("pwMsg").className = "form-msg";
+        }, 3000);
+      }
 
-  function showPwMsg(text, type) {
-    const el = document.getElementById('pwMsg');
-    el.className = `form-msg ${type}`;
-    el.innerHTML = type === 'error'
-      ? `<svg width="14" height="14" fill="none" stroke="currentColor" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10" stroke-width="2"/><line x1="12" y1="8" x2="12" y2="12" stroke-width="2"/><line x1="12" y1="16" x2="12.01" y2="16" stroke-width="2"/></svg><span>${text}</span>`
-      : `<svg width="14" height="14" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-width="2" d="M22 11.08V12a10 10 0 11-5.93-9.14"/><polyline stroke-width="2" points="22 4 12 14.01 9 11.01"/></svg><span>${text}</span>`;
-  }
+      function showToast(msg) {
+        const toast = document.getElementById("toast");
+        toast.textContent = msg;
+        toast.classList.add("show");
+        setTimeout(() => toast.classList.remove("show"), 2500);
+      }
 
-  function savePassword() {
-    const p = document.getElementById('newPass').value;
-    const c = document.getElementById('confirmPass').value;
-
-    if (!p) return showPwMsg('Please enter a new password.', 'error');
-    if (p.length < 8) return showPwMsg('Password must be at least 8 characters.', 'error');
-    if (!/[a-zA-Z]/.test(p)) return showPwMsg('Password must contain at least one letter.', 'error');
-    if (!/[0-9]/.test(p)) return showPwMsg('Password must contain at least one number.', 'error');
-    if (p !== c) return showPwMsg("Passwords don't match.", 'error');
-
-    // TODO: wire up to /api/auth/change-password endpoint
-    showPwMsg('Password saved successfully!', 'success');
-    document.getElementById('newPass').value = '';
-    document.getElementById('confirmPass').value = '';
-    setTimeout(() => {
-      document.getElementById('pwMsg').className = 'form-msg';
-    }, 3000);
-  }
-
-  function showToast(msg) {
-    const toast = document.getElementById('toast');
-    toast.textContent = msg;
-    toast.classList.add('show');
-    setTimeout(() => toast.classList.remove('show'), 2500);
-  }
-
-  function logout() {
-    localStorage.removeItem('token');
-    window.location.href = '/';
-  }
-</script>
-
-</body>
+      function logout() {
+        localStorage.removeItem("token");
+        window.location.href = "/";
+      }
+    </script>
+  </body>
 </html>
