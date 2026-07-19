@@ -632,7 +632,7 @@
           </div>
           <h1 class="empty-title">How can I help you?</h1>
           <p class="empty-sub">
-            Ask me anything — I'm Vixy, your AI assistant powered by Gemini.
+            Ask me anything — I'm Vixy, your AI assistant.
           </p>
           <div class="suggestions-grid">
             <button
@@ -1009,9 +1009,15 @@
           firstMessage.length > 40
             ? firstMessage.slice(0, 40) + "…"
             : firstMessage;
-        const id = "sess_" + Date.now() + "_" + Math.random().toString(36).slice(2, 7);
+        const id =
+          "sess_" + Date.now() + "_" + Math.random().toString(36).slice(2, 7);
         currentSessionId = id;
-        sessions.unshift({ id, title, ts: Date.now(), messages: [...chatHistory] });
+        sessions.unshift({
+          id,
+          title,
+          ts: Date.now(),
+          messages: [...chatHistory],
+        });
         localStorage.setItem(
           "vx_sessions",
           JSON.stringify(sessions.slice(0, 20)),
@@ -1021,8 +1027,10 @@
 
       function updateSession() {
         if (!currentSessionId) return;
-        const sessions = JSON.parse(localStorage.getItem("vx_sessions") || "[]");
-        const idx = sessions.findIndex(s => s.id === currentSessionId);
+        const sessions = JSON.parse(
+          localStorage.getItem("vx_sessions") || "[]",
+        );
+        const idx = sessions.findIndex((s) => s.id === currentSessionId);
         if (idx !== -1) {
           sessions[idx].messages = [...chatHistory];
           localStorage.setItem("vx_sessions", JSON.stringify(sessions));
@@ -1078,7 +1086,9 @@
       }
 
       function loadSession(i) {
-        const sessions = JSON.parse(localStorage.getItem("vx_sessions") || "[]");
+        const sessions = JSON.parse(
+          localStorage.getItem("vx_sessions") || "[]",
+        );
         const session = sessions[i];
         if (!session) return;
 
