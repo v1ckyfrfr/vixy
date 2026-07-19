@@ -25,8 +25,8 @@ Vixy is an intelligent web-based AI Assistant featuring a modern, ChatGPT-inspir
 
 1. **Clone the repository**
    ```bash
-   git clone <your-repository-url>
-   cd auth-app
+   git clone <https://github.com/v1ckyfrfr/vixy.git>
+   cd vixy
    ```
 
 2. **Install dependencies**
