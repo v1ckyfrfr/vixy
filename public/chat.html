@@ -737,6 +737,8 @@
 
       let isGenerating = false;
       let chatHistory = []; // {role, text}[]
+      let sessionSaved = false; // only save to Recent Chats on first message of session
+      let currentSessionId = null; // ID of the currently active session
 
       async function loadProfile() {
         try {
@@ -955,13 +957,16 @@
 
         try {
           const authToken = localStorage.getItem("token");
+          // Snapshot history BEFORE the current user message (already pushed above)
+          // We send all previous turns so AI remembers the conversation context
+          const historySnapshot = chatHistory.slice(0, -1); // exclude the just-pushed user msg
           const res = await fetch("/api/ai/chat", {
             method: "POST",
             headers: {
               "Content-Type": "application/json",
               ...(authToken && { Authorization: `Bearer ${authToken}` }),
             },
-            body: JSON.stringify({ message: text }),
+            body: JSON.stringify({ message: text, history: historySnapshot }),
           });
 
           if (res.status === 401 || res.status === 403) {
@@ -977,8 +982,14 @@
           appendMessage("ai", reply);
           chatHistory.push({ role: "ai", text: reply });
 
-          // Save to local history
-          saveSession(text);
+          // Save to Recent Chats only on the first message of a new session
+          if (!sessionSaved) {
+            saveSession(text);
+            sessionSaved = true;
+          } else {
+            // Update existing session's messages
+            updateSession();
+          }
         } catch (err) {
           hideTyping();
           appendMessage(
@@ -998,12 +1009,24 @@
           firstMessage.length > 40
             ? firstMessage.slice(0, 40) + "…"
             : firstMessage;
-        sessions.unshift({ title, ts: Date.now() });
+        const id = "sess_" + Date.now() + "_" + Math.random().toString(36).slice(2, 7);
+        currentSessionId = id;
+        sessions.unshift({ id, title, ts: Date.now(), messages: [...chatHistory] });
         localStorage.setItem(
           "vx_sessions",
           JSON.stringify(sessions.slice(0, 20)),
         );
         renderHistory();
+      }
+
+      function updateSession() {
+        if (!currentSessionId) return;
+        const sessions = JSON.parse(localStorage.getItem("vx_sessions") || "[]");
+        const idx = sessions.findIndex(s => s.id === currentSessionId);
+        if (idx !== -1) {
+          sessions[idx].messages = [...chatHistory];
+          localStorage.setItem("vx_sessions", JSON.stringify(sessions));
+        }
       }
 
       function useSuggestion(text) {
@@ -1014,6 +1037,8 @@
 
       function newChat() {
         chatHistory = [];
+        sessionSaved = false; // reset so next message creates a new session entry
+        currentSessionId = null;
         const box = document.getElementById("chatBox");
         box.innerHTML = "";
         const empty = document.createElement("div");
@@ -1053,8 +1078,30 @@
       }
 
       function loadSession(i) {
-        // future: load specific session messages
-        newChat();
+        const sessions = JSON.parse(localStorage.getItem("vx_sessions") || "[]");
+        const session = sessions[i];
+        if (!session) return;
+
+        // Reset state
+        chatHistory = [];
+        currentSessionId = session.id;
+        sessionSaved = true; // already saved, don't create duplicate
+
+        // Clear chat box
+        const box = document.getElementById("chatBox");
+        box.innerHTML = "";
+
+        // Restore messages
+        const messages = session.messages || [];
+        if (messages.length === 0) {
+          // No messages stored, show empty
+          newChat();
+          return;
+        }
+        for (const msg of messages) {
+          appendMessage(msg.role === "ai" ? "ai" : "user", msg.text);
+          chatHistory.push({ role: msg.role, text: msg.text });
+        }
       }
 
       function logout() {
