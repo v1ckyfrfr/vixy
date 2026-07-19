@@ -348,3 +348,22 @@ input:focus {
     transform: rotate(360deg);
   }
 }
+
+/* =====================================================
+   Mobile & Tablet Responsiveness
+   ===================================================== */
+@media (max-width: 480px) {
+  .auth-card {
+    padding: 24px 20px;
+  }
+  .logo-text {
+    font-size: 1.1rem;
+  }
+  .form-title {
+    font-size: 1.15rem;
+  }
+  .submit-btn {
+    padding: 12px;
+  }
+}
+
