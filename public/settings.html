@@ -288,10 +288,16 @@
       </div>
     </aside>
 
+    <div class="sidebar-overlay" onclick="toggleSidebar()"></div>
     <main class="main">
-      <div class="page-header">
-        <h1 class="page-title">Settings</h1>
-        <p class="page-subtitle">Manage your account and preferences.</p>
+      <div class="page-header" style="display: flex; align-items: flex-start; gap: 12px;">
+        <button class="mobile-toggle" onclick="toggleSidebar()">
+          <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-width="2" stroke-linecap="round" stroke-linejoin="round" d="M4 6h16M4 12h16M4 18h16"/></svg>
+        </button>
+        <div>
+          <h1 class="page-title">Settings</h1>
+          <p class="page-subtitle">Manage your account and preferences.</p>
+        </div>
       </div>
 
       <div class="settings-stack">
@@ -623,6 +629,11 @@
         toast.textContent = msg;
         toast.classList.add("show");
         setTimeout(() => toast.classList.remove("show"), 2500);
+      }
+
+      function toggleSidebar() {
+        document.querySelector('.sidebar').classList.toggle('open');
+        document.querySelector('.sidebar-overlay').classList.toggle('open');
       }
 
       function logout() {
