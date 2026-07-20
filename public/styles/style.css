@@ -585,7 +585,7 @@ a {
   .mobile-toggle {
     display: block;
   }
-  
+
   .sidebar {
     transform: translateX(-100%);
     transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
@@ -599,7 +599,7 @@ a {
     margin-left: 0;
     padding: 24px 20px;
   }
-  
+
   .page-header {
     flex-direction: column;
     gap: 12px;
@@ -612,11 +612,11 @@ a {
   .chat-wrap {
     margin-left: 0 !important;
   }
-  
+
   .chat-header {
     padding: 10px 16px;
   }
-  
+
   .msg-user-bubble {
     max-width: 90%;
   }

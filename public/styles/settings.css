@@ -100,7 +100,9 @@
   gap: 16px;
 }
 
-.toggle-info { flex: 1; }
+.toggle-info {
+  flex: 1;
+}
 
 .toggle-label {
   font-size: 0.875rem;
@@ -146,7 +148,9 @@
   top: 2px;
   background: var(--text-muted);
   border-radius: 50%;
-  transition: transform 0.2s, background 0.2s;
+  transition:
+    transform 0.2s,
+    background 0.2s;
 }
 
 .toggle input:checked + .toggle-track {
@@ -212,5 +216,7 @@
 }
 
 @media (max-width: 640px) {
-  .input-grid { grid-template-columns: 1fr; }
+  .input-grid {
+    grid-template-columns: 1fr;
+  }
 }

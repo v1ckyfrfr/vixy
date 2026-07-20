@@ -14,7 +14,9 @@
   border: 1px solid var(--border-subtle);
   border-radius: var(--radius);
   padding: 20px 22px;
-  transition: border-color 0.2s, box-shadow 0.2s;
+  transition:
+    border-color 0.2s,
+    box-shadow 0.2s;
 }
 
 .stat-card:hover {
@@ -194,6 +196,10 @@
 }
 
 @media (max-width: 960px) {
-  .stat-grid  { grid-template-columns: 1fr 1fr; }
-  .bottom-grid { grid-template-columns: 1fr; }
+  .stat-grid {
+    grid-template-columns: 1fr 1fr;
+  }
+  .bottom-grid {
+    grid-template-columns: 1fr;
+  }
 }
