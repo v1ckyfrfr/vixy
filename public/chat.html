@@ -11,6 +11,9 @@
       rel="stylesheet"
     />
     <link rel="stylesheet" href="styles/style.css" />
+    <!-- Highlight.js for syntax highlighting -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/atom-one-dark.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
     <script src="https://unpkg.com/lucide@latest"></script>
     <script src="js/theme.js"></script>
     <style>
@@ -601,15 +604,21 @@
       </div>
     </aside>
 
+    <div class="sidebar-overlay" onclick="toggleSidebar()"></div>
     <div class="chat-wrap">
       <!-- Header -->
       <header class="chat-header">
-        <button class="model-selector" id="modelSelector">
-          Vixy-VY01u
-          <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <polyline stroke-width="2" points="6 9 12 15 18 9" />
-          </svg>
-        </button>
+        <div style="display: flex; align-items: center;">
+          <button class="mobile-toggle" onclick="toggleSidebar()">
+            <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-width="2" stroke-linecap="round" stroke-linejoin="round" d="M4 6h16M4 12h16M4 18h16"/></svg>
+          </button>
+          <button class="model-selector" id="modelSelector">
+            Vixy-VY01u
+            <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <polyline stroke-width="2" points="6 9 12 15 18 9" />
+            </svg>
+          </button>
+        </div>
         <div class="header-actions">
           <div class="badge" id="statusBadge">
             <span class="dot"></span>
@@ -797,6 +806,11 @@
           .replace(/</g, "&lt;")
           .replace(/>/g, "&gt;")
           .replace(/"/g, "&quot;");
+      }
+
+      function toggleSidebar() {
+        document.querySelector('.sidebar').classList.toggle('open');
+        document.querySelector('.sidebar-overlay').classList.toggle('open');
       }
 
       function removeEmptyState() {
