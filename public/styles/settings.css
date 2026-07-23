@@ -1,7 +1,3 @@
-/* =====================================================
-   settings.css — Styles for settings.html
-   ===================================================== */
-
 .settings-stack {
   display: flex;
   flex-direction: column;
@@ -213,6 +209,45 @@
 .avatar-info {
   font-size: 0.82rem;
   color: var(--text-muted);
+}
+
+@media (max-width: 768px) {
+  .settings-stack {
+    gap: 8px;
+  }
+
+  .settings-card-header {
+    padding: 13px 16px;
+  }
+  .settings-body {
+    padding: 16px;
+  }
+
+  .input-grid {
+    grid-template-columns: 1fr;
+    gap: 10px;
+  }
+
+  .avatar-preview {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 12px;
+  }
+  .avatar-circle {
+    width: 48px;
+    height: 48px;
+    font-size: 1.2rem;
+  }
+
+  .toggle-row {
+    gap: 12px;
+  }
+  .toggle-label {
+    font-size: 0.84rem;
+  }
+  .toggle-hint {
+    font-size: 0.74rem;
+  }
 }
 
 @media (max-width: 640px) {
