@@ -161,17 +161,70 @@ function appendMessage(role, text, fileInfo) {
           </div>
         </div>`;
     box.appendChild(div);
+
+    div.querySelectorAll('pre code').forEach(block => {
+      if (typeof hljs !== 'undefined') hljs.highlightElement(block);
+    });
   }
   box.scrollTop = box.scrollHeight;
 }
 
 function formatResponse(text) {
-  return escapeHtml(text)
-    .replace(/```([\s\S]*?)```/g, "<pre><code>$1</code></pre>")
-    .replace(/`([^`]+)`/g, "<code>$1</code>")
-    .replace(/\*\*(.+?)\*\*/g, "<strong>$1</strong>")
-    .replace(/\*(.+?)\*/g, "<em>$1</em>")
-    .replace(/\n/g, "<br>");
+  const lines = text.split('\n');
+  let html = '';
+  let inCode = false;
+  let codeLang = '';
+  let codeLines = [];
+
+  for (let i = 0; i < lines.length; i++) {
+    const line = lines[i];
+    const fenceMatch = line.match(/^```(\w*)/);
+
+    if (!inCode && fenceMatch) {
+      inCode = true;
+      codeLang = fenceMatch[1] || '';
+      codeLines = [];
+      continue;
+    }
+
+    if (inCode && line.startsWith('```')) {
+      const langAttr = codeLang ? ` class="language-${codeLang}"` : '';
+      const escaped = codeLines.join('\n')
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;');
+      html += `<pre><code${langAttr}>${escaped}</code></pre>`;
+      inCode = false;
+      codeLang = '';
+      codeLines = [];
+      continue;
+    }
+
+    if (inCode) {
+      codeLines.push(line);
+      continue;
+    }
+
+    let escaped = line
+      .replace(/&/g, '&amp;')
+      .replace(/</g, '&lt;')
+      .replace(/>/g, '&gt;')
+      .replace(/`([^`]+)`/g, '<code>$1</code>')
+      .replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>')
+      .replace(/\*(.+?)\*/g, '<em>$1</em>');
+
+    html += escaped + '<br>';
+  }
+
+  if (inCode && codeLines.length) {
+    const escaped = codeLines.join('\n')
+      .replace(/&/g, '&amp;')
+      .replace(/</g, '&lt;')
+      .replace(/>/g, '&gt;');
+    html += `<pre><code>${escaped}</code></pre>`;
+  }
+
+  return html;
 }
 
 function copyText(btn) {
