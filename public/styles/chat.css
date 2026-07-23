@@ -913,3 +913,11 @@ body {
 .msg-group {
   animation: fadeUp 0.2s ease;
 }
+
+/* Prevent iOS auto-zoom on input focus (requires font-size >= 16px) */
+@media (max-width: 768px) {
+  #msgInput,
+  #imgPromptInput {
+    font-size: 16px;
+  }
+}
