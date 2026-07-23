@@ -1,7 +1,3 @@
-/* =====================================================
-   dashboard.css — Styles for dashboard.html
-   ===================================================== */
-
 .stat-grid {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
@@ -195,11 +191,67 @@
   height: 15px;
 }
 
-@media (max-width: 960px) {
+@media (max-width: 1024px) {
   .stat-grid {
     grid-template-columns: 1fr 1fr;
   }
+}
+
+@media (max-width: 768px) {
+  .stat-grid {
+    grid-template-columns: 1fr 1fr;
+    gap: 8px;
+  }
+  .stat-card {
+    padding: 14px 16px;
+  }
+  .stat-value {
+    font-size: 1.3rem;
+  }
+  .stat-icon {
+    width: 28px;
+    height: 28px;
+    margin-bottom: 10px;
+  }
+
   .bottom-grid {
+    grid-template-columns: 1fr;
+    gap: 8px;
+  }
+
+  .info-row {
+    padding: 10px 14px;
+    flex-wrap: wrap;
+    gap: 4px;
+  }
+  .info-key {
+    font-size: 0.78rem;
+  }
+  .info-val {
+    font-size: 0.76rem;
+  }
+  .info-card-header {
+    padding: 12px 14px;
+  }
+
+  .activity-item {
+    padding: 10px 14px;
+  }
+  .activity-text {
+    font-size: 0.8rem;
+  }
+
+  .quick-actions {
+    gap: 8px;
+  }
+  .quick-btn {
+    padding: 7px 12px;
+    font-size: 0.8rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .stat-grid {
     grid-template-columns: 1fr;
   }
 }
