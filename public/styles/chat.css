@@ -1,7 +1,3 @@
-/* =====================================================
-   chat.css — Styles for chat.html
-   ===================================================== */
-
 body {
   display: flex;
   height: 100vh;
@@ -87,7 +83,6 @@ body {
   background: var(--surface-hover);
   color: var(--text);
 }
-
 .icon-btn svg {
   width: 16px;
   height: 16px;
@@ -101,7 +96,6 @@ body {
   padding-bottom: 16px;
 }
 
-/* Empty state */
 .empty-state {
   flex: 1;
   display: flex;
@@ -144,7 +138,6 @@ body {
   max-width: 380px;
 }
 
-/* Suggestion grid */
 .suggestions-grid {
   display: grid;
   grid-template-columns: repeat(2, 1fr);
@@ -193,18 +186,15 @@ body {
   font-size: 0.78rem;
 }
 
-/* Messages */
 .msg-group {
   padding: 20px 0;
   border-bottom: none;
-  animation: fadeUp 0.2s ease;
 }
 
 .msg-group:hover .msg-actions {
   opacity: 1;
 }
 
-/* User message */
 .msg-user {
   display: flex;
   justify-content: flex-end;
@@ -223,7 +213,6 @@ body {
   word-break: break-word;
 }
 
-/* AI message */
 .msg-ai {
   display: flex;
   gap: 12px;
@@ -268,7 +257,6 @@ body {
   word-break: break-word;
 }
 
-/* Code blocks in AI response */
 .ai-bubble code {
   font-family: var(--font-mono);
   font-size: 0.82em;
@@ -294,7 +282,6 @@ body {
   font-size: 0.85em;
 }
 
-/* Message actions */
 .msg-actions {
   display: flex;
   gap: 4px;
@@ -324,13 +311,11 @@ body {
   background: var(--surface-hover);
   color: var(--text-dim);
 }
-
 .msg-action-btn svg {
   width: 13px;
   height: 13px;
 }
 
-/* Typing indicator */
 .typing-indicator {
   display: flex;
   gap: 12px;
@@ -373,7 +358,6 @@ body {
   }
 }
 
-/* Input area */
 .chat-input-wrapper {
   padding: 0 20px 20px;
   flex-shrink: 0;
@@ -454,7 +438,6 @@ body {
   cursor: not-allowed;
   transform: none;
 }
-
 .send-btn svg {
   width: 16px;
   height: 16px;
@@ -488,6 +471,292 @@ body {
   display: flex;
 }
 
+.img-gen-btn {
+  width: 36px;
+  height: 36px;
+  background: transparent;
+  border: 1px solid var(--border-subtle);
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  flex-shrink: 0;
+  color: var(--text-muted);
+  transition:
+    background 0.15s,
+    border-color 0.15s,
+    color 0.15s;
+}
+.img-gen-btn:hover {
+  background: var(--surface-hover);
+  border-color: var(--border);
+  color: var(--text);
+}
+.img-gen-btn svg {
+  width: 16px;
+  height: 16px;
+}
+
+.img-modal-backdrop {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.55);
+  backdrop-filter: blur(4px);
+  z-index: 9999;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.2s;
+}
+.img-modal-backdrop.open {
+  opacity: 1;
+  pointer-events: all;
+}
+.img-modal {
+  background: var(--bg);
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  padding: 28px;
+  width: 100%;
+  max-width: 480px;
+  box-shadow: 0 24px 64px rgba(0, 0, 0, 0.5);
+  transform: translateY(16px) scale(0.97);
+  transition: transform 0.2s;
+}
+.img-modal-backdrop.open .img-modal {
+  transform: translateY(0) scale(1);
+}
+.img-modal-title {
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: var(--text);
+  margin-bottom: 6px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.img-modal-title svg {
+  width: 18px;
+  height: 18px;
+  color: var(--accent);
+}
+.img-modal-sub {
+  font-size: 0.82rem;
+  color: var(--text-muted);
+  margin-bottom: 20px;
+}
+.img-modal label {
+  display: block;
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: var(--text-dim);
+  margin-bottom: 6px;
+  letter-spacing: 0.03em;
+  text-transform: uppercase;
+}
+#imgPromptInput {
+  width: 100%;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 10px 14px;
+  color: var(--text);
+  font-family: var(--font-sans);
+  font-size: 0.9rem;
+  resize: vertical;
+  min-height: 80px;
+  outline: none;
+  transition: border-color 0.2s;
+  box-sizing: border-box;
+}
+#imgPromptInput:focus {
+  border-color: var(--accent);
+}
+#imgPromptInput::placeholder {
+  color: var(--text-muted);
+}
+.img-aspect-options {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+  margin-bottom: 20px;
+  margin-top: 6px;
+}
+.aspect-chip {
+  padding: 5px 12px;
+  border-radius: 20px;
+  border: 1px solid var(--border);
+  background: var(--surface);
+  font-size: 0.78rem;
+  color: var(--text-muted);
+  cursor: pointer;
+  transition: all 0.15s;
+  font-family: var(--font-sans);
+}
+.aspect-chip:hover {
+  border-color: var(--border);
+  color: var(--text);
+  background: var(--surface-2);
+}
+.aspect-chip.active {
+  border-color: var(--accent);
+  background: rgba(var(--accent-rgb, 99, 102, 241), 0.12);
+  color: var(--accent);
+}
+.img-modal-actions {
+  display: flex;
+  gap: 10px;
+  justify-content: flex-end;
+  margin-top: 20px;
+}
+.img-cancel-btn {
+  padding: 8px 18px;
+  background: transparent;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  font-size: 0.88rem;
+  color: var(--text-dim);
+  cursor: pointer;
+  font-family: var(--font-sans);
+  transition: background 0.15s;
+}
+.img-cancel-btn:hover {
+  background: var(--surface-hover);
+}
+.img-generate-btn {
+  padding: 8px 20px;
+  background: var(--accent);
+  border: none;
+  border-radius: 8px;
+  font-size: 0.88rem;
+  font-weight: 600;
+  color: #fff;
+  cursor: pointer;
+  font-family: var(--font-sans);
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  transition:
+    background 0.15s,
+    opacity 0.15s;
+}
+.img-generate-btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+.img-generate-btn:not(:disabled):hover {
+  background: var(--accent-dim);
+}
+.img-generate-btn svg {
+  width: 14px;
+  height: 14px;
+}
+.img-spinner {
+  width: 14px;
+  height: 14px;
+  border: 2px solid rgba(255, 255, 255, 0.4);
+  border-top-color: #fff;
+  border-radius: 50%;
+  animation: spin 0.7s linear infinite;
+  display: none;
+}
+.img-generate-btn.loading .img-spinner {
+  display: block;
+}
+.img-generate-btn.loading .btn-icon {
+  display: none;
+}
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.msg-image-wrap {
+  margin-top: 8px;
+}
+.msg-image-wrap img {
+  max-width: 340px;
+  width: 100%;
+  border-radius: 12px;
+  border: 1px solid var(--border-subtle);
+  display: block;
+  cursor: pointer;
+  transition: opacity 0.15s;
+}
+.msg-image-wrap img:hover {
+  opacity: 0.9;
+}
+.msg-image-caption {
+  font-size: 0.75rem;
+  color: var(--text-muted);
+  margin-top: 6px;
+}
+
+.img-lightbox {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.85);
+  z-index: 99999;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.2s;
+  flex-direction: column;
+  gap: 16px;
+  padding: 24px;
+}
+.img-lightbox.open {
+  opacity: 1;
+  pointer-events: all;
+}
+.img-lightbox img {
+  max-width: min(90vw, 600px);
+  max-height: 80vh;
+  border-radius: 12px;
+  object-fit: contain;
+}
+.img-lightbox-close {
+  position: absolute;
+  top: 20px;
+  right: 20px;
+  background: rgba(255, 255, 255, 0.1);
+  border: none;
+  border-radius: 50%;
+  width: 36px;
+  height: 36px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #fff;
+  cursor: pointer;
+  font-size: 1.2rem;
+  transition: background 0.15s;
+}
+.img-lightbox-close:hover {
+  background: rgba(255, 255, 255, 0.2);
+}
+.img-lightbox-dl {
+  padding: 8px 20px;
+  background: var(--accent);
+  color: #fff;
+  border: none;
+  border-radius: 8px;
+  font-family: var(--font-sans);
+  font-size: 0.88rem;
+  font-weight: 600;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  text-decoration: none;
+}
+
 .input-footer {
   text-align: center;
   font-size: 0.72rem;
@@ -498,7 +767,138 @@ body {
   margin-right: auto;
 }
 
-/* Animations */
+.attach-btn {
+  width: 36px;
+  height: 36px;
+  background: transparent;
+  border: 1px solid var(--border-subtle);
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  flex-shrink: 0;
+  color: var(--text-muted);
+  transition:
+    background 0.15s,
+    border-color 0.15s,
+    color 0.15s;
+}
+.attach-btn:hover {
+  background: var(--surface-hover);
+  border-color: var(--border);
+  color: var(--text);
+}
+.attach-btn.has-file {
+  border-color: var(--accent);
+  color: var(--accent);
+  background: rgba(var(--accent-rgb, 99, 102, 241), 0.1);
+}
+.attach-btn svg {
+  width: 16px;
+  height: 16px;
+}
+
+.file-preview-bar {
+  max-width: 720px;
+  margin: 0 auto 8px;
+  display: none;
+  align-items: center;
+  gap: 10px;
+  padding: 8px 14px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+}
+.file-preview-bar.visible {
+  display: flex;
+  animation: fadeUp 0.18s ease;
+}
+.file-thumb {
+  width: 44px;
+  height: 44px;
+  border-radius: 8px;
+  object-fit: cover;
+  border: 1px solid var(--border-subtle);
+  flex-shrink: 0;
+}
+.file-doc-icon {
+  width: 44px;
+  height: 44px;
+  border-radius: 8px;
+  background: var(--surface-2);
+  border: 1px solid var(--border-subtle);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  font-size: 1.3rem;
+}
+.file-preview-info {
+  flex: 1;
+  min-width: 0;
+}
+.file-preview-name {
+  font-size: 0.82rem;
+  font-weight: 500;
+  color: var(--text);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.file-preview-size {
+  font-size: 0.74rem;
+  color: var(--text-muted);
+  margin-top: 2px;
+}
+.file-remove-btn {
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  color: var(--text-muted);
+  padding: 4px;
+  border-radius: 6px;
+  display: flex;
+  align-items: center;
+  transition:
+    color 0.15s,
+    background 0.15s;
+  flex-shrink: 0;
+}
+.file-remove-btn:hover {
+  color: var(--text);
+  background: var(--surface-hover);
+}
+.file-remove-btn svg {
+  width: 14px;
+  height: 14px;
+}
+
+.msg-file-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 5px 10px;
+  background: var(--surface-2);
+  border: 1px solid var(--border-subtle);
+  border-radius: 8px;
+  font-size: 0.78rem;
+  color: var(--text-dim);
+  margin-bottom: 6px;
+}
+.msg-file-badge svg {
+  width: 13px;
+  height: 13px;
+  flex-shrink: 0;
+}
+.user-bubble-img {
+  max-width: 220px;
+  border-radius: 10px;
+  border: 1px solid var(--border-subtle);
+  display: block;
+  margin-bottom: 6px;
+}
+
 @keyframes fadeUp {
   from {
     opacity: 0;
@@ -508,4 +908,8 @@ body {
     opacity: 1;
     transform: translateY(0);
   }
+}
+
+.msg-group {
+  animation: fadeUp 0.2s ease;
 }
