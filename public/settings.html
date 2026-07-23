@@ -2,7 +2,20 @@
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1.0, viewport-fit=cover"
+    />
+    <meta
+      name="theme-color"
+      content="#212121"
+      media="(prefers-color-scheme: dark)"
+    />
+    <meta
+      name="theme-color"
+      content="#ffffff"
+      media="(prefers-color-scheme: light)"
+    />
     <meta name="description" content="Vixy-AI — Account settings" />
     <title>Settings — Vixy-AI</title>
     <link rel="preconnect" href="https://fonts.googleapis.com" />
@@ -290,9 +303,19 @@
 
     <div class="sidebar-overlay" onclick="toggleSidebar()"></div>
     <main class="main">
-      <div class="page-header" style="display: flex; align-items: flex-start; gap: 12px;">
+      <div
+        class="page-header"
+        style="display: flex; align-items: flex-start; gap: 12px"
+      >
         <button class="mobile-toggle" onclick="toggleSidebar()">
-          <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-width="2" stroke-linecap="round" stroke-linejoin="round" d="M4 6h16M4 12h16M4 18h16"/></svg>
+          <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path
+              stroke-width="2"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              d="M4 6h16M4 12h16M4 18h16"
+            />
+          </svg>
         </button>
         <div>
           <h1 class="page-title">Settings</h1>
@@ -632,8 +655,8 @@
       }
 
       function toggleSidebar() {
-        document.querySelector('.sidebar').classList.toggle('open');
-        document.querySelector('.sidebar-overlay').classList.toggle('open');
+        document.querySelector(".sidebar").classList.toggle("open");
+        document.querySelector(".sidebar-overlay").classList.toggle("open");
       }
 
       function logout() {
