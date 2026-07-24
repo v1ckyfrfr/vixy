@@ -1,6 +1,3 @@
-// auth.js — Logic for index.html (login / signup page)
-
-// Redirect to dashboard if already logged in
 (function () {
   const token = localStorage.getItem("token");
   if (token) window.location.href = "/dashboard.html";
@@ -158,8 +155,6 @@ async function login() {
       setLoading("login", false);
       return;
     }
-
-    // Store token in localStorage so it persists across tabs and refreshes
     localStorage.setItem("token", data.token);
     window.location.href = "/dashboard.html";
   } catch (err) {
@@ -167,8 +162,6 @@ async function login() {
     setLoading("login", false);
   }
 }
-
-// Allow Enter key to submit
 document.addEventListener("keydown", function (e) {
   if (e.key !== "Enter") return;
   const loginActive = document
