@@ -267,19 +267,99 @@ body {
 }
 
 .ai-bubble pre {
-  background: var(--surface-2);
   border: 1px solid var(--border-subtle);
   border-radius: var(--radius-sm);
-  padding: 14px;
   margin: 10px 0;
   overflow-x: auto;
+  background: #1e1e2e;
+  padding: 0;
 }
 
 .ai-bubble pre code {
-  background: none;
+  display: block;
+  background: transparent;
   border: none;
-  padding: 0;
-  font-size: 0.85em;
+  padding: 14px 16px;
+  font-size: 0.84em;
+  font-family: var(--font-mono), "Courier New", monospace;
+  line-height: 1.6;
+  color: #cdd6f4;
+  white-space: pre;
+  overflow-x: auto;
+}
+
+.ai-bubble pre {
+  position: relative;
+}
+
+.ai-bubble pre code.hljs {
+  background: transparent;
+  padding: 14px 16px;
+}
+
+.code-block-wrap {
+  margin: 10px 0;
+  border-radius: var(--radius-sm);
+  border: 1px solid var(--border-subtle);
+  overflow: hidden;
+}
+
+.code-block-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 7px 14px;
+  background: #161622;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.07);
+}
+
+.code-lang-label {
+  font-size: 0.72rem;
+  font-family: var(--font-mono), "Courier New", monospace;
+  color: rgba(205, 214, 244, 0.55);
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+
+.code-copy-btn {
+  background: transparent;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: 5px;
+  color: rgba(205, 214, 244, 0.65);
+  font-size: 0.7rem;
+  padding: 2px 8px;
+  cursor: pointer;
+  font-family: var(--font-sans);
+  transition:
+    background 0.15s,
+    color 0.15s;
+}
+
+.code-copy-btn:hover {
+  background: rgba(255, 255, 255, 0.08);
+  color: #cdd6f4;
+}
+
+.code-block-wrap pre {
+  margin: 0;
+  border: none;
+  border-radius: 0;
+}
+
+.img-modal-error {
+  margin: 0 0 14px;
+  padding: 10px 14px;
+  background: rgba(239, 68, 68, 0.1);
+  border: 1px solid rgba(239, 68, 68, 0.3);
+  border-radius: 8px;
+  font-size: 0.82rem;
+  color: #fca5a5;
+  line-height: 1.5;
+}
+
+.img-modal-error a {
+  color: #fb923c;
+  text-decoration: underline;
 }
 
 .msg-actions {
@@ -914,7 +994,6 @@ body {
   animation: fadeUp 0.2s ease;
 }
 
-/* Prevent iOS auto-zoom on input focus (requires font-size >= 16px) */
 @media (max-width: 768px) {
   #msgInput,
   #imgPromptInput {

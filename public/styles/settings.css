@@ -88,7 +88,6 @@
   gap: 5px;
 }
 
-/* Toggle switch */
 .toggle-row {
   display: flex;
   justify-content: space-between;
@@ -159,7 +158,6 @@
   background: #fff;
 }
 
-/* Form message */
 .form-msg {
   padding: 10px 14px;
   border-radius: var(--radius-sm);
@@ -184,7 +182,6 @@
   color: var(--accent);
 }
 
-/* Avatar */
 .avatar-preview {
   display: flex;
   align-items: center;
