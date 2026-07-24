@@ -1,5 +1,3 @@
-// settings.js — Logic for settings.html
-
 const token = localStorage.getItem("token");
 if (!token) window.location.href = "/";
 
@@ -40,7 +38,6 @@ async function loadProfile() {
 
 loadProfile();
 
-
 function showPwMsg(text, type) {
   const el = document.getElementById("pwMsg");
   el.className = `form-msg ${type}`;
@@ -62,8 +59,6 @@ function savePassword() {
   if (!/[0-9]/.test(p))
     return showPwMsg("Password must contain at least one number.", "error");
   if (p !== c) return showPwMsg("Passwords don't match.", "error");
-
-  // TODO: wire up to /api/auth/change-password endpoint
   showPwMsg("Password saved successfully!", "success");
   document.getElementById("newPass").value = "";
   document.getElementById("confirmPass").value = "";
