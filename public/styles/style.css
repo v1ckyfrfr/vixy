@@ -1,13 +1,11 @@
 @import url("https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap");
 
 :root {
-  /* Accent */
   --accent: #10a37f;
   --accent-dim: #0d8f70;
   --accent-faint: rgba(16, 163, 127, 0.1);
   --accent-glow: rgba(16, 163, 127, 0.2);
 
-  /* Background layers */
   --bg: #212121;
   --bg-sidebar: #171717;
   --surface: #2f2f2f;
@@ -15,34 +13,28 @@
   --surface-3: #424242;
   --surface-hover: rgba(255, 255, 255, 0.05);
 
-  /* Text */
   --text: #ececec;
   --text-dim: #b4b4b4;
   --text-muted: #6b6b6b;
 
-  /* Borders */
   --border: rgba(255, 255, 255, 0.1);
   --border-subtle: rgba(255, 255, 255, 0.06);
 
-  /* Radius */
   --radius-xs: 4px;
   --radius-sm: 8px;
   --radius: 12px;
   --radius-lg: 16px;
   --radius-xl: 20px;
 
-  /* Layout */
   --sidebar-w: 260px;
   --font-sans: "Inter", -apple-system, BlinkMacSystemFont, sans-serif;
   --font-mono: "IBM Plex Mono", monospace;
 
-  /* Shadows */
   --shadow-sm: 0 1px 4px rgba(0, 0, 0, 0.3);
   --shadow: 0 4px 20px rgba(0, 0, 0, 0.4);
   --shadow-lg: 0 8px 40px rgba(0, 0, 0, 0.5);
 }
 
-/* Light theme */
 .light {
   --accent: #10a37f;
   --accent-dim: #0d8f70;
@@ -106,7 +98,6 @@ a {
   overflow: hidden;
 }
 
-/* Sidebar header */
 .sidebar-header {
   display: flex;
   align-items: center;
@@ -173,7 +164,6 @@ a {
   height: 16px;
 }
 
-/* Sidebar nav section */
 .sidebar-nav-section {
   padding: 4px 8px;
   flex: 1;
@@ -232,7 +222,6 @@ a {
   opacity: 1;
 }
 
-/* Chat history items */
 .chat-history-item {
   display: flex;
   align-items: center;
@@ -267,7 +256,6 @@ a {
   white-space: nowrap;
 }
 
-/* Sidebar footer */
 .sidebar-footer {
   padding: 8px;
   border-top: 1px solid var(--border-subtle);
@@ -542,10 +530,6 @@ a {
   background: var(--surface-2);
 }
 
-/* ============================================
-   Mobile & Tablet Responsiveness
-   ============================================ */
-
 .mobile-toggle {
   display: none;
   background: transparent;
@@ -582,7 +566,6 @@ a {
   display: block;
 }
 
-/* ── Tablet (769px – 1024px) ── */
 @media (min-width: 769px) and (max-width: 1024px) {
   :root {
     --sidebar-w: 220px;
@@ -617,9 +600,7 @@ a {
   }
 }
 
-/* ── Mobile (≤ 768px) ── */
 @media (max-width: 768px) {
-  /* Sidebar: hidden off-screen, slides in */
   .mobile-toggle {
     display: flex;
   }
@@ -634,7 +615,6 @@ a {
     transform: translateX(0) !important;
   }
 
-  /* Pages that use .main layout */
   .main {
     margin-left: 0;
     padding: 20px 16px;
@@ -654,7 +634,6 @@ a {
     gap: 12px;
   }
 
-  /* Chat layout */
   .chat-wrap {
     margin-left: 0 !important;
   }
@@ -671,7 +650,6 @@ a {
     padding: 5px 8px;
   }
 
-  /* Messages */
   .msg-user {
     padding: 0 12px;
   }
@@ -709,7 +687,6 @@ a {
     opacity: 1;
   }
 
-  /* Input area */
   .chat-input-wrapper {
     padding: 0 12px 16px;
   }
@@ -734,7 +711,6 @@ a {
     font-size: 0.68rem;
   }
 
-  /* Buttons in input bar — slightly larger tap targets */
   .send-btn,
   .stop-btn,
   .img-gen-btn,
@@ -743,7 +719,6 @@ a {
     height: 38px;
   }
 
-  /* Suggestions */
   .empty-state {
     padding: 28px 16px;
   }
@@ -772,7 +747,6 @@ a {
     font-size: 0.72rem;
   }
 
-  /* Image generation modal */
   .img-modal-backdrop {
     align-items: flex-end;
   }
@@ -806,7 +780,6 @@ a {
     font-size: 0.9rem;
   }
 
-  /* Lightbox */
   .img-lightbox img {
     max-width: 95vw;
     max-height: 70vh;
@@ -816,7 +789,6 @@ a {
     right: 14px;
   }
 
-  /* Generated image in chat */
   .msg-image-wrap img {
     max-width: 100%;
   }
@@ -824,13 +796,11 @@ a {
     max-width: 180px;
   }
 
-  /* Typing indicator */
   .typing-indicator {
     padding: 10px 12px;
   }
 }
 
-/* ── Very small phones (≤ 380px) ── */
 @media (max-width: 380px) {
   .suggestions-grid {
     grid-template-columns: 1fr;
@@ -845,7 +815,6 @@ a {
   }
 }
 
-/* Safe area for notched phones */
 @supports (padding-bottom: env(safe-area-inset-bottom)) {
   @media (max-width: 768px) {
     .chat-input-wrapper {
