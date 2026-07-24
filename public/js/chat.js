@@ -161,19 +161,22 @@ function appendMessage(role, text, fileInfo) {
           </div>
         </div>`;
     box.appendChild(div);
-
-    div.querySelectorAll('pre code').forEach(block => {
-      if (typeof hljs !== 'undefined') hljs.highlightElement(block);
+    requestAnimationFrame(() => {
+      div.querySelectorAll("pre code").forEach((block) => {
+        if (typeof hljs !== "undefined") {
+          hljs.highlightElement(block);
+        }
+      });
     });
   }
   box.scrollTop = box.scrollHeight;
 }
 
 function formatResponse(text) {
-  const lines = text.split('\n');
-  let html = '';
+  const lines = text.split("\n");
+  let html = "";
   let inCode = false;
-  let codeLang = '';
+  let codeLang = "";
   let codeLines = [];
 
   for (let i = 0; i < lines.length; i++) {
@@ -182,20 +185,24 @@ function formatResponse(text) {
 
     if (!inCode && fenceMatch) {
       inCode = true;
-      codeLang = fenceMatch[1] || '';
+      codeLang = fenceMatch[1] || "";
       codeLines = [];
       continue;
     }
 
-    if (inCode && line.startsWith('```')) {
-      const langAttr = codeLang ? ` class="language-${codeLang}"` : '';
-      const escaped = codeLines.join('\n')
-        .replace(/&/g, '&amp;')
-        .replace(/</g, '&lt;')
-        .replace(/>/g, '&gt;');
-      html += `<pre><code${langAttr}>${escaped}</code></pre>`;
+    if (inCode && line.startsWith("```")) {
+      const langAttr = codeLang
+        ? ` class="language-${codeLang}"`
+        : ' class="plaintext"';
+      const langLabel = codeLang || "code";
+      const escaped = codeLines
+        .join("\n")
+        .replace(/&/g, "&amp;")
+        .replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;");
+      html += `<div class="code-block-wrap"><div class="code-block-header"><span class="code-lang-label">${escapeHtml(langLabel)}</span><button class="code-copy-btn" onclick="copyCode(this)">Copy</button></div><pre><code${langAttr}>${escaped}</code></pre></div>`;
       inCode = false;
-      codeLang = '';
+      codeLang = "";
       codeLines = [];
       continue;
     }
@@ -206,25 +213,45 @@ function formatResponse(text) {
     }
 
     let escaped = line
-      .replace(/&/g, '&amp;')
-      .replace(/</g, '&lt;')
-      .replace(/>/g, '&gt;')
-      .replace(/`([^`]+)`/g, '<code>$1</code>')
-      .replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>')
-      .replace(/\*(.+?)\*/g, '<em>$1</em>');
+      .replace(/&/g, "&amp;")
+      .replace(/</g, "&lt;")
+      .replace(/>/g, "&gt;")
+      .replace(/`([^`]+)`/g, "<code>$1</code>")
+      .replace(/\*\*(.+?)\*\*/g, "<strong>$1</strong>")
+      .replace(/\*(.+?)\*/g, "<em>$1</em>");
 
-    html += escaped + '<br>';
+    html += escaped + "<br>";
   }
 
   if (inCode && codeLines.length) {
-    const escaped = codeLines.join('\n')
-      .replace(/&/g, '&amp;')
-      .replace(/</g, '&lt;')
-      .replace(/>/g, '&gt;');
-    html += `<pre><code>${escaped}</code></pre>`;
+    const langAttr = codeLang
+      ? ` class="language-${codeLang}"`
+      : ' class="plaintext"';
+    const langLabel = codeLang || "code";
+    const escaped = codeLines
+      .join("\n")
+      .replace(/&/g, "&amp;")
+      .replace(/</g, "&lt;")
+      .replace(/>/g, "&gt;");
+    html += `<div class="code-block-wrap"><div class="code-block-header"><span class="code-lang-label">${escapeHtml(langLabel)}</span><button class="code-copy-btn" onclick="copyCode(this)">Copy</button></div><pre><code${langAttr}>${escaped}</code></pre></div>`;
   }
 
   return html;
+}
+
+function copyCode(btn) {
+  const code = btn.closest(".code-block-wrap").querySelector("code");
+  const text = code.textContent;
+  navigator.clipboard
+    .writeText(text)
+    .then(() => {
+      btn.textContent = "Copied!";
+      setTimeout(() => (btn.textContent = "Copy"), 2000);
+    })
+    .catch(() => {
+      btn.textContent = "Error";
+      setTimeout(() => (btn.textContent = "Copy"), 2000);
+    });
 }
 
 function copyText(btn) {
@@ -537,6 +564,8 @@ function closeImageModal() {
   document.getElementById("imgModalBackdrop").classList.remove("open");
   document.getElementById("imgPromptInput").value = "";
   resetImgGenerateBtn();
+  const err = document.getElementById("imgModalError");
+  if (err) err.remove();
 
   document
     .querySelectorAll(".aspect-chip")
@@ -577,6 +606,8 @@ async function generateImage() {
   const btn = document.getElementById("imgGenerateBtn");
   btn.classList.add("loading");
   btn.disabled = true;
+  const existingErr = document.getElementById("imgModalError");
+  if (existingErr) existingErr.remove();
 
   try {
     const authToken = localStorage.getItem("token");
@@ -621,12 +652,20 @@ async function generateImage() {
       updateSession();
     }
   } catch (err) {
-    closeImageModal();
     resetImgGenerateBtn();
-    appendMessage(
-      "ai",
-      `[!] Gagal generate gambar: ${err.message || "Silakan coba lagi."}`,
-    );
+    const errDiv = document.createElement("div");
+    errDiv.id = "imgModalError";
+    errDiv.className = "img-modal-error";
+    const isQuota =
+      err.message &&
+      (err.message.includes("quota") ||
+        err.message.includes("rate limit") ||
+        err.message.includes("429"));
+    errDiv.innerHTML = isQuota
+      ? `⚠️ <strong>API quota exceeded.</strong> Image generation requires a paid Gemini API plan. <a href="https://aistudio.google.com/apikey" target="_blank" rel="noopener">Upgrade your API key</a> to enable this feature.`
+      : `⚠️ ${err.message || "Image generation failed. Please try again."}`;
+    const actions = document.querySelector(".img-modal-actions");
+    actions.parentNode.insertBefore(errDiv, actions);
   }
 }
 
