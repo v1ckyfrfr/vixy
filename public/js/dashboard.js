@@ -1,5 +1,3 @@
-// dashboard.js — Logic for dashboard.html
-
 const token = localStorage.getItem("token");
 if (!token) window.location.href = "/";
 
@@ -13,37 +11,28 @@ async function getProfile() {
       logout();
       return;
     }
-
     if (!res.ok) {
-      logout();
+      console.warn("[dashboard] profile fetch failed:", res.status);
       return;
     }
 
     const { user } = await res.json();
     if (!user) {
-      logout();
+      console.warn("[dashboard] no user in profile response");
       return;
     }
-
-    // Update header greeting
     const name = user.username || "there";
     document.getElementById("greeting").textContent = name;
-
-    // Sidebar
     document.getElementById("sidebarAvatar").textContent = name
       .charAt(0)
       .toUpperCase();
     document.getElementById("sidebarName").textContent = name;
     document.getElementById("sidebarEmail").textContent = user.email || "—";
-
-    // Stats & info
     document.getElementById("userId").textContent = "#" + user.id;
     document.getElementById("profileId").textContent = user.id;
     document.getElementById("profileUsername").textContent =
       user.username || "—";
     document.getElementById("profileEmail").textContent = user.email || "—";
-
-    // Session time
     const now = new Date().toLocaleTimeString([], {
       hour: "2-digit",
       minute: "2-digit",
