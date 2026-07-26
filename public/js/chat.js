@@ -736,6 +736,7 @@ document.addEventListener("keydown", (e) => {
   if (e.key === "Escape") {
     closeImageModal();
     closeLightbox();
+    closeScrapeModal();
   }
 });
 
@@ -746,3 +747,260 @@ document.getElementById("chatBox").addEventListener("click", (e) => {
   const uImg = e.target.closest(".user-bubble-img");
   if (uImg) openLightbox(uImg.src);
 });
+
+// Web Scraping
+
+let slashHintEl = null;
+
+// /scraping command
+document.getElementById("msgInput").addEventListener("input", function () {
+  updateSendBtn();
+  const val = this.value;
+  const inputContainer = document.getElementById("inputContainer");
+
+  if (val.trimStart().startsWith("/scraping")) {
+    if (!slashHintEl) {
+      slashHintEl = document.createElement("div");
+      slashHintEl.className = "slash-hint";
+      slashHintEl.innerHTML = `
+        <span class="slash-hint-cmd">/scraping</span>
+        <span><strong>Web Scraping Mode</strong> - scrape &amp; analisis halaman web manapun</span>
+      `;
+      slashHintEl.addEventListener("click", () => {
+        document.getElementById("msgInput").value = "";
+        updateSendBtn();
+        removeSlashHint();
+        openScrapeModal();
+      });
+      inputContainer.style.position = "relative";
+      inputContainer.appendChild(slashHintEl);
+    }
+  } else {
+    removeSlashHint();
+  }
+});
+
+function removeSlashHint() {
+  if (slashHintEl) {
+    slashHintEl.remove();
+    slashHintEl = null;
+  }
+}
+
+function openScrapeModal() {
+  removeSlashHint();
+  document.getElementById("scrapeModalBackdrop").classList.add("open");
+  document.getElementById("scrapeUrlInput").focus();
+  // clear previous error
+  const err = document.getElementById("scrapeModalError");
+  if (err) err.remove();
+}
+
+function closeScrapeModal() {
+  document.getElementById("scrapeModalBackdrop").classList.remove("open");
+  document.getElementById("scrapeUrlInput").value = "";
+  document.getElementById("scrapeQueryInput").value = "";
+  resetScrapeBtn();
+  const err = document.getElementById("scrapeModalError");
+  if (err) err.remove();
+}
+
+function closeScrapeModalOnBackdrop(e) {
+  if (e.target === document.getElementById("scrapeModalBackdrop")) {
+    closeScrapeModal();
+  }
+}
+
+function setScrapeQuery(text) {
+  document.getElementById("scrapeQueryInput").value = text;
+  document.getElementById("scrapeQueryInput").focus();
+}
+
+function resetScrapeBtn() {
+  const btn = document.getElementById("scrapeStartBtn");
+  btn.classList.remove("loading");
+  btn.disabled = false;
+}
+
+// Handle Enter key in scrape URL input
+document.getElementById("scrapeUrlInput").addEventListener("keydown", (e) => {
+  if (e.key === "Enter") {
+    e.preventDefault();
+    startScraping();
+  }
+});
+
+async function startScraping() {
+  const urlRaw = document.getElementById("scrapeUrlInput").value.trim();
+  const query = document.getElementById("scrapeQueryInput").value.trim();
+
+  // Remove existing errors
+  const existingErr = document.getElementById("scrapeModalError");
+  if (existingErr) existingErr.remove();
+
+  if (!urlRaw) {
+    document.getElementById("scrapeUrlInput").focus();
+    showScrapeError("URL tidak boleh kosong.");
+    return;
+  }
+
+  // Basic URL guard
+  try {
+    new URL(urlRaw.startsWith("http") ? urlRaw : "https://" + urlRaw);
+  } catch {
+    showScrapeError(
+      "Format URL tidak valid. Pastikan dimulai dengan http:// atau https://",
+    );
+    return;
+  }
+
+  const url = urlRaw.startsWith("http") ? urlRaw : "https://" + urlRaw;
+
+  const btn = document.getElementById("scrapeStartBtn");
+  btn.classList.add("loading");
+  btn.disabled = true;
+
+  closeScrapeModal();
+
+  // Show user message
+  const displayQuery = query || "Analisis & ringkas halaman ini";
+  appendScrapeUserBubble(url, displayQuery);
+  chatHistory.push({
+    role: "user",
+    text: `[Web Scraping] ${url} — ${displayQuery}`,
+  });
+  showTyping();
+  setGenerating(true);
+
+  try {
+    const authToken = localStorage.getItem("token");
+    const res = await fetch("/api/ai/scrape", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        ...(authToken && { Authorization: `Bearer ${authToken}` }),
+      },
+      body: JSON.stringify({ url, query: query || undefined }),
+    });
+
+    if (res.status === 401 || res.status === 403) {
+      logout();
+      return;
+    }
+
+    const data = await res.json();
+
+    if (!res.ok) {
+      hideTyping();
+      appendMessage(
+        "ai",
+        `⚠️ Scraping gagal: ${data.message || "Terjadi kesalahan."}`,
+      );
+      return;
+    }
+
+    hideTyping();
+    appendScrapeResult(data);
+
+    chatHistory.push({ role: "ai", text: data.reply || "" });
+
+    if (!sessionSaved) {
+      saveSession(`[scrape] ${data.meta?.title || url}`);
+      sessionSaved = true;
+    } else {
+      updateSession();
+    }
+  } catch (err) {
+    hideTyping();
+    appendMessage("ai", "[!] Tidak bisa menghubungi server. Coba lagi.");
+  } finally {
+    setGenerating(false);
+    resetScrapeBtn();
+  }
+}
+
+function showScrapeError(msg) {
+  const errDiv = document.createElement("div");
+  errDiv.id = "scrapeModalError";
+  errDiv.className = "scrape-modal-error";
+  errDiv.textContent = "⚠️ " + msg;
+  const actions = document.querySelector(".scrape-modal-actions");
+  if (actions) actions.parentNode.insertBefore(errDiv, actions);
+}
+
+function appendScrapeUserBubble(url, query) {
+  removeEmptyState();
+  const box = document.getElementById("chatBox");
+  const div = document.createElement("div");
+  div.className = "msg-group";
+  div.innerHTML = `
+    <div class="msg-user">
+      <div class="msg-user-bubble">
+        <span class="msg-file-badge">
+          <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <circle cx="11" cy="11" r="8" stroke-width="2"/>
+            <path stroke-width="2" stroke-linecap="round" d="M21 21l-4.35-4.35"/>
+          </svg>
+          Web Scraping
+        </span>
+        <div style="font-family:var(--font-mono,monospace);font-size:0.82rem;opacity:0.7;margin-top:4px;word-break:break-all">${escapeHtml(url)}</div>
+        ${query ? `<div style="margin-top:6px">${escapeHtml(query)}</div>` : ""}
+      </div>
+    </div>`;
+  box.appendChild(div);
+  box.scrollTop = box.scrollHeight;
+}
+
+function appendScrapeResult(data) {
+  removeEmptyState();
+  const box = document.getElementById("chatBox");
+  const { reply, meta } = data;
+  const formatted = formatResponse(reply || "");
+
+  const metaHtml = meta
+    ? `<div class="scrape-meta-bar">
+        <svg style="width:13px;height:13px;flex-shrink:0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <circle cx="11" cy="11" r="8" stroke-width="2"/>
+          <path stroke-width="2" stroke-linecap="round" d="M21 21l-4.35-4.35"/>
+        </svg>
+        <a href="${escapeHtml(meta.url)}" target="_blank" rel="noopener" title="${escapeHtml(meta.url)}">${escapeHtml(meta.title || meta.url)}</a>
+        ${meta.headingsCount ? `<span class="scrape-meta-pill">${meta.headingsCount} headings</span>` : ""}
+        ${meta.paragraphsCount ? `<span class="scrape-meta-pill">${meta.paragraphsCount} paragraphs</span>` : ""}
+        ${meta.linksCount ? `<span class="scrape-meta-pill">${meta.linksCount} links</span>` : ""}
+      </div>`
+    : "";
+
+  const div = document.createElement("div");
+  div.className = "msg-group";
+  div.innerHTML = `
+    <div class="msg-ai">
+      <div class="ai-avatar">
+        <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-width="2" d="M12 2a10 10 0 100 20A10 10 0 0012 2zm0 0v20M2 12h20"/>
+        </svg>
+      </div>
+      <div class="ai-content">
+        <div class="ai-name">Vixy <span style="font-size:0.72rem;opacity:0.5;font-weight:400;margin-left:4px">· Web Scraper</span></div>
+        <div class="ai-bubble">
+          ${metaHtml}
+          ${formatted}
+        </div>
+        <div class="msg-actions">
+          <button class="msg-action-btn" onclick="copyText(this)" data-text="${escapeHtml(reply || "")}">
+            <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <rect x="9" y="9" width="13" height="13" rx="2" stroke-width="2"/>
+              <path stroke-width="2" d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"/>
+            </svg>
+            Copy
+          </button>
+        </div>
+      </div>
+    </div>`;
+  box.appendChild(div);
+  requestAnimationFrame(() => {
+    div.querySelectorAll("pre code").forEach((block) => {
+      if (typeof hljs !== "undefined") hljs.highlightElement(block);
+    });
+  });
+  box.scrollTop = box.scrollHeight;
+}
