@@ -119,12 +119,19 @@ function appendMessage(role, text, fileInfo) {
     let innerHtml = "";
 
     if (fileInfo) {
-      if (fileInfo.isImage) {
+      if (fileInfo.isImage && fileInfo.dataUrl) {
+        // Full image preview (only available before page reload)
         innerHtml += `<img class="user-bubble-img" src="${fileInfo.dataUrl}" alt="${escapeHtml(fileInfo.name)}" />`;
+      } else if (fileInfo.isImage && !fileInfo.dataUrl) {
+        // Image cached as badge after reload (dataUrl not stored in localStorage)
+        innerHtml += `<div class="msg-file-badge">
+                <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="3" stroke-width="2"/><circle cx="8.5" cy="8.5" r="1.5" stroke-width="2"/><polyline stroke-width="2" points="21 15 16 10 5 21"/></svg>
+                ${escapeHtml(fileInfo.name)} <span style="color:var(--text-muted);margin-left:4px">${fileInfo.size || ""}</span>
+              </div>`;
       } else {
         innerHtml += `<div class="msg-file-badge">
                 <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-width="2" d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline stroke-width="2" points="14 2 14 8 20 8"/></svg>
-                ${escapeHtml(fileInfo.name)} <span style="color:var(--text-muted);margin-left:4px">${fileInfo.size}</span>
+                ${escapeHtml(fileInfo.name)} <span style="color:var(--text-muted);margin-left:4px">${fileInfo.size || ""}</span>
               </div>`;
       }
     }
@@ -388,10 +395,18 @@ async function send() {
   if (fileToSend) removeAttachment();
 
   appendMessage("user", text, fileInfoSnap);
-  const historyLabel = fileToSend
-    ? `[File: ${fileToSend.name}]${text ? " " + text : ""}`
-    : text;
-  chatHistory.push({ role: "user", text: historyLabel });
+  // Store type + fileInfo (without dataUrl — too large for localStorage)
+  if (fileInfoSnap) {
+    const { dataUrl: _drop, ...fileInfoLite } = fileInfoSnap;
+    chatHistory.push({
+      role: "user",
+      type: "file-user",
+      text: text,
+      fileInfo: fileInfoLite,
+    });
+  } else {
+    chatHistory.push({ role: "user", text });
+  }
   showTyping();
   setGenerating(true);
 
@@ -543,8 +558,17 @@ function loadSession(i) {
     return;
   }
   for (const msg of messages) {
-    appendMessage(msg.role === "ai" ? "ai" : "user", msg.text);
-    chatHistory.push({ role: msg.role, text: msg.text });
+    if (msg.type === "scrape-user") {
+      appendScrapeUserBubble(msg.url || "", msg.query || "");
+    } else if (msg.type === "scrape-ai") {
+      appendScrapeResult({ reply: msg.text, meta: msg.meta || null });
+    } else if (msg.type === "file-user") {
+      // Restore file badge; dataUrl is not cached so image previews show as badge
+      appendMessage("user", msg.text, msg.fileInfo || null);
+    } else {
+      appendMessage(msg.role === "ai" ? "ai" : "user", msg.text);
+    }
+    chatHistory.push(msg);
   }
 }
 
@@ -867,6 +891,9 @@ async function startScraping() {
   appendScrapeUserBubble(url, displayQuery);
   chatHistory.push({
     role: "user",
+    type: "scrape-user",
+    url,
+    query: displayQuery,
     text: `[Web Scraping] ${url} — ${displayQuery}`,
   });
   showTyping();
@@ -902,7 +929,12 @@ async function startScraping() {
     hideTyping();
     appendScrapeResult(data);
 
-    chatHistory.push({ role: "ai", text: data.reply || "" });
+    chatHistory.push({
+      role: "ai",
+      type: "scrape-ai",
+      text: data.reply || "",
+      meta: data.meta || null,
+    });
 
     if (!sessionSaved) {
       saveSession(`[scrape] ${data.meta?.title || url}`);
