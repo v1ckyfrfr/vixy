@@ -36,4 +36,6 @@ router.post("/chat", authMiddleware, upload.single("file"), aiController.chat);
 
 router.post("/generate-image", authMiddleware, aiController.generateImage);
 
+router.post("/scrape", authMiddleware, aiController.scrape);
+
 module.exports = router;
