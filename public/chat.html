@@ -430,6 +430,156 @@
       </a>
     </div>
 
+    <!-- Scraping Modal -->
+    <div
+      class="scrape-modal-backdrop"
+      id="scrapeModalBackdrop"
+      onclick="closeScrapeModalOnBackdrop(event)"
+    >
+      <div class="scrape-modal">
+        <div class="scrape-modal-header">
+          <div class="scrape-modal-title">
+            <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <circle cx="11" cy="11" r="8" stroke-width="2" />
+              <path
+                stroke-width="2"
+                stroke-linecap="round"
+                d="M21 21l-4.35-4.35"
+              />
+              <path
+                stroke-width="2"
+                stroke-linecap="round"
+                d="M11 8v6M8 11h6"
+              />
+            </svg>
+            Web Scraping Mode
+          </div>
+          <button
+            class="scrape-modal-close"
+            onclick="closeScrapeModal()"
+            title="Close"
+          >
+            <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <line
+                x1="18"
+                y1="6"
+                x2="6"
+                y2="18"
+                stroke-width="2"
+                stroke-linecap="round"
+              />
+              <line
+                x1="6"
+                y1="6"
+                x2="18"
+                y2="18"
+                stroke-width="2"
+                stroke-linecap="round"
+              />
+            </svg>
+          </button>
+        </div>
+
+        <p class="scrape-modal-sub">
+          Masukkan URL halaman web yang ingin di-scrape, lalu tambahkan
+          pertanyaan opsional untuk Vixy.
+        </p>
+
+        <label for="scrapeUrlInput">URL Website</label>
+        <div class="scrape-url-row">
+          <svg
+            class="scrape-url-icon"
+            fill="none"
+            stroke="currentColor"
+            viewBox="0 0 24 24"
+          >
+            <path
+              stroke-width="2"
+              d="M10 13a5 5 0 007.54.54l3-3a5 5 0 00-7.07-7.07l-1.72 1.71"
+            />
+            <path
+              stroke-width="2"
+              d="M14 11a5 5 0 00-7.54-.54l-3 3a5 5 0 007.07 7.07l1.71-1.71"
+            />
+          </svg>
+          <input
+            type="url"
+            id="scrapeUrlInput"
+            placeholder="https://example.com"
+            autocomplete="off"
+          />
+        </div>
+
+        <label style="margin-top: 14px; display: block"
+          >Pertanyaan / Instruksi
+          <span style="opacity: 0.5; font-weight: 400">(opsional)</span></label
+        >
+        <textarea
+          id="scrapeQueryInput"
+          placeholder="Contoh: Ringkas artikel ini, Apa saja produk yang dijual?, Ekstrak semua harga..."
+          rows="3"
+        ></textarea>
+
+        <div class="scrape-quick-queries">
+          <button
+            class="scrape-query-chip"
+            onclick="setScrapeQuery('Ringkas konten halaman ini')"
+          >
+            Ringkas
+          </button>
+          <button
+            class="scrape-query-chip"
+            onclick="
+              setScrapeQuery('Ekstrak semua link penting di halaman ini')
+            "
+          >
+            Ekstrak Link
+          </button>
+          <button
+            class="scrape-query-chip"
+            onclick="setScrapeQuery('Apa topik utama halaman ini?')"
+          >
+            Topik Utama
+          </button>
+          <button
+            class="scrape-query-chip"
+            onclick="
+              setScrapeQuery('Buat daftar poin penting dari halaman ini')
+            "
+          >
+            Poin Penting
+          </button>
+        </div>
+
+        <div class="scrape-modal-actions">
+          <button class="scrape-cancel-btn" onclick="closeScrapeModal()">
+            Cancel
+          </button>
+          <button
+            class="scrape-start-btn"
+            id="scrapeStartBtn"
+            onclick="startScraping()"
+          >
+            <div class="scrape-spinner" id="scrapeSpinner"></div>
+            <svg
+              class="btn-icon"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+            >
+              <circle cx="11" cy="11" r="8" stroke-width="2" />
+              <path
+                stroke-width="2"
+                stroke-linecap="round"
+                d="M21 21l-4.35-4.35"
+              />
+            </svg>
+            Scrape &amp; Analisis
+          </button>
+        </div>
+      </div>
+    </div>
+
     <script src="/js/chat.js"></script>
   </body>
 </html>
