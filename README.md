@@ -1,73 +1,143 @@
 # Vixy AI Assistant
 
-Vixy is an intelligent web-based AI Assistant featuring a modern, ChatGPT-inspired user interface, coupled with a robust and secure User Authentication system. This application is built on a solid technology stack utilizing Node.js, Express, SQLite, and Google Gemini AI.
+**Vixy AI** is a modern, full-stack web application featuring a ChatGPT-inspired AI assistant interface coupled with secure Firebase Authentication and Google Gemini AI integration. Built with high performance, sleek aesthetics, and cross-platform compatibility in mind.
+
+---
 
 ## Key Features
 
-- **Modern Authentication System**: Highly secure user registration and login utilizing JSON Web Tokens (JWT) and robust bcrypt password hashing.
-- **Integrated AI Chatbot**: Powered by the Google Gemini API to deliver intelligent, fast, and context-aware responses.
-- **Premium User Interface**: A clean, responsive design tailored to mimic the ChatGPT experience, built entirely with Vanilla HTML, CSS, and JavaScript.
-- **Theme Preferences**: Built-in support for Dark and Light modes, persistently saved in the user's browser via localStorage.
-- **Robust Security Measures**: 
-  - Brute-force attack mitigation using express-rate-limit.
-  - Comprehensive HTTP header security enforced by Helmet.
-  - Protection against payload exploitation via strict input size limits (16kb).
+- **Firebase Authentication**:
+  - Secure Email & Password sign-up/login.
+  - Seamless **Google OAuth Sign-In** using `signInWithRedirect` (fully compatible across Linux, Windows, and macOS).
+  - Backend ID token verification using **Firebase Admin SDK v14**.
+- **Advanced AI Chatbot**:
+  - Powered by **Google Gemini AI** (`@google/genai` SDK) for fast, intelligent, and context-aware responses.
+  - Multi-turn conversation history and system instructions.
+- **AI Image Generation**:
+  - Integrated with **Google Imagen 3** (`imagen-3.0-generate-002`) for high-quality, photorealistic AI image generation.
+  - Custom aspect ratio selection (`1:1`, `16:9`, `9:16`, `4:3`, `3:4`).
+- **Premium Responsive UI**:
+  - Modern ChatGPT-style interface built with Vanilla HTML5, CSS3, and JavaScript (ES Modules).
+  - Password visibility toggle (Show/Hide) with interactive UI design.
+  - Persistent Dark & Light mode theme switching via `localStorage`.
+- **Security & Protection**:
+  - HTTP security headers powered by **Helmet**.
+  - Rate limiting via **express-rate-limit** to prevent brute-force and DDoS attacks.
+  - Strict payload size limits and CORS policy enforcement.
+
+---
 
 ## Technology Stack
 
-- **Backend Architecture**: Node.js, Express.js
-- **Database Engine**: SQLite3 (Local file-based)
-- **Artificial Intelligence**: Google Gemini 2.5 Flash (@google/genai)
-- **Security Protocols**: Helmet, bcrypt, jsonwebtoken, express-rate-limit
-- **Frontend Technologies**: HTML5, Vanilla CSS, JavaScript, Lucide Icons
+| Category                  | Technology                                                                      |
+| :------------------------ | :------------------------------------------------------------------------------ |
+| **Backend Architecture**  | Node.js, Express 5                                                              |
+| **Authentication**        | Firebase Auth Client SDK v11 & Firebase Admin SDK v14                           |
+| **AI Models**             | Google Gemini (`gemini-3.6-flash`), Google Imagen 3 (`imagen-3.0-generate-002`) |
+| **AI Library**            | `@google/genai`                                                                 |
+| **Security & Middleware** | Helmet, Express Rate Limit, CORS, Dotenv                                        |
+| **Frontend Stack**        | HTML5, Vanilla CSS3 (Custom Design System), ES Modules JS                       |
+
+---
 
 ## Installation and Setup
 
-1. **Clone the repository**
-   ```bash
-   git clone <https://github.com/v1ckyfrfr/vixy.git>
-   cd vixy
-   ```
+### 1. Clone the Repository
 
-2. **Install dependencies**
-   ```bash
-   npm install
-   ```
+```bash
+git clone https://github.com/v1ckyfrfr/vixy.git
+cd auth-app
+```
 
-3. **Configure Environment Variables**
-   - Copy or rename the `.env.example` file to `.env`.
-   - Open the `.env` file and populate the required credentials, specifically your `GEMINI_API_KEY` from Google AI Studio and a strong `JWT_SECRET`.
-   ```env
-   PORT=3000
-   ALLOWED_ORIGIN=http://localhost:3000
-   JWT_SECRET=your_highly_secure_jwt_secret_here
-   GEMINI_API_KEY=your_google_gemini_api_key_here
-   ```
+### 2. Install Dependencies
 
-4. **Launch the Application**
-   ```bash
-   node server.js
-   ```
-   > The application will automatically initialize and run on `http://localhost:3000`
+```bash
+npm install
+```
+
+### 3. Setup Firebase Service Account
+
+Download your Firebase Service Account Key from:
+
+> **Firebase Console** → **Project Settings** → **Service Accounts** → **Generate New Private Key**
+
+Save the JSON file as `serviceAccountKey.json` in the project root directory, or set the `FIREBASE_SERVICE_ACCOUNT` environment variable with the JSON string.
+
+### 4. Configure Environment Variables
+
+Copy `.env.example` to `.env` and fill in your credentials:
+
+```bash
+cp .env.example .env
+```
+
+Edit your `.env` file:
+
+```env
+PORT=3000
+ALLOWED_ORIGIN=http://localhost:3000
+GEMINI_API_KEY=your_google_gemini_api_key_here
+```
+
+### 5. Launch the Application
+
+For development:
+
+```bash
+npm run dev
+```
+
+For production:
+
+```bash
+npm start
+```
+
+Open your browser and navigate to `http://localhost:3000`.
+
+---
 
 ## Project Structure
 
 ```text
 auth-app/
- |-- controllers/     # Route logic (Authentication and AI handling)
- |-- middleware/      # API security layers (Rate Limiting and JWT Verification)
- |-- models/          # Database configuration and schema (SQLite)
- |-- public/          # Static frontend assets (HTML, CSS, JS)
- |-- routes/          # API endpoint definitions
- |-- utils/           # Helper functions (Input validation, Hashing)
- |-- server.js        # Node.js backend entry point
- |-- users.db         # Auto-generated SQLite Database
- |-- .env.example     # Environment variables template
- |-- package.json     # Project metadata and dependencies
+├── config/
+│   └── firebase.js           # Firebase Admin SDK initialization
+├── controllers/
+│   ├── aiController.js       # Gemini Chat & Imagen 3 Image Generation endpoints
+│   └── authController.js     # User authentication profile handler
+├── middleware/
+│   └── authMiddleware.js     # Firebase ID token validation middleware
+├── public/
+│   ├── js/
+│   │   ├── auth.js           # Frontend Firebase auth logic (Email & Google Sign-In)
+│   │   ├── chat.js           # AI Chat interface controller
+│   │   ├── dashboard.js      # User dashboard controller
+│   │   ├── settings.js       # User settings controller
+│   │   └── theme.js          # Theme toggle handler
+│   ├── styles/               # App CSS design system
+│   ├── index.html            # Sign-In / Register page
+│   ├── dashboard.html        # Main dashboard
+│   ├── chat.html             # AI Chat room
+│   └── settings.html         # User settings page
+├── routes/
+│   ├── aiRoutes.js           # AI endpoint routes (/api/ai/*)
+│   └── authRoutes.js         # Auth endpoint routes (/api/auth/*)
+├── serviceAccountKey.json    # Firebase Admin key (DO NOT COMMIT)
+├── server.js                 # Express application entry point
+├── .env                      # Environment variables (DO NOT COMMIT)
+└── package.json              # Project dependencies & scripts
 ```
 
-## Security Notice
-To maintain the highest security standards, the `.env` file (containing API keys and secrets) and the `users.db` file (containing local user data) are excluded from version control via `.gitignore`. Never commit these files to a public repository.
+---
+
+## Security Best Practices
+
+- **Secrets Isolation**: Never commit `.env` or `serviceAccountKey.json` to version control. Both are protected in `.gitignore`.
+- **Token Handling**: Firebase ID Tokens are checked server-side using Firebase Admin SDK to ensure authorized API access.
 
 ---
-*Engineered to provide a seamless AI chat experience with uncompromised data security.*
+
+## Author
+
+**(v1ckyfrfr)**
