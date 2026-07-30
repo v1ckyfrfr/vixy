@@ -186,7 +186,7 @@ label {
 
 input {
   width: 100%;
-  padding: 10px 14px 10px 38px;
+  padding: 10px 38px 10px 38px;
   background: rgba(0, 0, 0, 0.2);
   border: 1px solid var(--border);
   border-radius: var(--radius-sm);
@@ -197,6 +197,12 @@ input {
   transition:
     border-color 0.15s,
     box-shadow 0.15s;
+  box-sizing: border-box;
+}
+
+/* For fields without a toggle button, reset right padding */
+.input-wrapper:not(:has(.pw-toggle)) input {
+  padding-right: 14px;
 }
 
 input::placeholder {
@@ -210,26 +216,29 @@ input:focus {
 
 .pw-toggle {
   position: absolute;
-  right: 12px;
+  right: 10px;
   top: 50%;
   transform: translateY(-50%);
   background: none;
   border: none;
   cursor: pointer;
   color: var(--text-muted);
-  padding: 0;
+  padding: 4px;
   display: flex;
   align-items: center;
   transition: color 0.15s;
+  z-index: 2;
+  line-height: 0;
 }
 
 .pw-toggle:hover {
-  color: var(--text-dim);
+  color: var(--text);
 }
 
 .pw-toggle svg {
-  width: 15px;
-  height: 15px;
+  width: 16px;
+  height: 16px;
+  pointer-events: none;
 }
 
 .submit-btn {
