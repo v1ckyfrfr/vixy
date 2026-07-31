@@ -432,76 +432,48 @@
       </div>
     </main>
 
+    <script type="module" src="/js/auth-guard.js"></script>
     <script>
-      const token = localStorage.getItem("token");
-      if (!token) window.location.href = "/";
+      // profile is passed directly from auth-guard.js (Firebase user data)
+      // No backend call needed here — eliminates the 401 signOut loop.
+      window.__onAuthReady = function (user, token, profile) {
+        const name = profile.username || "there";
 
-      async function getProfile() {
-        try {
-          const res = await fetch("/api/auth/profile", {
-            headers: { Authorization: `Bearer ${token}` },
-          });
+        document.getElementById("greeting").textContent = name;
+        document.getElementById("sidebarAvatar").textContent =
+          name.charAt(0).toUpperCase();
+        document.getElementById("sidebarName").textContent = name;
+        document.getElementById("sidebarEmail").textContent =
+          profile.email || "—";
+        document.getElementById("userId").textContent =
+          "#" + profile.id.substring(0, 8);
+        document.getElementById("profileId").textContent = profile.id;
+        document.getElementById("profileUsername").textContent = name;
+        document.getElementById("profileEmail").textContent =
+          profile.email || "—";
 
-          if (res.status === 401 || res.status === 403) {
-            logout();
-            return;
-          }
-
-          if (!res.ok) {
-            logout();
-            return;
-          }
-
-          const { user } = await res.json();
-          if (!user) {
-            logout();
-            return;
-          }
-
-          // Update header greeting
-          const name = user.username || "there";
-          document.getElementById("greeting").textContent = name;
-
-          // Sidebar
-          document.getElementById("sidebarAvatar").textContent = name
-            .charAt(0)
-            .toUpperCase();
-          document.getElementById("sidebarName").textContent = name;
-          document.getElementById("sidebarEmail").textContent =
-            user.email || "—";
-
-          // Stats & info
-          document.getElementById("userId").textContent = "#" + user.id;
-          document.getElementById("profileId").textContent = user.id;
-          document.getElementById("profileUsername").textContent =
-            user.username || "—";
-          document.getElementById("profileEmail").textContent =
-            user.email || "—";
-
-          // Session time
-          const now = new Date().toLocaleTimeString([], {
-            hour: "2-digit",
-            minute: "2-digit",
-          });
-          document.getElementById("sessionTime").textContent =
-            `Started at ${now}`;
-          document.getElementById("sessionTimeAgo").textContent = `At ${now}`;
-        } catch (e) {
-          console.error("[dashboard] profile error:", e);
-        }
-      }
+        const now = new Date().toLocaleTimeString([], {
+          hour: "2-digit",
+          minute: "2-digit",
+        });
+        document.getElementById("sessionTime").textContent =
+          `Started at ${now}`;
+        document.getElementById("sessionTimeAgo").textContent = `At ${now}`;
+      };
 
       function toggleSidebar() {
-        document.querySelector('.sidebar').classList.toggle('open');
-        document.querySelector('.sidebar-overlay').classList.toggle('open');
+        document.querySelector(".sidebar").classList.toggle("open");
+        document.querySelector(".sidebar-overlay").classList.toggle("open");
       }
 
       function logout() {
-        localStorage.removeItem("token");
-        window.location.href = "/";
+        if (typeof window.__firebaseSignOut === "function") {
+          window.__firebaseSignOut();
+        } else {
+          localStorage.removeItem("token");
+          window.location.replace("/");
+        }
       }
-
-      getProfile();
     </script>
   </body>
 </html>
