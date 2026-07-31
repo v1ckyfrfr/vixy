@@ -14,6 +14,8 @@ coverage/
 .env.production.local
 *.pem
 *.key
+# Firebase service account key
+serviceAccountKey.json
 
 # Database
 users.db
