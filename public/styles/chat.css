@@ -346,6 +346,14 @@ body {
   border-radius: 0;
 }
 
+.math-rendered-box {
+  padding: 14px 16px;
+  background: #11111b;
+  overflow-x: auto;
+  font-size: 1.05rem;
+  color: #cdd6f4;
+}
+
 .img-modal-error {
   margin: 0 0 14px;
   padding: 10px 14px;
