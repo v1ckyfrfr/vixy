@@ -18,7 +18,7 @@
     />
     <meta
       name="description"
-      content="Vixy-AI — Sign in to your AI assistant account"
+      content="Vixy-AI — Passwordless Sign In & Sign Up"
     />
     <title>Vixy-AI — Sign In</title>
     <link rel="preconnect" href="https://fonts.googleapis.com" />
@@ -43,40 +43,24 @@
       </div>
 
       <div class="auth-card">
-        <div class="tab-switcher" role="tablist">
-          <button
-            id="tabLogin"
-            class="tab-btn active"
-            role="tab"
-            onclick="switchTab('login')"
-          >
-            Sign in
-          </button>
-          <button
-            id="tabSignup"
-            class="tab-btn"
-            role="tab"
-            onclick="switchTab('signup')"
-          >
-            Create account
-          </button>
-        </div>
-
+        <!-- Send OTP via Email / Google Sign-In -->
         <form
-          id="formLogin"
+          id="stepEmail"
           class="form active"
           onsubmit="return false;"
           novalidate
         >
           <div>
-            <h1 class="form-title">Welcome back</h1>
-            <p class="form-subtitle">Sign in to your account</p>
+            <h1 class="form-title">Welcome to Vixy-AI</h1>
+            <p class="form-subtitle">
+              Sign in or create an account with Email or Google
+            </p>
           </div>
 
-          <div id="loginMsg" class="form-msg" role="alert"></div>
+          <div id="emailMsg" class="form-msg" role="alert"></div>
 
           <div class="field">
-            <label for="li_email">Email</label>
+            <label for="auth_email">Email Address</label>
             <div class="input-wrapper">
               <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path
@@ -86,7 +70,7 @@
                 <polyline stroke-width="2" points="22,6 12,13 2,6" />
               </svg>
               <input
-                id="li_email"
+                id="auth_email"
                 type="email"
                 placeholder="you@mail.com"
                 autocomplete="email"
@@ -95,59 +79,21 @@
             </div>
           </div>
 
-          <div class="field">
-            <label for="li_password">Password</label>
-            <div class="input-wrapper">
-              <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <rect
-                  x="3"
-                  y="11"
-                  width="18"
-                  height="11"
-                  rx="2"
-                  stroke-width="2"
-                />
-                <path stroke-width="2" d="M7 11V7a5 5 0 0110 0v4" />
-              </svg>
-              <input
-                id="li_password"
-                type="password"
-                placeholder="••••••••"
-                autocomplete="current-password"
-                required
-              />
-              <button
-                type="button"
-                class="pw-toggle"
-                onclick="togglePassword('li_password', this)"
-                aria-label="Toggle password visibility"
-              >
-                <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path
-                    stroke-width="2"
-                    d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"
-                  />
-                  <circle cx="12" cy="12" r="3" stroke-width="2" />
-                </svg>
-              </button>
-            </div>
-          </div>
-
           <button
             type="button"
-            id="loginBtn"
+            id="sendOtpBtn"
             class="submit-btn"
-            onclick="login()"
+            onclick="sendOtp()"
           >
-            <span id="loginBtnText">Sign in</span>
-            <div id="loginSpinner" class="spinner"></div>
+            <span id="sendOtpBtnText">Continue with Email</span>
+            <div id="sendOtpSpinner" class="spinner"></div>
           </button>
 
           <div class="divider"><span>OR</span></div>
 
           <button
             type="button"
-            id="googleLoginBtn"
+            id="googleBtn"
             class="google-btn"
             onclick="loginWithGoogle()"
           >
@@ -173,56 +119,20 @@
           </button>
         </form>
 
-        <form id="formSignup" class="form" onsubmit="return false;" novalidate>
+        <!-- Verify 6-digit OTP Code -->
+        <form id="stepOtp" class="form" onsubmit="return false;" novalidate>
           <div>
-            <h1 class="form-title">Create an account</h1>
-            <p class="form-subtitle">Start chatting with Vixy-AI for free</p>
+            <h1 class="form-title">Enter Verification Code</h1>
+            <p class="form-subtitle">
+              We sent a 6-digit code to
+              <strong id="sentEmailSpan" style="color: var(--text)"></strong>
+            </p>
           </div>
 
-          <div id="signupMsg" class="form-msg" role="alert"></div>
+          <div id="otpMsg" class="form-msg" role="alert"></div>
 
           <div class="field">
-            <label for="su_username">Username</label>
-            <div class="input-wrapper">
-              <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path
-                  stroke-width="2"
-                  d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"
-                />
-                <circle cx="12" cy="7" r="4" stroke-width="2" />
-              </svg>
-              <input
-                id="su_username"
-                type="text"
-                placeholder="Your name"
-                autocomplete="name"
-                required
-              />
-            </div>
-          </div>
-
-          <div class="field">
-            <label for="su_email">Email</label>
-            <div class="input-wrapper">
-              <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path
-                  stroke-width="2"
-                  d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"
-                />
-                <polyline stroke-width="2" points="22,6 12,13 2,6" />
-              </svg>
-              <input
-                id="su_email"
-                type="email"
-                placeholder="you@mail.com"
-                autocomplete="email"
-                required
-              />
-            </div>
-          </div>
-
-          <div class="field">
-            <label for="su_password">Password</label>
+            <label for="auth_otp">6-Digit Code</label>
             <div class="input-wrapper">
               <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <rect
@@ -236,71 +146,78 @@
                 <path stroke-width="2" d="M7 11V7a5 5 0 0110 0v4" />
               </svg>
               <input
-                id="su_password"
-                type="password"
-                placeholder="Min. 8 characters"
-                autocomplete="new-password"
-                oninput="checkStrength(this)"
+                id="auth_otp"
+                type="text"
+                class="otp-input"
+                placeholder="123456"
+                maxlength="6"
+                autocomplete="one-time-code"
                 required
               />
-              <button
-                type="button"
-                class="pw-toggle"
-                onclick="togglePassword('su_password', this)"
-                aria-label="Toggle password visibility"
-              >
-                <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path
-                    stroke-width="2"
-                    d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"
-                  />
-                  <circle cx="12" cy="12" r="3" stroke-width="2" />
-                </svg>
-              </button>
             </div>
-            <div id="pwStrength" class="pw-strength">
-              <div id="pwStrengthBar" class="pw-strength-bar"></div>
-            </div>
-            <div id="pwHint" class="pw-hint"></div>
           </div>
 
           <button
             type="button"
-            id="signupBtn"
+            id="verifyOtpBtn"
             class="submit-btn"
-            onclick="signup()"
+            onclick="verifyOtp()"
           >
-            <span id="signupBtnText">Create account</span>
-            <div id="signupSpinner" class="spinner"></div>
+            <span id="verifyOtpBtnText">Verify & Continue</span>
+            <div id="verifyOtpSpinner" class="spinner"></div>
           </button>
-
-          <div class="divider"><span>OR</span></div>
 
           <button
             type="button"
-            id="googleSignupBtn"
-            class="google-btn"
-            onclick="loginWithGoogle()"
+            class="secondary-action"
+            onclick="showStep('stepEmail')"
           >
-            <svg viewBox="0 0 24 24" width="18" height="18">
-              <path
-                fill="#4285F4"
-                d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"
+            ← Use a different email address
+          </button>
+        </form>
+
+        <!-- Choose Username (Onboarding) -->
+        <form
+          id="stepUsername"
+          class="form"
+          onsubmit="return false;"
+          novalidate
+        >
+          <div>
+            <h1 class="form-title">Choose your Username</h1>
+            <p class="form-subtitle">What should Vixy call you in chat?</p>
+          </div>
+
+          <div id="usernameMsg" class="form-msg" role="alert"></div>
+
+          <div class="field">
+            <label for="auth_username">Username</label>
+            <div class="input-wrapper">
+              <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path
+                  stroke-width="2"
+                  d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"
+                />
+                <circle cx="12" cy="7" r="4" stroke-width="2" />
+              </svg>
+              <input
+                id="auth_username"
+                type="text"
+                placeholder="Your username"
+                autocomplete="name"
+                required
               />
-              <path
-                fill="#34A853"
-                d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"
-              />
-              <path
-                fill="#FBBC05"
-                d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l3.66-2.84z"
-              />
-              <path
-                fill="#EA4335"
-                d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"
-              />
-            </svg>
-            Sign up with Google
+            </div>
+          </div>
+
+          <button
+            type="button"
+            id="setUsernameBtn"
+            class="submit-btn"
+            onclick="saveUsernameAndContinue()"
+          >
+            <span id="setUsernameBtnText">Start Chatting with Vixy</span>
+            <div id="setUsernameSpinner" class="spinner"></div>
           </button>
         </form>
       </div>
