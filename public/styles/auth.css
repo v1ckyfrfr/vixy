@@ -388,7 +388,7 @@ input:focus {
   transform: scale(0.98);
 }
 
-/* ─── OR Divider ─────────────────────────────────────────── */
+/* ─── OR Divider ───*/
 .divider {
   display: flex;
   align-items: center;
@@ -404,6 +404,31 @@ input:focus {
   flex: 1;
   height: 1px;
   background: var(--border);
+}
+
+.otp-input {
+  text-align: center;
+  font-size: 1.3rem;
+  letter-spacing: 8px;
+  font-weight: 700;
+  color: var(--accent);
+  padding-left: 18px !important;
+}
+
+.secondary-action {
+  background: transparent;
+  border: none;
+  color: var(--text-muted);
+  font-size: 0.8rem;
+  cursor: pointer;
+  text-align: center;
+  margin-top: 4px;
+  padding: 6px;
+  transition: color 0.15s;
+}
+
+.secondary-action:hover {
+  color: var(--text);
 }
 
 @media (max-width: 480px) {
