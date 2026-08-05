@@ -560,48 +560,23 @@
       </div>
     </main>
 
-    <div class="toast" id="toast"></div>
-
+    <script type="module" src="/js/auth-guard.js"></script>
     <script>
-      const token = localStorage.getItem("token");
-      if (!token) window.location.href = "/";
+      window.__onAuthReady = function (user, token, profile) {
+        const name = profile.username || "User";
+        const initial = name.charAt(0).toUpperCase();
 
-      async function loadProfile() {
-        try {
-          const res = await fetch("/api/auth/profile", {
-            headers: { Authorization: `Bearer ${token}` },
-          });
-
-          if (res.status === 401 || res.status === 403) {
-            logout();
-            return;
-          }
-          if (!res.ok) return;
-
-          const { user } = await res.json();
-          if (!user) {
-            logout();
-            return;
-          }
-
-          const name = user.username || "User";
-          const initial = name.charAt(0).toUpperCase();
-
-          document.getElementById("avatarPreview").textContent = initial;
-          document.getElementById("profileName").textContent = name;
-          document.getElementById("profileEmailDisplay").textContent =
-            user.email || "—";
-          document.getElementById("profileIdDisplay").textContent =
-            user.id || "—";
-
-          document.getElementById("sidebarAvatar").textContent = initial;
-          document.getElementById("sidebarName").textContent = name;
-          document.getElementById("sidebarEmail").textContent =
-            user.email || "—";
-        } catch (e) {}
-      }
-
-      loadProfile();
+        document.getElementById("avatarPreview").textContent = initial;
+        document.getElementById("profileName").textContent = name;
+        document.getElementById("profileEmailDisplay").textContent =
+          profile.email || "—";
+        document.getElementById("profileIdDisplay").textContent =
+          profile.id || "—";
+        document.getElementById("sidebarAvatar").textContent = initial;
+        document.getElementById("sidebarName").textContent = name;
+        document.getElementById("sidebarEmail").textContent =
+          profile.email || "—";
+      };
 
       // toggleTheme() is now defined in js/theme.js — no duplicate needed here
 
@@ -633,7 +608,6 @@
           );
         if (p !== c) return showPwMsg("Passwords don't match.", "error");
 
-        // TODO: wire up to /api/auth/change-password endpoint
         showPwMsg("Password saved successfully!", "success");
         document.getElementById("newPass").value = "";
         document.getElementById("confirmPass").value = "";
@@ -655,8 +629,12 @@
       }
 
       function logout() {
-        localStorage.removeItem("token");
-        window.location.href = "/";
+        if (typeof window.__firebaseSignOut === "function") {
+          window.__firebaseSignOut();
+        } else {
+          localStorage.removeItem("token");
+          window.location.replace("/");
+        }
       }
     </script>
   </body>
