@@ -75,6 +75,10 @@ function showToast(msg) {
 }
 
 function logout() {
-  localStorage.removeItem("token");
-  window.location.href = "/";
+  if (typeof window.__firebaseSignOut === "function") {
+    window.__firebaseSignOut();
+  } else {
+    localStorage.removeItem("token");
+    window.location.replace("/");
+  }
 }
