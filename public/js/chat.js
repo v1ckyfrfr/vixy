@@ -1,37 +1,33 @@
-const token = localStorage.getItem("token");
-if (!token) window.location.href = "/";
+let _authToken = localStorage.getItem("token") || "";
+let currentUserId = null;
+
+function getSessionsKey() {
+  return currentUserId ? `vx_sessions_${currentUserId}` : "vx_sessions";
+}
+
+window.__onAuthReady = function (user, token, profile) {
+  _authToken = token;
+  currentUserId = profile?.id || user?.uid || null;
+  const name = profile?.username || "User";
+  const initial = name.charAt(0).toUpperCase();
+  const el = (id) => document.getElementById(id);
+  if (el("sidebarAvatar")) el("sidebarAvatar").textContent = initial;
+  if (el("sidebarName")) el("sidebarName").textContent = name;
+  if (el("sidebarEmail"))
+    el("sidebarEmail").textContent = profile?.email || "—";
+
+  renderHistory();
+};
 
 let isGenerating = false;
 let chatHistory = [];
 let sessionSaved = false;
 let currentSessionId = null;
 
-async function loadProfile() {
-  try {
-    const res = await fetch("/api/auth/profile", {
-      headers: { Authorization: `Bearer ${token}` },
-    });
-    if (res.status === 401 || res.status === 403) {
-      logout();
-      return;
-    }
-    if (!res.ok) return;
-    const { user } = await res.json();
-    if (user) {
-      const name = user.username || "User";
-      const initial = name.charAt(0).toUpperCase();
-      document.getElementById("sidebarAvatar").textContent = initial;
-      document.getElementById("sidebarName").textContent = name;
-      document.getElementById("sidebarEmail").textContent = user.email || "—";
-    }
-  } catch (e) {}
-}
-
-loadProfile();
-
 function renderHistory() {
   const container = document.getElementById("chatHistoryList");
-  const sessions = JSON.parse(localStorage.getItem("vx_sessions") || "[]");
+  if (!container) return;
+  const sessions = JSON.parse(localStorage.getItem(getSessionsKey()) || "[]");
   if (sessions.length === 0) {
     container.innerHTML =
       '<div style="padding:6px 10px;font-size:0.78rem;color:var(--text-muted)">No past chats yet</div>';
@@ -174,13 +170,32 @@ function appendMessage(role, text, fileInfo) {
           hljs.highlightElement(block);
         }
       });
+      if (typeof renderMathInElement !== "undefined") {
+        renderMathInElement(div, {
+          delimiters: [
+            { left: "$$", right: "$$", display: true },
+            { left: "\\[", right: "\\]", display: true },
+            { left: "$", right: "$", display: false },
+            { left: "\\(", right: "\\)", display: false },
+          ],
+          throwOnError: false,
+        });
+      }
     });
   }
   box.scrollTop = box.scrollHeight;
 }
 
 function formatResponse(text) {
-  const lines = text.split("\n");
+  // Pre-process $$ math blocks into math code blocks so they get wrapped in a copyable block container
+  const processedText = text.replace(
+    /\$\$\s*([\s\S]+?)\s*\$\$/g,
+    function (_, mathContent) {
+      return "\n```math\n" + mathContent.trim() + "\n```\n";
+    },
+  );
+
+  const lines = processedText.split("\n");
   let html = "";
   let inCode = false;
   let codeLang = "";
@@ -198,16 +213,24 @@ function formatResponse(text) {
     }
 
     if (inCode && line.startsWith("```")) {
-      const langAttr = codeLang
-        ? ` class="language-${codeLang}"`
-        : ' class="plaintext"';
-      const langLabel = codeLang || "code";
-      const escaped = codeLines
-        .join("\n")
+      const isMath = codeLang === "math" || codeLang === "latex";
+      const langAttr = isMath
+        ? ' class="language-math"'
+        : codeLang
+          ? ` class="language-${codeLang}"`
+          : ' class="plaintext"';
+      const langLabel = isMath ? "Math Formula" : codeLang || "code";
+      const rawText = codeLines.join("\n").trim();
+      const escaped = rawText
         .replace(/&/g, "&amp;")
         .replace(/</g, "&lt;")
         .replace(/>/g, "&gt;");
-      html += `<div class="code-block-wrap"><div class="code-block-header"><span class="code-lang-label">${escapeHtml(langLabel)}</span><button class="code-copy-btn" onclick="copyCode(this)">Copy</button></div><pre><code${langAttr}>${escaped}</code></pre></div>`;
+
+      if (isMath) {
+        html += `<div class="code-block-wrap math-block-wrap"><div class="code-block-header"><span class="code-lang-label">${escapeHtml(langLabel)}</span><button class="code-copy-btn" onclick="copyCode(this)">Copy</button></div><pre style="display:none"><code>${escaped}</code></pre><div class="math-rendered-box">\\[${escaped}\\]</div></div>`;
+      } else {
+        html += `<div class="code-block-wrap"><div class="code-block-header"><span class="code-lang-label">${escapeHtml(langLabel)}</span><button class="code-copy-btn" onclick="copyCode(this)">Copy</button></div><pre><code${langAttr}>${escaped}</code></pre></div>`;
+      }
       inCode = false;
       codeLang = "";
       codeLines = [];
@@ -219,7 +242,9 @@ function formatResponse(text) {
       continue;
     }
 
-    let escaped = line
+    let lineText = line.replace(/^(\s*)[\*\-\+]\s+/, "$1• ");
+
+    let escaped = lineText
       .replace(/&/g, "&amp;")
       .replace(/</g, "&lt;")
       .replace(/>/g, "&gt;")
@@ -231,24 +256,33 @@ function formatResponse(text) {
   }
 
   if (inCode && codeLines.length) {
-    const langAttr = codeLang
-      ? ` class="language-${codeLang}"`
-      : ' class="plaintext"';
-    const langLabel = codeLang || "code";
-    const escaped = codeLines
-      .join("\n")
+    const isMath = codeLang === "math" || codeLang === "latex";
+    const langAttr = isMath
+      ? ' class="language-math"'
+      : codeLang
+        ? ` class="language-${codeLang}"`
+        : ' class="plaintext"';
+    const langLabel = isMath ? "Math Formula" : codeLang || "code";
+    const rawText = codeLines.join("\n").trim();
+    const escaped = rawText
       .replace(/&/g, "&amp;")
       .replace(/</g, "&lt;")
       .replace(/>/g, "&gt;");
-    html += `<div class="code-block-wrap"><div class="code-block-header"><span class="code-lang-label">${escapeHtml(langLabel)}</span><button class="code-copy-btn" onclick="copyCode(this)">Copy</button></div><pre><code${langAttr}>${escaped}</code></pre></div>`;
+
+    if (isMath) {
+      html += `<div class="code-block-wrap math-block-wrap"><div class="code-block-header"><span class="code-lang-label">${escapeHtml(langLabel)}</span><button class="code-copy-btn" onclick="copyCode(this)">Copy</button></div><pre style="display:none"><code>${escaped}</code></pre><div class="math-rendered-box">\\[${escaped}\\]</div></div>`;
+    } else {
+      html += `<div class="code-block-wrap"><div class="code-block-header"><span class="code-lang-label">${escapeHtml(langLabel)}</span><button class="code-copy-btn" onclick="copyCode(this)">Copy</button></div><pre><code${langAttr}>${escaped}</code></pre></div>`;
+    }
   }
 
   return html;
 }
 
 function copyCode(btn) {
-  const code = btn.closest(".code-block-wrap").querySelector("code");
-  const text = code.textContent;
+  const wrap = btn.closest(".code-block-wrap");
+  const code = wrap ? wrap.querySelector("code") : null;
+  const text = code ? code.textContent : wrap ? wrap.innerText : "";
   navigator.clipboard
     .writeText(text)
     .then(() => {
@@ -411,7 +445,7 @@ async function send() {
   setGenerating(true);
 
   try {
-    const authToken = localStorage.getItem("token");
+    const authToken = _authToken || localStorage.getItem("token");
     const historySnapshot = chatHistory.slice(0, -1);
 
     let res;
@@ -466,7 +500,8 @@ async function send() {
 }
 
 function saveSession(firstMessage) {
-  const sessions = JSON.parse(localStorage.getItem("vx_sessions") || "[]");
+  const key = getSessionsKey();
+  const sessions = JSON.parse(localStorage.getItem(key) || "[]");
   const title =
     firstMessage.length > 40 ? firstMessage.slice(0, 40) + "…" : firstMessage;
   const id =
@@ -478,17 +513,18 @@ function saveSession(firstMessage) {
     ts: Date.now(),
     messages: [...chatHistory],
   });
-  localStorage.setItem("vx_sessions", JSON.stringify(sessions.slice(0, 20)));
+  localStorage.setItem(key, JSON.stringify(sessions.slice(0, 20)));
   renderHistory();
 }
 
 function updateSession() {
   if (!currentSessionId) return;
-  const sessions = JSON.parse(localStorage.getItem("vx_sessions") || "[]");
+  const key = getSessionsKey();
+  const sessions = JSON.parse(localStorage.getItem(key) || "[]");
   const idx = sessions.findIndex((s) => s.id === currentSessionId);
   if (idx !== -1) {
     sessions[idx].messages = [...chatHistory];
-    localStorage.setItem("vx_sessions", JSON.stringify(sessions));
+    localStorage.setItem(key, JSON.stringify(sessions));
   }
 }
 
@@ -541,7 +577,8 @@ function newChat() {
 }
 
 function loadSession(i) {
-  const sessions = JSON.parse(localStorage.getItem("vx_sessions") || "[]");
+  const key = getSessionsKey();
+  const sessions = JSON.parse(localStorage.getItem(key) || "[]");
   const session = sessions[i];
   if (!session) return;
 
@@ -573,8 +610,12 @@ function loadSession(i) {
 }
 
 function logout() {
-  localStorage.removeItem("token");
-  window.location.href = "/";
+  if (typeof window.__firebaseSignOut === "function") {
+    window.__firebaseSignOut();
+  } else {
+    localStorage.removeItem("token");
+    window.location.replace("/");
+  }
 }
 
 let selectedAspectRatio = "1:1";
@@ -634,7 +675,7 @@ async function generateImage() {
   if (existingErr) existingErr.remove();
 
   try {
-    const authToken = localStorage.getItem("token");
+    const authToken = _authToken || localStorage.getItem("token");
     const res = await fetch("/api/ai/generate-image", {
       method: "POST",
       headers: {
@@ -900,7 +941,7 @@ async function startScraping() {
   setGenerating(true);
 
   try {
-    const authToken = localStorage.getItem("token");
+    const authToken = _authToken || localStorage.getItem("token");
     const res = await fetch("/api/ai/scrape", {
       method: "POST",
       headers: {
@@ -1033,6 +1074,17 @@ function appendScrapeResult(data) {
     div.querySelectorAll("pre code").forEach((block) => {
       if (typeof hljs !== "undefined") hljs.highlightElement(block);
     });
+    if (typeof renderMathInElement !== "undefined") {
+      renderMathInElement(div, {
+        delimiters: [
+          { left: "$$", right: "$$", display: true },
+          { left: "\\[", right: "\\]", display: true },
+          { left: "$", right: "$", display: false },
+          { left: "\\(", right: "\\)", display: false },
+        ],
+        throwOnError: false,
+      });
+    }
   });
   box.scrollTop = box.scrollHeight;
 }
