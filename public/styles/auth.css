@@ -186,13 +186,13 @@ label {
 
 input {
   width: 100%;
-  padding: 10px 38px 10px 38px;
+  padding: 12px 38px 12px 38px;
   background: rgba(0, 0, 0, 0.2);
   border: 1px solid var(--border);
   border-radius: var(--radius-sm);
   color: var(--text);
   font-family: var(--font-sans);
-  font-size: 0.875rem;
+  font-size: 1rem; /* 16px — prevents iOS Safari auto-zoom */
   outline: none;
   transition:
     border-color 0.15s,
@@ -243,13 +243,14 @@ input:focus {
 
 .submit-btn {
   width: 100%;
-  padding: 11px;
+  padding: 13px;
+  min-height: 48px;
   background: var(--accent);
   border: none;
   border-radius: var(--radius-sm);
   color: #fff;
   font-family: var(--font-sans);
-  font-size: 0.9rem;
+  font-size: 0.95rem;
   font-weight: 600;
   cursor: pointer;
   transition:
@@ -261,6 +262,8 @@ input:focus {
   align-items: center;
   justify-content: center;
   gap: 8px;
+  -webkit-tap-highlight-color: transparent;
+  touch-action: manipulation;
 }
 
 .submit-btn:hover {
@@ -433,15 +436,20 @@ input:focus {
 
 @media (max-width: 480px) {
   .auth-card {
-    padding: 24px 20px;
+    padding: 22px 18px;
   }
   .logo-text {
     font-size: 1.1rem;
   }
   .form-title {
-    font-size: 1.15rem;
+    font-size: 1.1rem;
   }
   .submit-btn {
-    padding: 12px;
+    padding: 14px;
+  }
+  /* Ensure OTP input doesn't zoom on small phones */
+  .otp-input {
+    font-size: 1.2rem;
+    letter-spacing: 6px;
   }
 }
