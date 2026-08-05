@@ -1,6 +1,6 @@
 body {
   display: flex;
-  height: 100vh;
+  height: 100dvh; /* Use dvh to account for dynamic mobile browser toolbars */
   overflow: hidden;
 }
 
@@ -12,7 +12,7 @@ body {
   margin-left: var(--sidebar-w);
   display: flex;
   flex-direction: column;
-  height: 100vh;
+  height: 100dvh;
   flex: 1;
   background: var(--bg);
   min-width: 0;
@@ -404,45 +404,189 @@ body {
   height: 13px;
 }
 
-.typing-indicator {
+/* ──────────────────────────────────────────────
+   THINKING / PROCESSING ANIMATION
+   Replaces the old 3-dot typing indicator.
+────────────────────────────────────────────── */
+.thinking-row {
   display: flex;
   gap: 12px;
   padding: 16px 20px;
   align-items: flex-start;
+  animation: thinkFadeIn 0.3s cubic-bezier(0.4, 0, 0.2, 1) both;
+  transition:
+    opacity 0.2s ease,
+    transform 0.2s ease;
 }
 
-.typing-dots {
+@keyframes thinkFadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Avatar with animated ring */
+.thinking-avatar {
+  position: relative;
+  width: 28px;
+  height: 28px;
+  flex-shrink: 0;
+  margin-top: 2px;
+}
+
+.thinking-avatar svg {
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  background: var(--accent);
+  color: #fff;
+  padding: 5px;
+  display: block;
+  position: relative;
+  z-index: 1;
+}
+
+.thinking-avatar-ring {
+  position: absolute;
+  inset: -4px;
+  border-radius: 50%;
+  border: 2px solid transparent;
+  background:
+    linear-gradient(var(--bg-sidebar, #171717), var(--bg-sidebar, #171717))
+      padding-box,
+    conic-gradient(
+        from 0deg,
+        var(--accent) 0%,
+        rgba(16, 163, 127, 0.3) 40%,
+        transparent 55%,
+        transparent 90%,
+        var(--accent) 100%
+      )
+      border-box;
+  animation: ringRotate 1.4s linear infinite;
+}
+
+@keyframes ringRotate {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+/* Body: header + bars */
+.thinking-body {
+  flex: 1;
+  min-width: 0;
+  padding-top: 2px;
+}
+
+.thinking-header {
   display: flex;
   align-items: center;
-  gap: 3px;
-  padding: 8px 0;
+  gap: 10px;
+  margin-bottom: 12px;
 }
 
-.typing-dot {
+.thinking-name {
+  font-size: 0.82rem;
+  font-weight: 600;
+  color: var(--text-dim);
+}
+
+/* Badge pill with orb + phase text */
+.thinking-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background: var(--accent-faint);
+  border: 1px solid rgba(16, 163, 127, 0.2);
+  border-radius: 20px;
+  padding: 3px 10px 3px 6px;
+}
+
+.thinking-orb {
   width: 7px;
   height: 7px;
   border-radius: 50%;
-  background: var(--text-muted);
-  animation: typing-bounce 1.4s ease-in-out infinite;
+  background: var(--accent);
+  box-shadow:
+    0 0 6px var(--accent),
+    0 0 12px rgba(16, 163, 127, 0.4);
+  animation: orbPulse 1.2s ease-in-out infinite;
+  flex-shrink: 0;
 }
 
-.typing-dot:nth-child(2) {
-  animation-delay: 0.2s;
-}
-.typing-dot:nth-child(3) {
-  animation-delay: 0.4s;
-}
-
-@keyframes typing-bounce {
+@keyframes orbPulse {
   0%,
-  60%,
   100% {
-    transform: translateY(0);
-    opacity: 0.6;
-  }
-  30% {
-    transform: translateY(-5px);
+    transform: scale(1);
     opacity: 1;
+    box-shadow:
+      0 0 6px var(--accent),
+      0 0 12px rgba(16, 163, 127, 0.4);
+  }
+  50% {
+    transform: scale(1.35);
+    opacity: 0.7;
+    box-shadow:
+      0 0 10px var(--accent),
+      0 0 22px rgba(16, 163, 127, 0.5);
+  }
+}
+
+.thinking-phase {
+  font-size: 0.73rem;
+  font-weight: 500;
+  color: var(--accent);
+  letter-spacing: 0.01em;
+  transition: opacity 0.2s ease;
+  white-space: nowrap;
+}
+
+/* Shimmer skeleton bars */
+.thinking-bars {
+  display: flex;
+  flex-direction: column;
+  gap: 9px;
+}
+
+.thinking-bar {
+  height: 9px;
+  border-radius: 6px;
+  background: linear-gradient(
+    90deg,
+    var(--surface-2) 0%,
+    var(--surface-3) 35%,
+    rgba(16, 163, 127, 0.15) 50%,
+    var(--surface-3) 65%,
+    var(--surface-2) 100%
+  );
+  background-size: 300% 100%;
+  animation: shimmer 2s ease-in-out infinite;
+}
+
+@keyframes shimmer {
+  0% {
+    background-position: 200% center;
+  }
+  100% {
+    background-position: -200% center;
+  }
+}
+
+@media (max-width: 768px) {
+  .thinking-row {
+    padding: 12px 10px;
+    gap: 8px;
+  }
+  .thinking-avatar,
+  .thinking-avatar svg {
+    width: 26px;
+    height: 26px;
   }
 }
 
@@ -513,6 +657,8 @@ body {
     background 0.15s,
     transform 0.1s,
     opacity 0.15s;
+  -webkit-tap-highlight-color: transparent;
+  touch-action: manipulation;
 }
 
 .send-btn:hover {
@@ -591,6 +737,7 @@ body {
   inset: 0;
   background: rgba(0, 0, 0, 0.55);
   backdrop-filter: blur(4px);
+  -webkit-backdrop-filter: blur(4px);
   z-index: 9999;
   display: flex;
   align-items: center;
@@ -1004,8 +1151,10 @@ body {
 
 @media (max-width: 768px) {
   #msgInput,
-  #imgPromptInput {
-    font-size: 16px;
+  #imgPromptInput,
+  #scrapeUrlInput,
+  #scrapeQueryInput {
+    font-size: 16px !important;
   }
 }
 
