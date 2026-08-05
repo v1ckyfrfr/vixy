@@ -490,36 +490,16 @@
               </svg>
             </div>
             <div>
-              <div class="settings-title">Session & Security</div>
+              <div class="settings-title">Session &amp; Security</div>
               <div class="settings-desc">Manage your active session</div>
             </div>
           </div>
           <div class="settings-body">
-            <p
-              style="
-                font-size: 0.84rem;
-                color: var(--text-muted);
-                margin-bottom: 14px;
-              "
-            >
-              Your session is protected by JWT and expires in 8 hours. Sign out
-              to invalidate your current session.
+            <p style="font-size: 0.84rem; color: var(--text-muted)">
+              Your session is protected by JWT and expires in 8 hours. To sign
+              out and invalidate your current session, use the
+              <strong>Danger Zone</strong> section below.
             </p>
-            <button class="btn btn-ghost" onclick="logout()">
-              <svg
-                width="14"
-                height="14"
-                fill="none"
-                stroke="currentColor"
-                viewBox="0 0 24 24"
-              >
-                <path
-                  stroke-width="2"
-                  d="M9 21H5a2 2 0 01-2-2V5a2 2 0 012-2h4M16 17l5-5-5-5M21 12H9"
-                />
-              </svg>
-              Sign Out
-            </button>
           </div>
         </div>
 
@@ -561,6 +541,7 @@
     </main>
 
     <script type="module" src="/js/auth-guard.js"></script>
+    <script type="module" src="/js/signout.js"></script>
     <script>
       window.__onAuthReady = function (user, token, profile) {
         const name = profile.username || "User";
