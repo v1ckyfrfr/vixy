@@ -17,7 +17,7 @@
       media="(prefers-color-scheme: light)"
     />
     <meta name="description" content="Vixy-AI — Chat with your AI assistant" />
-    <title>Vixy-AI — Chat</title>
+    <title>Vixy-AI - Chat</title>
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link
       href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap"
@@ -130,7 +130,7 @@
     <div class="sidebar-overlay" onclick="toggleSidebar()"></div>
     <div class="chat-wrap">
       <header class="chat-header">
-        <div style="display: flex; align-items: center">
+        <div style="display: flex; align-items: center; gap: 8px">
           <button class="mobile-toggle" onclick="toggleSidebar()">
             <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path
@@ -141,13 +141,114 @@
               />
             </svg>
           </button>
-          <button class="model-selector" id="modelSelector">
-            Vixy-VY01u
-            <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <polyline stroke-width="2" points="6 9 12 15 18 9" />
-            </svg>
-          </button>
+
+          <!-- Mode Selector -->
+          <div class="mode-selector-wrap" id="modeSelectorWrap">
+            <button
+              class="model-selector"
+              id="modeSelectorBtn"
+              onclick="toggleModeDropdown()"
+              aria-haspopup="true"
+              aria-expanded="false"
+            >
+              <span class="mode-dot" id="modeDot" data-mode="auto"></span>
+              <span id="modeLabelText">Auto</span>
+              <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <polyline stroke-width="2" points="6 9 12 15 18 9" />
+              </svg>
+            </button>
+
+            <div class="mode-dropdown" id="modeDropdown" role="menu">
+              <div class="mode-dropdown-header">Response Mode</div>
+
+              <button
+                class="mode-option"
+                data-mode="auto"
+                onclick="setMode('auto')"
+                role="menuitem"
+              >
+                <span class="mode-opt-dot" data-mode="auto"></span>
+                <div class="mode-opt-info">
+                  <span class="mode-opt-label">Auto</span>
+                  <span class="mode-opt-desc"
+                    >Model decides - balanced for most tasks</span
+                  >
+                </div>
+                <svg
+                  class="mode-check"
+                  id="check-auto"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                >
+                  <polyline
+                    stroke-width="2.5"
+                    stroke-linecap="round"
+                    points="20 6 9 17 4 12"
+                  />
+                </svg>
+              </button>
+
+              <button
+                class="mode-option"
+                data-mode="fast"
+                onclick="setMode('fast')"
+                role="menuitem"
+              >
+                <span class="mode-opt-dot" data-mode="fast"></span>
+                <div class="mode-opt-info">
+                  <span class="mode-opt-label">Fast</span>
+                  <span class="mode-opt-desc"
+                    >Instant replies - best for casual chat</span
+                  >
+                </div>
+                <svg
+                  class="mode-check"
+                  id="check-fast"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                >
+                  <polyline
+                    stroke-width="2.5"
+                    stroke-linecap="round"
+                    points="20 6 9 17 4 12"
+                  />
+                </svg>
+              </button>
+
+              <button
+                class="mode-option"
+                data-mode="think"
+                onclick="setMode('think')"
+                role="menuitem"
+              >
+                <span class="mode-opt-dot" data-mode="think"></span>
+                <div class="mode-opt-info">
+                  <span class="mode-opt-label">Think</span>
+                  <span class="mode-opt-desc"
+                    >Deep reasoning - for code, math &amp; complex
+                    problems</span
+                  >
+                </div>
+                <svg
+                  class="mode-check"
+                  id="check-think"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                >
+                  <polyline
+                    stroke-width="2.5"
+                    stroke-linecap="round"
+                    points="20 6 9 17 4 12"
+                  />
+                </svg>
+              </button>
+            </div>
+          </div>
         </div>
+
         <div class="header-actions">
           <div class="badge" id="statusBadge">
             <span class="dot"></span>
@@ -494,7 +595,8 @@
         </div>
 
         <p class="scrape-modal-sub">
-          Enter the webpage URL you want to scrape, then add an optional question or instruction for Vixy.
+          Enter the webpage URL you want to scrape, then add an optional
+          question or instruction for Vixy.
         </p>
 
         <label for="scrapeUrlInput">Website URL</label>
@@ -541,9 +643,7 @@
           </button>
           <button
             class="scrape-query-chip"
-            onclick="
-              setScrapeQuery('Extract all key links on this page')
-            "
+            onclick="setScrapeQuery('Extract all key links on this page')"
           >
             Extract Links
           </button>
@@ -555,9 +655,7 @@
           </button>
           <button
             class="scrape-query-chip"
-            onclick="
-              setScrapeQuery('List key takeaways from this page')
-            "
+            onclick="setScrapeQuery('List key takeaways from this page')"
           >
             Key Takeaways
           </button>
