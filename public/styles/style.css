@@ -469,7 +469,7 @@ a {
   margin-top: 4px;
 }
 
-/* ─── Badge ─────────────────────────────────────────────────── */
+/* ─── Badge — base ───────────────────────────────────────────── */
 .badge {
   display: inline-flex;
   align-items: center;
@@ -478,17 +478,76 @@ a {
   border-radius: 20px;
   font-size: 0.71rem;
   font-weight: 500;
-  background: var(--accent-subtle);
-  color: var(--accent);
-  border: 1px solid var(--accent-border);
+  letter-spacing: 0.01em;
+  /* color/border overridden per state below */
+  transition:
+    background 0.25s ease,
+    color 0.25s ease,
+    border-color 0.25s ease;
 }
 
 .badge .dot {
   width: 5px;
   height: 5px;
   border-radius: 50%;
-  background: var(--accent);
+  flex-shrink: 0;
+  transition: background 0.25s ease;
+}
+
+/* ── state: ready ──── green */
+.badge[data-state="ready"] {
+  background: rgba(90, 158, 124, 0.12);
+  color: #5a9e7c;
+  border: 1px solid rgba(90, 158, 124, 0.25);
+}
+.badge[data-state="ready"] .dot {
+  background: #5a9e7c;
   animation: softPulse 2.5s ease-in-out infinite;
+}
+
+/* ── state: thinking ── amber, subtle spin */
+.badge[data-state="thinking"] {
+  background: rgba(201, 169, 110, 0.12);
+  color: #c9a96e;
+  border: 1px solid rgba(201, 169, 110, 0.25);
+}
+.badge[data-state="thinking"] .dot {
+  background: #c9a96e;
+  animation: dotSpin 1s linear infinite;
+}
+
+/* ── state: processing ── amber (same palette, no spin) */
+.badge[data-state="processing"] {
+  background: rgba(201, 169, 110, 0.12);
+  color: #c9a96e;
+  border: 1px solid rgba(201, 169, 110, 0.25);
+}
+.badge[data-state="processing"] .dot {
+  background: #c9a96e;
+  animation: softPulse 1s ease-in-out infinite;
+}
+
+/* ── state: error ── red */
+.badge[data-state="error"] {
+  background: rgba(185, 90, 90, 0.12);
+  color: #b95a5a;
+  border: 1px solid rgba(185, 90, 90, 0.25);
+}
+.badge[data-state="error"] .dot {
+  background: #b95a5a;
+  animation: softPulse 0.8s ease-in-out infinite;
+}
+
+/* ── state: offline ── muted grey */
+.badge[data-state="offline"] {
+  background: rgba(120, 120, 130, 0.1);
+  color: var(--text-muted);
+  border: 1px solid var(--border-subtle);
+}
+.badge[data-state="offline"] .dot {
+  background: var(--text-muted);
+  opacity: 0.5;
+  animation: none;
 }
 
 @keyframes softPulse {
@@ -497,7 +556,23 @@ a {
     opacity: 1;
   }
   50% {
-    opacity: 0.35;
+    opacity: 0.3;
+  }
+}
+
+/* Spinner variant for thinking dot */
+@keyframes dotSpin {
+  0% {
+    transform: scale(1);
+    opacity: 1;
+  }
+  50% {
+    transform: scale(0.4);
+    opacity: 0.3;
+  }
+  100% {
+    transform: scale(1);
+    opacity: 1;
   }
 }
 

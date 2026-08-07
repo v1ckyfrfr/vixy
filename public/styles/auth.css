@@ -1,3 +1,5 @@
+@import url("https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,300;0,14..32,400;0,14..32,500;0,14..32,600;0,14..32,700;1,14..32,400&display=swap");
+
 *,
 *::before,
 *::after {
@@ -7,20 +9,41 @@
 }
 
 :root {
-  --accent: #10a37f;
-  --accent-dim: #0d8f70;
-  --accent-glow: rgba(16, 163, 127, 0.2);
-  --bg: #212121;
-  --surface: #2f2f2f;
-  --surface-2: #3a3a3a;
-  --text: #ececec;
-  --text-dim: #b4b4b4;
-  --text-muted: #6b6b6b;
-  --border: rgba(255, 255, 255, 0.1);
-  --border-subtle: rgba(255, 255, 255, 0.06);
-  --radius-sm: 8px;
-  --radius: 12px;
-  --font-sans: "Inter", -apple-system, sans-serif;
+  /* Core palette - refined */
+  --accent: #5a9e7c;
+  --accent-hover: #4d8c6c;
+  --accent-subtle: rgba(90, 158, 124, 0.12);
+  --accent-border: rgba(90, 158, 124, 0.25);
+
+  /* Backgrounds - deep slate */
+  --bg: #141414;
+  --surface: #1c1c1c;
+  --surface-2: #242424;
+  --surface-3: #2e2e2e;
+
+  /* Text - warm ivory hierarchy */
+  --text: #f0ede8;
+  --text-dim: #a8a49e;
+  --text-muted: #5c5a57;
+
+  /* Borders colors */
+  --border: rgba(255, 255, 255, 0.08);
+  --border-focus: rgba(255, 255, 255, 0.18);
+  --border-subtle: rgba(255, 255, 255, 0.04);
+
+  /* Radii */
+  --radius-xs: 6px;
+  --radius-sm: 10px;
+  --radius: 14px;
+  --radius-lg: 18px;
+
+  /* Shadows */
+  --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.4);
+  --shadow: 0 4px 24px rgba(0, 0, 0, 0.5);
+  --shadow-lg: 0 12px 48px rgba(0, 0, 0, 0.6);
+
+  --font-sans:
+    "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
 }
 
 html {
@@ -31,33 +54,30 @@ body {
   font-family: var(--font-sans);
   background: var(--bg);
   color: var(--text);
-  min-height: 100vh;
+  min-height: 100dvh;
   display: flex;
   align-items: center;
   justify-content: center;
-  padding: 20px;
+  padding: 24px 20px;
   -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
 }
 
+/* Very subtle */
 body::before {
   content: "";
   position: fixed;
   inset: 0;
-  background:
-    radial-gradient(
-      circle at 20% 80%,
-      rgba(16, 163, 127, 0.04) 0%,
-      transparent 50%
-    ),
-    radial-gradient(
-      circle at 80% 20%,
-      rgba(16, 163, 127, 0.03) 0%,
-      transparent 50%
-    );
+  background: radial-gradient(
+    ellipse 80% 60% at 50% 0%,
+    rgba(90, 158, 124, 0.04) 0%,
+    transparent 60%
+  );
   pointer-events: none;
   z-index: 0;
 }
 
+/* ─── Container ─────────────────────────────────────── */
 .auth-container {
   position: relative;
   z-index: 1;
@@ -65,77 +85,53 @@ body::before {
   max-width: 400px;
 }
 
+/* ─── Logo ──────────────────────────────────────────── */
 .auth-logo {
   display: flex;
   align-items: center;
   justify-content: center;
   gap: 10px;
-  margin-bottom: 32px;
+  margin-bottom: 36px;
 }
 
 .logo-icon {
-  width: 36px;
-  height: 36px;
+  width: 34px;
+  height: 34px;
   background: var(--accent);
-  border-radius: 10px;
+  border-radius: var(--radius-sm);
   display: flex;
   align-items: center;
   justify-content: center;
+  flex-shrink: 0;
 }
 
 .logo-icon svg {
-  width: 20px;
-  height: 20px;
+  width: 18px;
+  height: 18px;
   color: #fff;
 }
 
 .logo-text {
-  font-size: 1.25rem;
-  font-weight: 700;
-  letter-spacing: -0.02em;
+  font-size: 1.1rem;
+  font-weight: 600;
+  letter-spacing: -0.03em;
   color: var(--text);
 }
 
+/* ─── Card ──────────────────────────────────────────── */
 .auth-card {
   background: var(--surface);
-  border: 1px solid var(--border-subtle);
-  border-radius: 16px;
-  padding: 32px;
-  box-shadow: 0 8px 40px rgba(0, 0, 0, 0.3);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  padding: 36px 32px;
+  box-shadow: var(--shadow-lg);
 }
 
-.tab-switcher {
-  display: flex;
-  background: rgba(0, 0, 0, 0.2);
-  border-radius: var(--radius-sm);
-  padding: 3px;
-  margin-bottom: 28px;
-}
-
-.tab-btn {
-  flex: 1;
-  padding: 8px;
-  background: transparent;
-  border: none;
-  border-radius: 6px;
-  font-family: var(--font-sans);
-  font-size: 0.875rem;
-  font-weight: 500;
-  color: var(--text-muted);
-  cursor: pointer;
-  transition: all 0.2s;
-}
-
-.tab-btn.active {
-  background: var(--surface-2);
-  color: var(--text);
-  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.2);
-}
-
+/* ─── Form ──────────────────────────────────────────── */
 .form {
   display: none;
   flex-direction: column;
-  gap: 14px;
+  gap: 18px;
 }
 
 .form.active {
@@ -143,51 +139,57 @@ body::before {
 }
 
 .form-title {
-  font-size: 1.25rem;
+  font-size: 1.2rem;
   font-weight: 600;
-  letter-spacing: -0.02em;
+  letter-spacing: -0.025em;
   margin-bottom: 4px;
   text-align: center;
+  color: var(--text);
+  line-height: 1.3;
 }
 
 .form-subtitle {
   font-size: 0.82rem;
   color: var(--text-muted);
   text-align: center;
-  margin-bottom: 8px;
+  line-height: 1.55;
 }
 
+/* ─── Field ─────────────────────────────────────────── */
 .field {
   display: flex;
   flex-direction: column;
-  gap: 6px;
+  gap: 7px;
 }
 
 label {
-  font-size: 0.8rem;
+  font-size: 0.775rem;
   font-weight: 500;
   color: var(--text-dim);
+  letter-spacing: 0.01em;
 }
 
+/* ─── Input ─────────────────────────────────────────── */
 .input-wrapper {
   position: relative;
 }
 
 .input-wrapper svg {
   position: absolute;
-  left: 12px;
+  left: 13px;
   top: 50%;
   transform: translateY(-50%);
-  width: 15px;
-  height: 15px;
+  width: 14px;
+  height: 14px;
   color: var(--text-muted);
   pointer-events: none;
+  transition: color 0.2s;
 }
 
 input {
   width: 100%;
-  padding: 12px 38px 12px 38px;
-  background: rgba(0, 0, 0, 0.2);
+  padding: 11px 14px 11px 38px;
+  background: var(--surface-2);
   border: 1px solid var(--border);
   border-radius: var(--radius-sm);
   color: var(--text);
@@ -195,8 +197,8 @@ input {
   font-size: 1rem; /* 16px — prevents iOS Safari auto-zoom */
   outline: none;
   transition:
-    border-color 0.15s,
-    box-shadow 0.15s;
+    border-color 0.2s ease,
+    background 0.2s ease;
   box-sizing: border-box;
 }
 
@@ -207,13 +209,24 @@ input {
 
 input::placeholder {
   color: var(--text-muted);
+  font-weight: 400;
 }
 
 input:focus {
-  border-color: var(--accent);
-  box-shadow: 0 0 0 3px var(--accent-glow);
+  border-color: var(--border-focus);
+  background: var(--surface-3);
 }
 
+input:focus + * /* sibling icon color update via JS, but let's style the wrapper */ {
+  color: var(--text-dim);
+}
+
+/* When input is focused, brighten the icon via parent */
+.input-wrapper:focus-within svg {
+  color: var(--text-dim);
+}
+
+/* ─── Password Toggle ───────────────────────────────── */
 .pw-toggle {
   position: absolute;
   right: 10px;
@@ -223,40 +236,42 @@ input:focus {
   border: none;
   cursor: pointer;
   color: var(--text-muted);
-  padding: 4px;
+  padding: 5px;
   display: flex;
   align-items: center;
-  transition: color 0.15s;
+  transition: color 0.2s;
   z-index: 2;
   line-height: 0;
 }
 
 .pw-toggle:hover {
-  color: var(--text);
+  color: var(--text-dim);
 }
 
 .pw-toggle svg {
-  width: 16px;
-  height: 16px;
+  width: 15px;
+  height: 15px;
   pointer-events: none;
 }
 
+/* ─── Submit Button ─────────────────────────────────── */
 .submit-btn {
   width: 100%;
-  padding: 13px;
-  min-height: 48px;
+  padding: 12px;
+  min-height: 46px;
   background: var(--accent);
   border: none;
   border-radius: var(--radius-sm);
   color: #fff;
   font-family: var(--font-sans);
-  font-size: 0.95rem;
+  font-size: 0.9rem;
   font-weight: 600;
   cursor: pointer;
   transition:
-    background 0.15s,
-    transform 0.1s;
-  margin-top: 4px;
+    background 0.2s ease,
+    transform 0.12s ease,
+    opacity 0.2s;
+  margin-top: 2px;
   letter-spacing: -0.01em;
   display: flex;
   align-items: center;
@@ -267,39 +282,93 @@ input:focus {
 }
 
 .submit-btn:hover {
-  background: var(--accent-dim);
+  background: var(--accent-hover);
 }
 
 .submit-btn:active {
-  transform: scale(0.99);
+  transform: scale(0.985);
 }
 
 .submit-btn:disabled {
-  opacity: 0.6;
+  opacity: 0.5;
   cursor: not-allowed;
   transform: none;
 }
 
+/* ─── Google Button ─────────────────────────────────── */
+.google-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  width: 100%;
+  padding: 11px 16px;
+  background: var(--surface-2);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  color: var(--text-dim);
+  font-size: 0.875rem;
+  font-weight: 500;
+  font-family: var(--font-sans);
+  cursor: pointer;
+  transition:
+    background 0.2s ease,
+    border-color 0.2s ease,
+    color 0.2s ease,
+    transform 0.12s ease;
+}
+
+.google-btn:hover {
+  background: var(--surface-3);
+  border-color: var(--border-focus);
+  color: var(--text);
+}
+
+.google-btn:active {
+  transform: scale(0.985);
+}
+
+/* ─── OR Divider ─────────────────────────────────────── */
+.divider {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  color: var(--text-muted);
+  font-size: 0.75rem;
+  letter-spacing: 0.06em;
+  font-weight: 500;
+}
+
+.divider::before,
+.divider::after {
+  content: "";
+  flex: 1;
+  height: 1px;
+  background: var(--border);
+}
+
+/* ─── Form Message ─────────────────────────────────── */
 .form-msg {
   padding: 10px 14px;
-  border-radius: var(--radius-sm);
-  font-size: 0.82rem;
+  border-radius: var(--radius-xs);
+  font-size: 0.8rem;
   display: none;
   align-items: center;
   gap: 8px;
+  line-height: 1.4;
 }
 
 .form-msg.error {
   display: flex;
-  background: rgba(239, 68, 68, 0.1);
-  border: 1px solid rgba(239, 68, 68, 0.2);
-  color: #f87171;
+  background: rgba(220, 80, 80, 0.08);
+  border: 1px solid rgba(220, 80, 80, 0.18);
+  color: #e08080;
 }
 
 .form-msg.success {
   display: flex;
-  background: rgba(16, 163, 127, 0.1);
-  border: 1px solid rgba(16, 163, 127, 0.2);
+  background: var(--accent-subtle);
+  border: 1px solid var(--accent-border);
   color: var(--accent);
 }
 
@@ -309,8 +378,62 @@ input:focus {
   flex-shrink: 0;
 }
 
+/* ─── OTP Input ─────────────────────────────────────── */
+.otp-input {
+  text-align: center;
+  font-size: 1.35rem;
+  letter-spacing: 10px;
+  font-weight: 700;
+  color: var(--text);
+  padding-left: 18px !important;
+}
+
+/* ─── Secondary Action ──────────────────────────────── */
+.secondary-action {
+  background: transparent;
+  border: none;
+  color: var(--text-muted);
+  font-size: 0.8rem;
+  font-family: var(--font-sans);
+  cursor: pointer;
+  text-align: center;
+  padding: 6px;
+  transition: color 0.2s;
+}
+
+.secondary-action:hover {
+  color: var(--text-dim);
+}
+
+/* ─── Spinner ───────────────────────────────────────── */
+.spinner {
+  width: 15px;
+  height: 15px;
+  border: 1.5px solid rgba(255, 255, 255, 0.25);
+  border-top-color: rgba(255, 255, 255, 0.85);
+  border-radius: 50%;
+  animation: spin 0.75s linear infinite;
+  display: none;
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+/* ─── Footer ────────────────────────────────────────── */
+.auth-footer {
+  text-align: center;
+  margin-top: 28px;
+  font-size: 0.74rem;
+  color: var(--text-muted);
+  line-height: 1.6;
+}
+
+/* ─── Password Strength ─────────────────────────────── */
 .pw-strength {
-  height: 3px;
+  height: 2px;
   border-radius: 2px;
   background: var(--border);
   overflow: hidden;
@@ -326,130 +449,70 @@ input:focus {
   height: 100%;
   border-radius: 2px;
   transition:
-    width 0.3s,
-    background 0.3s;
+    width 0.3s ease,
+    background 0.3s ease;
   width: 0%;
 }
 
 .pw-hint {
   font-size: 0.72rem;
   color: var(--text-muted);
-  margin-top: 2px;
+  margin-top: 3px;
 }
 
-.auth-footer {
-  text-align: center;
-  margin-top: 24px;
-  font-size: 0.78rem;
-  color: var(--text-muted);
-}
-
-.spinner {
-  width: 16px;
-  height: 16px;
-  border: 2px solid rgba(255, 255, 255, 0.3);
-  border-top-color: #fff;
-  border-radius: 50%;
-  animation: spin 0.7s linear infinite;
-  display: none;
-}
-
-@keyframes spin {
-  to {
-    transform: rotate(360deg);
-  }
-}
-
-/* ─── Google Button ───────────────────────────────────────── */
-.google-btn {
+/* ─── Tab Switcher ──────────────────────────────────── */
+.tab-switcher {
   display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 10px;
-  width: 100%;
-  padding: 11px 16px;
   background: var(--surface-2);
-  border: 1px solid var(--border);
-  border-radius: var(--radius-sm);
-  color: var(--text);
-  font-size: 0.9rem;
-  font-weight: 500;
-  font-family: var(--font-sans);
-  cursor: pointer;
-  transition:
-    background 0.2s,
-    border-color 0.2s,
-    transform 0.1s;
+  border-radius: var(--radius-xs);
+  padding: 3px;
+  margin-bottom: 24px;
+  gap: 2px;
 }
 
-.google-btn:hover {
-  background: rgba(255, 255, 255, 0.08);
-  border-color: rgba(255, 255, 255, 0.2);
-}
-
-.google-btn:active {
-  transform: scale(0.98);
-}
-
-/* ─── OR Divider ───*/
-.divider {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  margin: 4px 0;
-  color: var(--text-muted);
-  font-size: 0.8rem;
-}
-
-.divider::before,
-.divider::after {
-  content: "";
+.tab-btn {
   flex: 1;
-  height: 1px;
-  background: var(--border);
-}
-
-.otp-input {
-  text-align: center;
-  font-size: 1.3rem;
-  letter-spacing: 8px;
-  font-weight: 700;
-  color: var(--accent);
-  padding-left: 18px !important;
-}
-
-.secondary-action {
+  padding: 8px;
   background: transparent;
   border: none;
+  border-radius: calc(var(--radius-xs) - 1px);
+  font-family: var(--font-sans);
+  font-size: 0.84rem;
+  font-weight: 500;
   color: var(--text-muted);
-  font-size: 0.8rem;
   cursor: pointer;
-  text-align: center;
-  margin-top: 4px;
-  padding: 6px;
-  transition: color 0.15s;
+  transition:
+    background 0.18s,
+    color 0.18s;
 }
 
-.secondary-action:hover {
+.tab-btn.active {
+  background: var(--surface-3);
   color: var(--text);
 }
 
+/* ─── Responsive ────────────────────────────────────── */
 @media (max-width: 480px) {
   .auth-card {
-    padding: 22px 18px;
+    padding: 24px 18px;
+    border-radius: var(--radius);
   }
+
   .logo-text {
-    font-size: 1.1rem;
+    font-size: 1rem;
   }
+
   .form-title {
     font-size: 1.1rem;
   }
+
   .submit-btn {
-    padding: 14px;
+    padding: 13px;
+    min-height: 48px;
   }
-  /* Ensure OTP input doesn't zoom on small phones */
+
   .otp-input {
     font-size: 1.2rem;
-    letter-spacing: 6px;
+    letter-spacing: 8px;
   }
 }

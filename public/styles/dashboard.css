@@ -1,8 +1,9 @@
+/* ─── Stat Grid ─────────────────────────────────────────────── */
 .stat-grid {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
-  gap: 12px;
-  margin-bottom: 16px;
+  gap: 10px;
+  margin-bottom: 14px;
 }
 
 .stat-card {
@@ -11,25 +12,27 @@
   border-radius: var(--radius);
   padding: 20px 22px;
   transition:
-    border-color 0.2s,
-    box-shadow 0.2s;
+    border-color 0.2s ease,
+    background 0.2s ease;
 }
 
 .stat-card:hover {
   border-color: var(--border);
-  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.15);
+  background: var(--surface-2);
 }
 
+/* Left accent stripe — subtle, not neon */
 .stat-card.accent-left {
   border-left: 2px solid var(--accent);
 }
 
+/* ─── Stat Icon ─────────────────────────────────────────────── */
 .stat-icon {
-  width: 32px;
-  height: 32px;
+  width: 30px;
+  height: 30px;
   border-radius: var(--radius-sm);
-  background: var(--accent-faint);
-  border: 1px solid rgba(16, 163, 127, 0.2);
+  background: var(--accent-subtle);
+  border: 1px solid var(--accent-border);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -37,59 +40,68 @@
 }
 
 .stat-icon svg {
-  width: 15px;
-  height: 15px;
+  width: 14px;
+  height: 14px;
   color: var(--accent);
 }
 
+/* ─── Stat Labels & Values ──────────────────────────────────── */
 .stat-label {
-  font-size: 0.7rem;
+  font-size: 0.68rem;
   font-weight: 600;
-  letter-spacing: 0.06em;
+  letter-spacing: 0.08em;
   text-transform: uppercase;
   color: var(--text-muted);
   margin-bottom: 6px;
 }
 
 .stat-value {
-  font-size: 1.5rem;
+  font-size: 1.4rem;
   font-weight: 700;
-  letter-spacing: -0.02em;
+  letter-spacing: -0.025em;
   color: var(--text);
+  line-height: 1.2;
 }
 
 .stat-value.mono {
   font-family: var(--font-mono);
-  font-size: 1rem;
+  font-size: 0.95rem;
   color: var(--accent);
 }
 
 .stat-hint {
-  font-size: 0.78rem;
+  font-size: 0.77rem;
   color: var(--text-muted);
   margin-top: 4px;
 }
 
+/* ─── Bottom Grid ───────────────────────────────────────────── */
 .bottom-grid {
   display: grid;
   grid-template-columns: 1fr 1fr;
-  gap: 12px;
+  gap: 10px;
 }
 
+/* ─── Info Card ─────────────────────────────────────────────── */
 .info-card {
   background: var(--surface);
   border: 1px solid var(--border-subtle);
   border-radius: var(--radius);
   overflow: hidden;
+  transition: border-color 0.2s ease;
+}
+
+.info-card:hover {
+  border-color: var(--border);
 }
 
 .info-card-header {
-  padding: 14px 20px;
+  padding: 13px 20px;
   border-bottom: 1px solid var(--border-subtle);
-  font-size: 0.78rem;
+  font-size: 0.68rem;
   font-weight: 600;
-  color: var(--text-dim);
-  letter-spacing: 0.04em;
+  color: var(--text-muted);
+  letter-spacing: 0.08em;
   text-transform: uppercase;
 }
 
@@ -97,8 +109,13 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 12px 20px;
+  padding: 11px 20px;
   border-bottom: 1px solid var(--border-subtle);
+  transition: background 0.15s;
+}
+
+.info-row:hover {
+  background: var(--surface-hover);
 }
 
 .info-row:last-child {
@@ -106,26 +123,34 @@
 }
 
 .info-key {
-  font-size: 0.82rem;
+  font-size: 0.8rem;
   color: var(--text-muted);
 }
 
 .info-val {
   font-family: var(--font-mono);
-  font-size: 0.8rem;
-  color: var(--text);
+  font-size: 0.78rem;
+  color: var(--text-dim);
 }
 
 .info-val.accent {
   color: var(--accent);
+  font-family: var(--font-sans);
+  font-weight: 500;
 }
 
+/* ─── Activity ──────────────────────────────────────────────── */
 .activity-item {
   display: flex;
   align-items: flex-start;
   gap: 12px;
-  padding: 13px 20px;
+  padding: 12px 20px;
   border-bottom: 1px solid var(--border-subtle);
+  transition: background 0.15s;
+}
+
+.activity-item:hover {
+  background: var(--surface-hover);
 }
 
 .activity-item:last-child {
@@ -133,49 +158,55 @@
 }
 
 .activity-dot {
-  width: 6px;
-  height: 6px;
+  width: 5px;
+  height: 5px;
   border-radius: 50%;
-  background: var(--accent);
-  margin-top: 6px;
+  background: var(--text-muted);
+  margin-top: 7px;
   flex-shrink: 0;
-  opacity: 0.5;
+  opacity: 0.4;
 }
 
 .activity-dot.active {
+  background: var(--accent);
   opacity: 1;
 }
 
 .activity-text {
-  font-size: 0.84rem;
+  font-size: 0.83rem;
   color: var(--text);
+  line-height: 1.4;
 }
 
 .activity-time {
-  font-size: 0.72rem;
+  font-size: 0.71rem;
   color: var(--text-muted);
   margin-top: 2px;
 }
 
+/* ─── Quick Actions ─────────────────────────────────────────── */
 .quick-actions {
   display: flex;
-  gap: 10px;
-  margin-bottom: 24px;
+  gap: 8px;
+  margin-bottom: 22px;
   flex-wrap: wrap;
 }
 
 .quick-btn {
   display: flex;
   align-items: center;
-  gap: 8px;
+  gap: 7px;
   padding: 8px 14px;
   background: var(--surface);
   border: 1px solid var(--border-subtle);
   border-radius: var(--radius-sm);
-  font-size: 0.84rem;
-  color: var(--text-dim);
+  font-size: 0.82rem;
+  color: var(--text-muted);
   cursor: pointer;
-  transition: all 0.15s;
+  transition:
+    background 0.18s ease,
+    color 0.18s ease,
+    border-color 0.18s ease;
   font-family: var(--font-sans);
 }
 
@@ -185,11 +216,17 @@
   border-color: var(--border);
 }
 
-.quick-btn svg {
-  width: 15px;
-  height: 15px;
+.quick-btn:active {
+  transform: scale(0.97);
 }
 
+.quick-btn svg {
+  width: 14px;
+  height: 14px;
+  opacity: 0.7;
+}
+
+/* ─── Responsive ────────────────────────────────────────────── */
 @media (max-width: 1024px) {
   .stat-grid {
     grid-template-columns: 1fr 1fr;
@@ -201,15 +238,18 @@
     grid-template-columns: 1fr 1fr;
     gap: 8px;
   }
+
   .stat-card {
     padding: 14px 16px;
   }
+
   .stat-value {
-    font-size: 1.3rem;
+    font-size: 1.25rem;
   }
+
   .stat-icon {
-    width: 28px;
-    height: 28px;
+    width: 26px;
+    height: 26px;
     margin-bottom: 10px;
   }
 
@@ -223,29 +263,34 @@
     flex-wrap: wrap;
     gap: 4px;
   }
+
   .info-key {
-    font-size: 0.78rem;
+    font-size: 0.77rem;
   }
+
   .info-val {
-    font-size: 0.76rem;
+    font-size: 0.75rem;
   }
+
   .info-card-header {
-    padding: 12px 14px;
+    padding: 11px 14px;
   }
 
   .activity-item {
     padding: 10px 14px;
   }
+
   .activity-text {
-    font-size: 0.8rem;
+    font-size: 0.79rem;
   }
 
   .quick-actions {
-    gap: 8px;
+    gap: 7px;
   }
+
   .quick-btn {
     padding: 7px 12px;
-    font-size: 0.8rem;
+    font-size: 0.79rem;
   }
 }
 

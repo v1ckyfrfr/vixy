@@ -8,6 +8,138 @@ body {
   padding: 4px 8px;
 }
 
+/* ─── Mode Selector ─────────────────────────────────────────── */
+.mode-selector-wrap {
+  position: relative;
+}
+
+/* Indicator dot inside the trigger button */
+.mode-dot {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  flex-shrink: 0;
+  transition: background 0.2s;
+}
+.mode-dot[data-mode="auto"] {
+  background: var(--text-muted);
+}
+.mode-dot[data-mode="fast"] {
+  background: #c9a96e;
+}
+.mode-dot[data-mode="think"] {
+  background: #8b7fd4;
+}
+
+/* Dropdown panel */
+.mode-dropdown {
+  position: absolute;
+  top: calc(100% + 8px);
+  left: 0;
+  min-width: 260px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow-lg);
+  z-index: 200;
+  overflow: hidden;
+  opacity: 0;
+  pointer-events: none;
+  transform: translateY(-6px) scale(0.98);
+  transform-origin: top left;
+  transition:
+    opacity 0.15s ease,
+    transform 0.15s ease;
+}
+.mode-dropdown.open {
+  opacity: 1;
+  pointer-events: all;
+  transform: translateY(0) scale(1);
+}
+
+.mode-dropdown-header {
+  padding: 10px 14px 7px;
+  font-size: 0.68rem;
+  font-weight: 600;
+  letter-spacing: 0.07em;
+  text-transform: uppercase;
+  color: var(--text-muted);
+  border-bottom: 1px solid var(--border-subtle);
+}
+
+/* Individual option row */
+.mode-option {
+  display: flex;
+  align-items: center;
+  gap: 11px;
+  width: 100%;
+  padding: 11px 14px;
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  font-family: var(--font-sans);
+  transition: background 0.13s;
+  text-align: left;
+  border-bottom: 1px solid var(--border-subtle);
+}
+.mode-option:last-child {
+  border-bottom: none;
+}
+.mode-option:hover {
+  background: var(--surface-hover);
+}
+.mode-option.active {
+  background: var(--surface-2);
+}
+
+/* Small dot per option */
+.mode-opt-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+.mode-opt-dot[data-mode="auto"] {
+  background: var(--text-muted);
+  opacity: 0.6;
+}
+.mode-opt-dot[data-mode="fast"] {
+  background: #c9a96e;
+}
+.mode-opt-dot[data-mode="think"] {
+  background: #8b7fd4;
+}
+
+.mode-opt-info {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+.mode-opt-label {
+  font-size: 0.845rem;
+  font-weight: 600;
+  color: var(--text);
+}
+.mode-opt-desc {
+  font-size: 0.745rem;
+  color: var(--text-muted);
+  line-height: 1.4;
+}
+
+/* Checkmark — hidden by default, shown for active mode */
+.mode-check {
+  width: 14px;
+  height: 14px;
+  color: var(--accent);
+  opacity: 0;
+  flex-shrink: 0;
+  transition: opacity 0.15s;
+}
+.mode-check.visible {
+  opacity: 1;
+}
+
 /* ─── Chat Layout ───────────────────────────────────────────── */
 .chat-wrap {
   margin-left: var(--sidebar-w);
@@ -354,6 +486,30 @@ body {
   background: rgba(255, 255, 255, 0.06);
   color: #c8c4bc;
   border-color: rgba(255, 255, 255, 0.18);
+}
+
+.code-block-actions {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.code-dl-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  color: rgba(120, 180, 255, 0.6);
+  border-color: rgba(120, 180, 255, 0.15);
+}
+
+.code-dl-btn:hover {
+  background: rgba(120, 180, 255, 0.06);
+  color: rgba(120, 180, 255, 0.9);
+  border-color: rgba(120, 180, 255, 0.3);
+}
+
+.code-dl-btn svg {
+  flex-shrink: 0;
 }
 
 .code-block-wrap pre {

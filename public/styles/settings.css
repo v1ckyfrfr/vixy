@@ -1,16 +1,18 @@
+/* ─── Settings Layout ───────────────────────────────────────── */
 .settings-stack {
   display: flex;
   flex-direction: column;
-  gap: 12px;
-  max-width: 640px;
+  gap: 10px;
+  max-width: 620px;
 }
 
+/* ─── Settings Card ─────────────────────────────────────────── */
 .settings-card {
   background: var(--surface);
   border: 1px solid var(--border-subtle);
   border-radius: var(--radius);
   overflow: hidden;
-  transition: border-color 0.2s;
+  transition: border-color 0.2s ease;
 }
 
 .settings-card:hover {
@@ -18,13 +20,14 @@
 }
 
 .settings-card.danger {
-  border-color: rgba(239, 68, 68, 0.15);
+  border-color: rgba(200, 60, 60, 0.12);
 }
 
 .settings-card.danger:hover {
-  border-color: rgba(239, 68, 68, 0.3);
+  border-color: rgba(200, 60, 60, 0.22);
 }
 
+/* ─── Card Header ───────────────────────────────────────────── */
 .settings-card-header {
   display: flex;
   align-items: center;
@@ -33,12 +36,13 @@
   border-bottom: 1px solid var(--border-subtle);
 }
 
+/* ─── Settings Icon ─────────────────────────────────────────── */
 .settings-icon {
-  width: 30px;
-  height: 30px;
+  width: 28px;
+  height: 28px;
   border-radius: var(--radius-sm);
-  background: var(--accent-faint);
-  border: 1px solid rgba(16, 163, 127, 0.2);
+  background: var(--accent-subtle);
+  border: 1px solid var(--accent-border);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -52,29 +56,35 @@
 }
 
 .settings-icon.danger {
-  background: rgba(239, 68, 68, 0.1);
-  border-color: rgba(239, 68, 68, 0.2);
+  background: rgba(200, 60, 60, 0.08);
+  border-color: rgba(200, 60, 60, 0.16);
 }
 
 .settings-icon.danger svg {
-  color: #f87171;
+  color: #d07070;
 }
 
+/* ─── Titles ────────────────────────────────────────────────── */
 .settings-title {
-  font-size: 0.9rem;
+  font-size: 0.875rem;
   font-weight: 600;
+  color: var(--text);
+  letter-spacing: -0.01em;
 }
 
 .settings-desc {
-  font-size: 0.78rem;
+  font-size: 0.77rem;
   color: var(--text-muted);
   margin-top: 2px;
+  line-height: 1.4;
 }
 
+/* ─── Card Body ─────────────────────────────────────────────── */
 .settings-body {
   padding: 20px;
 }
 
+/* ─── Input Grid ────────────────────────────────────────────── */
 .input-grid {
   display: grid;
   grid-template-columns: 1fr 1fr;
@@ -88,11 +98,17 @@
   gap: 5px;
 }
 
+/* ─── Toggle Row ────────────────────────────────────────────── */
 .toggle-row {
   display: flex;
   justify-content: space-between;
   align-items: center;
   gap: 16px;
+  padding: 12px 0;
+}
+
+.toggle-row + .toggle-row {
+  border-top: 1px solid var(--border-subtle);
 }
 
 .toggle-info {
@@ -100,20 +116,23 @@
 }
 
 .toggle-label {
-  font-size: 0.875rem;
+  font-size: 0.845rem;
   font-weight: 500;
+  color: var(--text);
 }
 
 .toggle-hint {
-  font-size: 0.78rem;
+  font-size: 0.775rem;
   color: var(--text-muted);
   margin-top: 2px;
+  line-height: 1.4;
 }
 
+/* ─── Toggle Switch ─────────────────────────────────────────── */
 .toggle {
   position: relative;
-  width: 40px;
-  height: 22px;
+  width: 38px;
+  height: 21px;
   flex-shrink: 0;
 }
 
@@ -128,60 +147,63 @@
   position: absolute;
   inset: 0;
   background: var(--surface-2);
-  border-radius: 22px;
+  border-radius: 21px;
   cursor: pointer;
-  transition: background 0.2s;
+  transition: background 0.2s ease;
   border: 1px solid var(--border);
 }
 
 .toggle-track::before {
   content: "";
   position: absolute;
-  width: 16px;
-  height: 16px;
+  width: 15px;
+  height: 15px;
   left: 2px;
   top: 2px;
   background: var(--text-muted);
   border-radius: 50%;
   transition:
-    transform 0.2s,
-    background 0.2s;
+    transform 0.2s ease,
+    background 0.2s ease;
 }
 
 .toggle input:checked + .toggle-track {
   background: var(--accent);
-  border-color: var(--accent-dim);
+  border-color: var(--accent-hover);
 }
 
 .toggle input:checked + .toggle-track::before {
-  transform: translateX(18px);
+  transform: translateX(17px);
   background: #fff;
 }
 
+/* ─── Form Messages ─────────────────────────────────────────── */
 .form-msg {
   padding: 10px 14px;
-  border-radius: var(--radius-sm);
-  font-size: 0.82rem;
+  border-radius: var(--radius-xs);
+  font-size: 0.8rem;
   display: none;
   align-items: center;
   gap: 8px;
   margin-bottom: 12px;
+  line-height: 1.4;
 }
 
 .form-msg.error {
   display: flex;
-  background: rgba(239, 68, 68, 0.1);
-  border: 1px solid rgba(239, 68, 68, 0.2);
-  color: #f87171;
+  background: rgba(200, 60, 60, 0.08);
+  border: 1px solid rgba(200, 60, 60, 0.16);
+  color: #d08080;
 }
 
 .form-msg.success {
   display: flex;
-  background: rgba(16, 163, 127, 0.1);
-  border: 1px solid rgba(16, 163, 127, 0.2);
+  background: var(--accent-subtle);
+  border: 1px solid var(--accent-border);
   color: var(--accent);
 }
 
+/* ─── Avatar Preview ────────────────────────────────────────── */
 .avatar-preview {
   display: flex;
   align-items: center;
@@ -190,24 +212,27 @@
 }
 
 .avatar-circle {
-  width: 56px;
-  height: 56px;
+  width: 52px;
+  height: 52px;
   border-radius: 50%;
   background: var(--accent);
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: 1.4rem;
+  font-size: 1.3rem;
   font-weight: 600;
   color: #fff;
   flex-shrink: 0;
+  letter-spacing: -0.02em;
 }
 
 .avatar-info {
-  font-size: 0.82rem;
+  font-size: 0.8rem;
   color: var(--text-muted);
+  line-height: 1.5;
 }
 
+/* ─── Responsive ────────────────────────────────────────────── */
 @media (max-width: 768px) {
   .settings-stack {
     gap: 8px;
@@ -216,6 +241,7 @@
   .settings-card-header {
     padding: 13px 16px;
   }
+
   .settings-body {
     padding: 16px;
   }
@@ -230,18 +256,21 @@
     align-items: flex-start;
     gap: 12px;
   }
+
   .avatar-circle {
-    width: 48px;
-    height: 48px;
-    font-size: 1.2rem;
+    width: 44px;
+    height: 44px;
+    font-size: 1.1rem;
   }
 
   .toggle-row {
     gap: 12px;
   }
+
   .toggle-label {
-    font-size: 0.84rem;
+    font-size: 0.82rem;
   }
+
   .toggle-hint {
     font-size: 0.74rem;
   }
