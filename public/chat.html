@@ -39,6 +39,19 @@
       crossorigin="anonymous"
     ></script>
     <script
+      src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/languages/sql.min.js"
+      crossorigin="anonymous"
+    ></script>
+    <script
+      src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/languages/pgsql.min.js"
+      crossorigin="anonymous"
+    ></script>
+    <script
+      src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/languages/bash.min.js"
+      crossorigin="anonymous"
+    ></script>
+
+    <script
       src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.js"
       crossorigin="anonymous"
     ></script>
@@ -130,7 +143,7 @@
     <div class="sidebar-overlay" onclick="toggleSidebar()"></div>
     <div class="chat-wrap">
       <header class="chat-header">
-        <div style="display: flex; align-items: center; gap: 8px">
+        <div class="header-left">
           <button class="mobile-toggle" onclick="toggleSidebar()">
             <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path
@@ -142,7 +155,6 @@
             </svg>
           </button>
 
-          <!-- Mode Selector -->
           <div class="mode-selector-wrap" id="modeSelectorWrap">
             <button
               class="model-selector"
@@ -153,14 +165,19 @@
             >
               <span class="mode-dot" id="modeDot" data-mode="auto"></span>
               <span id="modeLabelText">Auto</span>
-              <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <svg
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+                width="12"
+                height="12"
+              >
                 <polyline stroke-width="2" points="6 9 12 15 18 9" />
               </svg>
             </button>
 
             <div class="mode-dropdown" id="modeDropdown" role="menu">
               <div class="mode-dropdown-header">Response Mode</div>
-
               <button
                 class="mode-option"
                 data-mode="auto"
@@ -171,7 +188,7 @@
                 <div class="mode-opt-info">
                   <span class="mode-opt-label">Auto</span>
                   <span class="mode-opt-desc"
-                    >Model decides - balanced for most tasks</span
+                    >Model decides — balanced for most tasks</span
                   >
                 </div>
                 <svg
@@ -188,7 +205,6 @@
                   />
                 </svg>
               </button>
-
               <button
                 class="mode-option"
                 data-mode="fast"
@@ -199,7 +215,7 @@
                 <div class="mode-opt-info">
                   <span class="mode-opt-label">Fast</span>
                   <span class="mode-opt-desc"
-                    >Instant replies - best for casual chat</span
+                    >Instant replies — best for casual chat</span
                   >
                 </div>
                 <svg
@@ -216,7 +232,6 @@
                   />
                 </svg>
               </button>
-
               <button
                 class="mode-option"
                 data-mode="think"
@@ -234,6 +249,364 @@
                 <svg
                   class="mode-check"
                   id="check-think"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                >
+                  <polyline
+                    stroke-width="2.5"
+                    stroke-linecap="round"
+                    points="20 6 9 17 4 12"
+                  />
+                </svg>
+              </button>
+            </div>
+          </div>
+
+          <div class="mode-selector-wrap" id="modelSelectorWrap">
+            <button
+              class="model-selector"
+              id="modelSelectorBtn"
+              onclick="toggleModelDropdown()"
+              aria-haspopup="true"
+              aria-expanded="false"
+            >
+              <svg
+                width="12"
+                height="12"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+              >
+                <circle cx="12" cy="12" r="3" stroke-width="2" />
+                <path
+                  stroke-width="2"
+                  d="M12 2v3M12 19v3M4.22 4.22l2.12 2.12M17.66 17.66l2.12 2.12M2 12h3M19 12h3M4.22 19.78l2.12-2.12M17.66 6.34l2.12-2.12"
+                />
+              </svg>
+              <span id="modelLabelText">Llama 3.3 70B</span>
+
+              <svg
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+                width="12"
+                height="12"
+              >
+                <polyline stroke-width="2" points="6 9 12 15 18 9" />
+              </svg>
+            </button>
+            <div
+              class="mode-dropdown model-dropdown"
+              id="modelDropdown"
+              role="menu"
+            >
+              <div class="mode-dropdown-header">AI Model</div>
+
+              <div class="model-group-label">Ultra Cheap AI Models</div>
+
+              <button
+                class="mode-option"
+                data-model="deepseek-v3"
+                onclick="setModel('deepseek-v3')"
+                role="menuitem"
+              >
+                <span class="model-tier-badge tier-pro">Paid</span>
+                <div class="mode-opt-info">
+                  <span class="mode-opt-label">DeepSeek V3</span>
+                  <span class="mode-opt-desc"
+                    >💡 Top-tier GPT-4o rival · Ultra cheap ($0.14/1M tok)</span
+                  >
+                </div>
+                <svg
+                  class="mode-check"
+                  id="check-model-deepseek-v3"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                >
+                  <polyline
+                    stroke-width="2.5"
+                    stroke-linecap="round"
+                    points="20 6 9 17 4 12"
+                  />
+                </svg>
+              </button>
+
+              <button
+                class="mode-option"
+                data-model="deepseek-r1"
+                onclick="setModel('deepseek-r1')"
+                role="menuitem"
+              >
+                <span class="model-tier-badge tier-pro">Paid</span>
+                <div class="mode-opt-info">
+                  <span class="mode-opt-label">DeepSeek R1</span>
+                  <span class="mode-opt-desc"
+                    >🧠 Reasoning powerhouse · Full Chain-of-Thought</span
+                  >
+                </div>
+                <svg
+                  class="mode-check"
+                  id="check-model-deepseek-r1"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                >
+                  <polyline
+                    stroke-width="2.5"
+                    stroke-linecap="round"
+                    points="20 6 9 17 4 12"
+                  />
+                </svg>
+              </button>
+
+              <button
+                class="mode-option"
+                data-model="gpt-4o-mini"
+                onclick="setModel('gpt-4o-mini')"
+                role="menuitem"
+              >
+                <span class="model-tier-badge tier-pro">Paid</span>
+                <div class="mode-opt-info">
+                  <span class="mode-opt-label">GPT-4o Mini</span>
+                  <span class="mode-opt-desc"
+                    >⚡ Official OpenAI · Fast &amp; super affordable</span
+                  >
+                </div>
+                <svg
+                  class="mode-check"
+                  id="check-model-gpt-4o-mini"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                >
+                  <polyline
+                    stroke-width="2.5"
+                    stroke-linecap="round"
+                    points="20 6 9 17 4 12"
+                  />
+                </svg>
+              </button>
+
+              <button
+                class="mode-option"
+                data-model="qwen-2.5-coder"
+                onclick="setModel('qwen-2.5-coder')"
+                role="menuitem"
+              >
+                <span class="model-tier-badge tier-pro">Paid</span>
+                <div class="mode-opt-info">
+                  <span class="mode-opt-label">Qwen 2.5 Coder 32B</span>
+                  <span class="mode-opt-desc"
+                    >💻 Code Specialist · Lowest price ($0.07/1M tok)</span
+                  >
+                </div>
+                <svg
+                  class="mode-check"
+                  id="check-model-qwen-2.5-coder"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                >
+                  <polyline
+                    stroke-width="2.5"
+                    stroke-linecap="round"
+                    points="20 6 9 17 4 12"
+                  />
+                </svg>
+              </button>
+
+              <div class="model-group-label">Groq - Ultra Fast (Free)</div>
+
+              <button
+                class="mode-option"
+                data-model="llama-3.3-70b"
+                onclick="setModel('llama-3.3-70b')"
+                role="menuitem"
+              >
+                <span class="model-tier-badge tier-free">Free</span>
+                <div class="mode-opt-info">
+                  <span class="mode-opt-label">Llama 3.3 70B</span>
+                  <span class="mode-opt-desc"
+                    >⚡⚡⚡ Blazing fast · Meta's 70B flagship</span
+                  >
+                </div>
+                <svg
+                  class="mode-check"
+                  id="check-model-llama-3.3-70b"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                >
+                  <polyline
+                    stroke-width="2.5"
+                    stroke-linecap="round"
+                    points="20 6 9 17 4 12"
+                  />
+                </svg>
+              </button>
+
+              <button
+                class="mode-option"
+                data-model="qwen-3.6-27b"
+                onclick="setModel('qwen-3.6-27b')"
+                role="menuitem"
+              >
+                <span class="model-tier-badge tier-free">Free</span>
+                <div class="mode-opt-info">
+                  <span class="mode-opt-label">Qwen 3.6 27B</span>
+                  <span class="mode-opt-desc"
+                    >💻 Code &amp; Reasoning Master</span
+                  >
+                </div>
+                <svg
+                  class="mode-check"
+                  id="check-model-qwen-3.6-27b"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                >
+                  <polyline
+                    stroke-width="2.5"
+                    stroke-linecap="round"
+                    points="20 6 9 17 4 12"
+                  />
+                </svg>
+              </button>
+
+              <button
+                class="mode-option"
+                data-model="llama-3.1-8b"
+                onclick="setModel('llama-3.1-8b')"
+                role="menuitem"
+              >
+                <span class="model-tier-badge tier-free">Free</span>
+                <div class="mode-opt-info">
+                  <span class="mode-opt-label">Llama 3.1 8B Instant</span>
+                  <span class="mode-opt-desc"
+                    >🚀 Instant response · Lightweight chat</span
+                  >
+                </div>
+                <svg
+                  class="mode-check"
+                  id="check-model-llama-3.1-8b"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                >
+                  <polyline
+                    stroke-width="2.5"
+                    stroke-linecap="round"
+                    points="20 6 9 17 4 12"
+                  />
+                </svg>
+              </button>
+
+              <div class="model-group-label">OpenRouter - Free Tier</div>
+
+              <button
+                class="mode-option"
+                data-model="gemma-4-26b"
+                onclick="setModel('gemma-4-26b')"
+                role="menuitem"
+              >
+                <span class="model-tier-badge tier-free">Free</span>
+                <div class="mode-opt-info">
+                  <span class="mode-opt-label">Google Gemma 4 26B (Free)</span>
+                  <span class="mode-opt-desc"
+                    >💡 OpenRouter active free model</span
+                  >
+                </div>
+                <svg
+                  class="mode-check"
+                  id="check-model-gemma-4-26b"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                >
+                  <polyline
+                    stroke-width="2.5"
+                    stroke-linecap="round"
+                    points="20 6 9 17 4 12"
+                  />
+                </svg>
+              </button>
+
+              <div class="model-group-label">Google Gemini - Free</div>
+
+              <button
+                class="mode-option"
+                data-model="gemini-2.5-flash"
+                onclick="setModel('gemini-2.5-flash')"
+                role="menuitem"
+              >
+                <span class="model-tier-badge tier-free">Free</span>
+                <div class="mode-opt-info">
+                  <span class="mode-opt-label">Gemini 2.5 Flash</span>
+                  <span class="mode-opt-desc"
+                    >⚡ Fast · 🧠 Smart - Best overall Gemini</span
+                  >
+                </div>
+                <svg
+                  class="mode-check"
+                  id="check-model-gemini-2.5-flash"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                >
+                  <polyline
+                    stroke-width="2.5"
+                    stroke-linecap="round"
+                    points="20 6 9 17 4 12"
+                  />
+                </svg>
+              </button>
+
+              <button
+                class="mode-option"
+                data-model="gemini-2.0-flash"
+                onclick="setModel('gemini-2.0-flash')"
+                role="menuitem"
+              >
+                <span class="model-tier-badge tier-free">Free</span>
+                <div class="mode-opt-info">
+                  <span class="mode-opt-label">Gemini 2.0 Flash</span>
+                  <span class="mode-opt-desc"
+                    >⚡ Very fast · Good for coding &amp; analysis</span
+                  >
+                </div>
+                <svg
+                  class="mode-check"
+                  id="check-model-gemini-2.0-flash"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                >
+                  <polyline
+                    stroke-width="2.5"
+                    stroke-linecap="round"
+                    points="20 6 9 17 4 12"
+                  />
+                </svg>
+              </button>
+
+              <button
+                class="mode-option"
+                data-model="gemini-1.5-flash"
+                onclick="setModel('gemini-1.5-flash')"
+                role="menuitem"
+              >
+                <span class="model-tier-badge tier-free">Free</span>
+                <div class="mode-opt-info">
+                  <span class="mode-opt-label">Gemini 1.5 Flash</span>
+                  <span class="mode-opt-desc"
+                    >⚡ Fast · Reliable — Large context (1M tokens)</span
+                  >
+                </div>
+                <svg
+                  class="mode-check"
+                  id="check-model-gemini-1.5-flash"
                   fill="none"
                   stroke="currentColor"
                   viewBox="0 0 24 24"
@@ -312,14 +685,16 @@
               class="suggestion-card"
               onclick="
                 useSuggestion(
-                  'What are the best productivity tips for developers?',
+                  'Audit this code for security vulnerabilities: SQLi, XSS, and CSRF',
                 )
               "
             >
-              <span class="suggestion-icon"><i data-lucide="rocket"></i></span>
-              <div class="suggestion-title">Get advice</div>
+              <span class="suggestion-icon"
+                ><i data-lucide="shield-alert"></i
+              ></span>
+              <div class="suggestion-title">Security Audit</div>
               <div class="suggestion-desc">
-                Productivity tips for developers
+                Analyze code for OWASP Top 10 vulnerabilities
               </div>
             </button>
           </div>
@@ -463,7 +838,45 @@
           rows="3"
         ></textarea>
 
-        <label style="margin-top: 16px; display: block">Aspect Ratio</label>
+        <label style="margin-top: 14px; display: block"
+          >Image Model / Style</label
+        >
+        <div
+          class="img-aspect-options"
+          id="imgModelOptions"
+          style="grid-template-columns: repeat(2, 1fr); gap: 8px"
+        >
+          <button
+            class="aspect-chip active"
+            data-img-model="flux"
+            onclick="selectImgModel(this)"
+          >
+            ✨ FLUX.1 Schnell (HD)
+          </button>
+          <button
+            class="aspect-chip"
+            data-img-model="flux-realism"
+            onclick="selectImgModel(this)"
+          >
+            📸 Flux Realism (Photo)
+          </button>
+          <button
+            class="aspect-chip"
+            data-img-model="flux-anime"
+            onclick="selectImgModel(this)"
+          >
+            🎨 Flux Anime &amp; Art
+          </button>
+          <button
+            class="aspect-chip"
+            data-img-model="flux-3d"
+            onclick="selectImgModel(this)"
+          >
+            🧊 Flux 3D Render
+          </button>
+        </div>
+
+        <label style="margin-top: 14px; display: block">Aspect Ratio</label>
         <div class="img-aspect-options" id="aspectOptions">
           <button
             class="aspect-chip active"
@@ -521,6 +934,70 @@
               <path stroke-width="2" d="M5 3l14 9-14 9V3z" />
             </svg>
             Generate
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- ── Vixy Pro Subscription Modal ── -->
+    <div
+      class="pro-modal-backdrop"
+      id="proModalBackdrop"
+      onclick="closeProModalOnBackdrop(event)"
+    >
+      <div class="pro-modal">
+        <div class="pro-modal-header">
+          <div class="pro-badge-glow">👑 VIXY PRO</div>
+          <h2>Upgrade to Vixy Pro</h2>
+          <p id="proModalMsg">
+            You've reached your daily limit of 5 free chats for Pro models.
+            Upgrade to Vixy Pro for unlimited access!
+          </p>
+        </div>
+
+        <div class="pro-features-list">
+          <div class="pro-feature-item">
+            <span class="pro-icon">⚡</span>
+            <div>
+              <strong>Unlimited Pro AI Models</strong>
+              <p>
+                Get unrestricted access to DeepSeek V3, DeepSeek R1, GPT-4o Mini
+                &amp; Qwen 2.5 Coder.
+              </p>
+            </div>
+          </div>
+          <div class="pro-feature-item">
+            <span class="pro-icon">🚀</span>
+            <div>
+              <strong>Ultra-Fast Priority Responses</strong>
+              <p>
+                Guaranteed top response times with zero queue delays during peak
+                hours.
+              </p>
+            </div>
+          </div>
+          <div class="pro-feature-item">
+            <span class="pro-icon">🎨</span>
+            <div>
+              <strong>HD Image Generation &amp; Web Scraping</strong>
+              <p>
+                Generate FLUX.1 HD images and scrape web pages without limits.
+              </p>
+            </div>
+          </div>
+        </div>
+
+        <div class="pro-price-card">
+          <div class="pro-price-amount">$1.99 <span>/ month</span></div>
+          <div class="pro-price-sub">~$0.06 / day • Flexible Pay As You Go</div>
+        </div>
+
+        <div class="pro-modal-actions">
+          <button class="pro-upgrade-btn" onclick="subscribePro()">
+            🔥 Upgrade to Vixy Pro ($1.99/mo)
+          </button>
+          <button class="pro-fallback-btn" onclick="switchToFreeModel()">
+            Switch to Free Model (Llama 3.3 70B)
           </button>
         </div>
       </div>
