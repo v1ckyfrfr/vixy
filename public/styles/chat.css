@@ -140,6 +140,70 @@ body {
   opacity: 1;
 }
 
+/* ─── Model Selector Extensions ─────────────────────────────── */
+
+/* Scrollable dropdown for model names with custom sleek scrollbar */
+.model-dropdown {
+  min-width: 320px;
+  max-height: min(430px, 75vh);
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  scrollbar-width: thin;
+  scrollbar-color: var(--border) transparent;
+}
+
+.model-dropdown::-webkit-scrollbar {
+  width: 5px;
+}
+.model-dropdown::-webkit-scrollbar-track {
+  background: transparent;
+}
+.model-dropdown::-webkit-scrollbar-thumb {
+  background: var(--border);
+  border-radius: 4px;
+}
+.model-dropdown::-webkit-scrollbar-thumb:hover {
+  background: var(--text-muted);
+}
+
+/* Section group label (e.g. "Google Gemini — Free") */
+.model-group-label {
+  padding: 6px 14px 4px;
+  font-size: 0.64rem;
+  font-weight: 700;
+  letter-spacing: 0.07em;
+  text-transform: uppercase;
+  color: var(--text-muted);
+  opacity: 0.55;
+}
+
+/* Tier badge pill next to model name */
+.model-tier-badge {
+  display: inline-flex;
+  align-items: center;
+  padding: 2px 7px;
+  border-radius: 20px;
+  font-size: 0.64rem;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  flex-shrink: 0;
+}
+.model-tier-badge.tier-free {
+  background: rgba(16, 163, 127, 0.12);
+  color: #10a37f;
+  border: 1px solid rgba(16, 163, 127, 0.2);
+}
+.model-tier-badge.tier-limited {
+  background: rgba(201, 169, 110, 0.12);
+  color: #c9a96e;
+  border: 1px solid rgba(201, 169, 110, 0.2);
+}
+.model-tier-badge.tier-pro {
+  background: rgba(139, 127, 212, 0.12);
+  color: #8b7fd4;
+  border: 1px solid rgba(139, 127, 212, 0.2);
+}
+
 /* ─── Chat Layout ───────────────────────────────────────────── */
 .chat-wrap {
   margin-left: var(--sidebar-w);
@@ -160,6 +224,13 @@ body {
   border-bottom: 1px solid var(--border-subtle);
   background: var(--bg);
   flex-shrink: 0;
+}
+
+/* Left cluster: hamburger + mode + model selectors */
+.header-left {
+  display: flex;
+  align-items: center;
+  gap: 4px;
 }
 
 .model-selector {
@@ -1709,4 +1780,193 @@ body {
   font-size: 0.82rem;
   color: #d08080;
   margin-top: 12px;
+}
+
+/* ─── Vixy Pro Subscription Modal ────────────────────────────── */
+.pro-modal-backdrop {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.7);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  z-index: 9999;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 16px;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.25s ease;
+}
+
+.pro-modal-backdrop.open {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+.pro-modal {
+  background: var(--surface);
+  border: 1px solid var(--border-focus);
+  border-radius: 20px;
+  width: 100%;
+  max-width: 440px;
+  padding: 24px;
+  box-shadow: 0 12px 40px rgba(0, 0, 0, 0.45);
+  animation: modalPop 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+  text-align: center;
+}
+
+@keyframes modalPop {
+  from {
+    transform: scale(0.94);
+    opacity: 0;
+  }
+  to {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+
+.pro-badge-glow {
+  display: inline-block;
+  padding: 4px 12px;
+  background: linear-gradient(
+    135deg,
+    rgba(201, 169, 110, 0.2),
+    rgba(255, 215, 0, 0.1)
+  );
+  color: #c9a96e;
+  border: 1px solid rgba(201, 169, 110, 0.4);
+  border-radius: 20px;
+  font-size: 0.72rem;
+  font-weight: 800;
+  letter-spacing: 0.08em;
+  margin-bottom: 12px;
+}
+
+.pro-modal-header h2 {
+  font-size: 1.35rem;
+  font-weight: 700;
+  margin-bottom: 6px;
+  color: var(--text);
+}
+
+.pro-modal-header p {
+  font-size: 0.84rem;
+  color: var(--text-muted);
+  line-height: 1.45;
+  margin-bottom: 20px;
+}
+
+.pro-features-list {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  text-align: left;
+  margin-bottom: 20px;
+}
+
+.pro-feature-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  padding: 10px 12px;
+  background: var(--surface-2);
+  border-radius: 12px;
+  border: 1px solid var(--border);
+}
+
+.pro-icon {
+  font-size: 1.2rem;
+  flex-shrink: 0;
+  margin-top: 1px;
+}
+
+.pro-feature-item strong {
+  display: block;
+  font-size: 0.86rem;
+  color: var(--text);
+  margin-bottom: 2px;
+}
+
+.pro-feature-item p {
+  font-size: 0.78rem;
+  color: var(--text-muted);
+  line-height: 1.35;
+  margin: 0;
+}
+
+.pro-price-card {
+  background: linear-gradient(
+    135deg,
+    rgba(16, 163, 127, 0.08),
+    rgba(90, 158, 124, 0.04)
+  );
+  border: 1px solid rgba(16, 163, 127, 0.3);
+  border-radius: 14px;
+  padding: 14px;
+  margin-bottom: 20px;
+}
+
+.pro-price-amount {
+  font-size: 1.5rem;
+  font-weight: 800;
+  color: #10a37f;
+}
+
+.pro-price-amount span {
+  font-size: 0.85rem;
+  font-weight: 500;
+  color: var(--text-muted);
+}
+
+.pro-price-sub {
+  font-size: 0.75rem;
+  color: var(--text-muted);
+  margin-top: 2px;
+}
+
+.pro-modal-actions {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.pro-upgrade-btn {
+  width: 100%;
+  padding: 12px;
+  background: #10a37f;
+  color: #ffffff;
+  border: none;
+  border-radius: 12px;
+  font-size: 0.9rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.pro-upgrade-btn:hover {
+  background: #0d8a6a;
+  transform: translateY(-1px);
+  box-shadow: 0 4px 14px rgba(16, 163, 127, 0.35);
+}
+
+.pro-fallback-btn {
+  width: 100%;
+  padding: 10px;
+  background: transparent;
+  color: var(--text-muted);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  font-size: 0.82rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition:
+    background 0.15s,
+    color 0.15s;
+}
+
+.pro-fallback-btn:hover {
+  background: var(--surface-3);
+  color: var(--text);
 }
