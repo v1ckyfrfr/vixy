@@ -59,6 +59,14 @@
       src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/contrib/auto-render.min.js"
       crossorigin="anonymous"
     ></script>
+    <script
+      src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"
+      crossorigin="anonymous"
+    ></script>
+    <script
+      src="https://cdnjs.cloudflare.com/ajax/libs/dompurify/3.2.4/purify.min.js"
+      crossorigin="anonymous"
+    ></script>
     <script src="https://unpkg.com/lucide@latest"></script>
     <script src="js/theme.js"></script>
     <link rel="stylesheet" href="styles/chat.css" />
@@ -623,6 +631,16 @@
         </div>
 
         <div class="header-actions">
+          <div
+            class="credit-badge"
+            id="creditBadge"
+            title="User Credits"
+            onclick="showProModal('Credit Info')"
+          >
+            <span class="credit-icon">🪙</span>
+            <span id="creditBalance">500</span>
+            <span class="credit-label">Credits</span>
+          </div>
           <div class="badge" id="statusBadge" data-state="ready">
             <span class="dot" id="statusDot"></span>
             <span id="statusLabel">Ready</span>
@@ -750,39 +768,123 @@
             oninput="autoResize(this)"
           ></textarea>
           <div class="input-actions">
-            <button
-              class="attach-btn"
-              id="attachBtn"
-              onclick="document.getElementById('fileInput').click()"
-              title="Attach image or file"
-            >
-              <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path
-                  stroke-width="2"
-                  stroke-linecap="round"
-                  d="M21.44 11.05l-9.19 9.19a6 6 0 01-8.49-8.49l9.19-9.19a4 4 0 015.66 5.66l-9.2 9.19a2 2 0 01-2.83-2.83l8.49-8.48"
-                />
-              </svg>
-            </button>
-            <button
-              class="img-gen-btn"
-              id="imgGenBtn"
-              onclick="openImageModal()"
-              title="Generate image with AI"
-            >
-              <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <rect
-                  x="3"
-                  y="3"
-                  width="18"
-                  height="18"
-                  rx="3"
-                  stroke-width="2"
-                />
-                <circle cx="8.5" cy="8.5" r="1.5" stroke-width="2" />
-                <polyline stroke-width="2" points="21 15 16 10 5 21" />
-              </svg>
-            </button>
+            <div class="tools-menu-wrap" id="toolsMenuWrap">
+              <button
+                class="tools-menu-btn"
+                id="toolsMenuBtn"
+                onclick="toggleToolsMenu()"
+                title="Add attachment, web search, or AI image generator"
+                aria-haspopup="true"
+                aria-expanded="false"
+              >
+                <svg
+                  class="plus-icon"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                >
+                  <path
+                    stroke-width="2.5"
+                    stroke-linecap="round"
+                    d="M12 5v14M5 12h14"
+                  />
+                </svg>
+                <span class="tools-indicator-dot" id="toolsIndicatorDot"></span>
+              </button>
+
+              <div
+                class="tools-menu-dropdown"
+                id="toolsMenuDropdown"
+                role="menu"
+              >
+                <button class="tools-menu-item" onclick="triggerFileUpload()">
+                  <span class="tools-item-icon">
+                    <svg
+                      fill="none"
+                      stroke="currentColor"
+                      viewBox="0 0 24 24"
+                      width="16"
+                      height="16"
+                    >
+                      <path
+                        stroke-width="2"
+                        stroke-linecap="round"
+                        d="M21.44 11.05l-9.19 9.19a6 6 0 01-8.49-8.49l9.19-9.19a4 4 0 015.66 5.66l-9.2 9.19a2 2 0 01-2.83-2.83l8.49-8.48"
+                      />
+                    </svg>
+                  </span>
+                  <div class="tools-item-info">
+                    <span class="tools-item-title">Upload File or Image</span>
+                    <span class="tools-item-desc"
+                      >Attach image, PDF, code, or document</span
+                    >
+                  </div>
+                </button>
+
+                <button
+                  class="tools-menu-item"
+                  id="toolsWebSearchItem"
+                  onclick="toggleWebSearchInMenu()"
+                >
+                  <span class="tools-item-icon">
+                    <svg
+                      fill="none"
+                      stroke="currentColor"
+                      viewBox="0 0 24 24"
+                      width="16"
+                      height="16"
+                    >
+                      <circle cx="12" cy="12" r="10" stroke-width="2" />
+                      <path
+                        stroke-width="2"
+                        d="M2 12h20M12 2a15.3 15.3 0 014 10 15.3 15.3 0 01-4 10 15.3 15.3 0 01-4-10 15.3 15.3 0 014-10z"
+                      />
+                    </svg>
+                  </span>
+                  <div class="tools-item-info">
+                    <span class="tools-item-title">Live Web Search</span>
+                    <span class="tools-item-desc"
+                      >Search real-time news & web data</span
+                    >
+                  </div>
+                  <span class="tools-item-badge" id="toolsWebSearchBadge"
+                    >Off</span
+                  >
+                </button>
+
+                <button
+                  class="tools-menu-item"
+                  onclick="openImageModalFromMenu()"
+                >
+                  <span class="tools-item-icon">
+                    <svg
+                      fill="none"
+                      stroke="currentColor"
+                      viewBox="0 0 24 24"
+                      width="16"
+                      height="16"
+                    >
+                      <rect
+                        x="3"
+                        y="3"
+                        width="18"
+                        height="18"
+                        rx="3"
+                        stroke-width="2"
+                      />
+                      <circle cx="8.5" cy="8.5" r="1.5" stroke-width="2" />
+                      <polyline stroke-width="2" points="21 15 16 10 5 21" />
+                    </svg>
+                  </span>
+                  <div class="tools-item-info">
+                    <span class="tools-item-title">Generate AI Image</span>
+                    <span class="tools-item-desc"
+                      >Create AI images with OpenRouter &amp; SDXL</span
+                    >
+                  </div>
+                </button>
+              </div>
+            </div>
             <button
               class="stop-btn"
               id="stopBtn"
@@ -848,31 +950,31 @@
         >
           <button
             class="aspect-chip active"
+            data-img-model="openrouter-flash"
+            onclick="selectImgModel(this)"
+          >
+            🚀 OpenRouter Flash HD
+          </button>
+          <button
+            class="aspect-chip"
+            data-img-model="turbo"
+            onclick="selectImgModel(this)"
+          >
+            ⚡ SDXL Turbo (High Detail)
+          </button>
+          <button
+            class="aspect-chip"
+            data-img-model="midjourney"
+            onclick="selectImgModel(this)"
+          >
+            🎨 Midjourney Style
+          </button>
+          <button
+            class="aspect-chip"
             data-img-model="flux"
             onclick="selectImgModel(this)"
           >
-            ✨ FLUX.1 Schnell (HD)
-          </button>
-          <button
-            class="aspect-chip"
-            data-img-model="flux-realism"
-            onclick="selectImgModel(this)"
-          >
-            📸 Flux Realism (Photo)
-          </button>
-          <button
-            class="aspect-chip"
-            data-img-model="flux-anime"
-            onclick="selectImgModel(this)"
-          >
-            🎨 Flux Anime &amp; Art
-          </button>
-          <button
-            class="aspect-chip"
-            data-img-model="flux-3d"
-            onclick="selectImgModel(this)"
-          >
-            🧊 Flux 3D Render
+            📸 FLUX.1 Schnell
           </button>
         </div>
 
@@ -947,22 +1049,32 @@
     >
       <div class="pro-modal">
         <div class="pro-modal-header">
-          <div class="pro-badge-glow">👑 VIXY PRO</div>
-          <h2>Upgrade to Vixy Pro</h2>
+          <div class="pro-badge-glow">🪙 VIXY CREDITS</div>
+          <h2>Credit Balance Info</h2>
           <p id="proModalMsg">
-            You've reached your daily limit of 5 free chats for Pro models.
-            Upgrade to Vixy Pro for unlimited access!
+            You can use Llama 3.3 70B for 100% FREE (0 Credits). Paid models and
+            AI tools deduct credits based on usage.
           </p>
         </div>
 
         <div class="pro-features-list">
           <div class="pro-feature-item">
+            <span class="pro-icon">🎁</span>
+            <div>
+              <strong>Llama 3.3 70B is 100% Free</strong>
+              <p>
+                Every user gets unlimited access to Meta's flagship Llama 3.3
+                70B model with 0 credit deduction!
+              </p>
+            </div>
+          </div>
+          <div class="pro-feature-item">
             <span class="pro-icon">⚡</span>
             <div>
-              <strong>Unlimited Pro AI Models</strong>
+              <strong>Flexible Usage-Based Credits</strong>
               <p>
-                Get unrestricted access to DeepSeek V3, DeepSeek R1, GPT-4o Mini
-                &amp; Qwen 2.5 Coder.
+                Use DeepSeek V3 (2 Cr), DeepSeek R1 (4 Cr), Gemini Flash (1 Cr),
+                Image Gen (10 Cr), and Web Scraping (2 Cr).
               </p>
             </div>
           </div>
@@ -981,7 +1093,8 @@
             <div>
               <strong>HD Image Generation &amp; Web Scraping</strong>
               <p>
-                Generate FLUX.1 HD images and scrape web pages without limits.
+                Generate Ultra HD images with Google Imagen 3 &amp; SDXL without
+                limits.
               </p>
             </div>
           </div>
