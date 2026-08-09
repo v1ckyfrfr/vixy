@@ -266,7 +266,33 @@ body {
 .header-actions {
   display: flex;
   align-items: center;
-  gap: 4px;
+  gap: 8px;
+}
+
+.credit-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background: rgba(234, 179, 8, 0.12);
+  border: 1px solid rgba(234, 179, 8, 0.3);
+  padding: 4px 10px;
+  border-radius: 9999px;
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: #facc15;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  user-select: none;
+}
+
+.credit-badge:hover {
+  background: rgba(234, 179, 8, 0.22);
+  border-color: rgba(234, 179, 8, 0.5);
+  transform: translateY(-1px);
+}
+
+.credit-icon {
+  font-size: 0.9rem;
 }
 
 .icon-btn {
@@ -1782,6 +1808,198 @@ body {
   margin-top: 12px;
 }
 
+/* ─── Unified Tools Menu (+) ────────────────────────────────── */
+.tools-menu-wrap {
+  position: relative;
+  display: inline-flex;
+}
+
+.tools-menu-btn {
+  position: relative;
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  background: var(--surface-hover, rgba(255, 255, 255, 0.07));
+  border: 1px solid var(--border-color, rgba(255, 255, 255, 0.15));
+  color: var(--text-muted, #94a3b8);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  touch-action: manipulation;
+  -webkit-tap-highlight-color: transparent;
+  transition:
+    background 0.18s ease,
+    color 0.18s ease,
+    transform 0.18s cubic-bezier(0.16, 1, 0.3, 1),
+    border-color 0.18s ease;
+}
+
+.tools-menu-btn:hover {
+  background: rgba(255, 255, 255, 0.12);
+  color: var(--text-main, #f8fafc);
+  transform: scale(1.05);
+}
+
+.tools-menu-btn:active {
+  transform: scale(0.95);
+}
+
+.tools-menu-btn.active {
+  background: rgba(56, 189, 248, 0.15);
+  border-color: rgba(56, 189, 248, 0.5);
+  color: #38bdf8;
+}
+
+.tools-menu-btn svg.plus-icon {
+  width: 16px;
+  height: 16px;
+  transition: transform 0.22s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.tools-menu-btn.open svg.plus-icon {
+  transform: rotate(45deg);
+}
+
+.tools-indicator-dot {
+  position: absolute;
+  top: 2px;
+  right: 2px;
+  width: 8px;
+  height: 8px;
+  background: #38bdf8;
+  border-radius: 50%;
+  box-shadow: 0 0 6px #38bdf8;
+  display: none;
+}
+
+.tools-indicator-dot.visible {
+  display: block;
+}
+
+.tools-menu-dropdown {
+  position: absolute;
+  bottom: calc(100% + 10px);
+  left: 0;
+  width: 275px;
+  max-width: calc(100vw - 24px);
+  background: var(--surface-card, #171719);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border: 1px solid var(--border-color, rgba(255, 255, 255, 0.14));
+  border-radius: 16px;
+  padding: 6px;
+  box-shadow:
+    0 16px 40px rgba(0, 0, 0, 0.65),
+    0 0 0 1px rgba(255, 255, 255, 0.05);
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  z-index: 1000;
+  opacity: 0;
+  visibility: hidden;
+  transform: translateY(10px) scale(0.95);
+  transform-origin: bottom left;
+  transition:
+    transform 0.22s cubic-bezier(0.16, 1, 0.3, 1),
+    opacity 0.18s ease,
+    visibility 0.18s ease;
+  pointer-events: none;
+}
+
+.tools-menu-dropdown.open {
+  opacity: 1;
+  visibility: visible;
+  transform: translateY(0) scale(1);
+  pointer-events: auto;
+}
+
+.tools-menu-item {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  width: 100%;
+  padding: 10px 12px;
+  background: transparent;
+  border: none;
+  border-radius: 12px;
+  color: var(--text-main, #f8fafc);
+  cursor: pointer;
+  text-align: left;
+  touch-action: manipulation;
+  -webkit-tap-highlight-color: transparent;
+  transition:
+    background 0.15s ease,
+    transform 0.15s ease;
+}
+
+.tools-menu-item:hover {
+  background: rgba(255, 255, 255, 0.08);
+}
+
+.tools-menu-item:active {
+  background: rgba(255, 255, 255, 0.14);
+  transform: scale(0.98);
+}
+
+.tools-item-icon {
+  width: 34px;
+  height: 34px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.09);
+  border-radius: 9px;
+  color: var(--text-muted, #94a3b8);
+  transition: all 0.15s ease;
+  flex-shrink: 0;
+}
+
+.tools-menu-item:hover .tools-item-icon,
+.tools-menu-item:active .tools-item-icon {
+  background: rgba(255, 255, 255, 0.12);
+  color: var(--text-main, #f8fafc);
+  border-color: rgba(255, 255, 255, 0.2);
+}
+
+.tools-item-info {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  min-width: 0;
+}
+
+.tools-item-title {
+  font-size: 0.84rem;
+  font-weight: 600;
+  color: #f8fafc;
+  line-height: 1.25;
+}
+
+.tools-item-desc {
+  font-size: 0.73rem;
+  color: #94a3b8;
+  line-height: 1.25;
+  margin-top: 1px;
+}
+
+.tools-item-badge {
+  font-size: 0.7rem;
+  font-weight: 700;
+  padding: 2px 8px;
+  border-radius: 9999px;
+  background: rgba(255, 255, 255, 0.1);
+  color: #94a3b8;
+  transition: all 0.2s ease;
+}
+
+.tools-item-badge.active {
+  background: rgba(56, 189, 248, 0.2);
+  color: #38bdf8;
+  border: 1px solid rgba(56, 189, 248, 0.4);
+}
+
 /* ─── Vixy Pro Subscription Modal ────────────────────────────── */
 .pro-modal-backdrop {
   position: fixed;
@@ -1945,6 +2163,92 @@ body {
   transition: all 0.2s;
 }
 
+/* ─── Web Search Controls & Sources ─────────────────────────────── */
+.web-search-toggle-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  height: 32px;
+  padding: 0 10px;
+  background: var(--surface-hover, rgba(255, 255, 255, 0.05));
+  border: 1px solid var(--border-color, rgba(255, 255, 255, 0.15));
+  border-radius: 9999px;
+  color: var(--text-muted, #94a3b8);
+  font-size: 0.78rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.web-search-toggle-btn:hover {
+  background: rgba(14, 165, 233, 0.15);
+  border-color: rgba(14, 165, 233, 0.4);
+  color: #38bdf8;
+}
+
+.web-search-toggle-btn.active {
+  background: rgba(14, 165, 233, 0.2);
+  border-color: #38bdf8;
+  color: #38bdf8;
+  box-shadow: 0 0 12px rgba(56, 189, 248, 0.25);
+}
+
+.web-search-toggle-btn svg {
+  width: 14px;
+  height: 14px;
+}
+
+.web-sources-container {
+  margin-top: 12px;
+  padding: 10px 14px;
+  background: rgba(15, 23, 42, 0.6);
+  border: 1px solid rgba(56, 189, 248, 0.25);
+  border-radius: 10px;
+}
+
+.web-sources-title {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 0.75rem;
+  font-weight: 700;
+  color: #38bdf8;
+  margin-bottom: 8px;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.web-sources-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+
+.web-source-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 4px 10px;
+  background: rgba(30, 41, 59, 0.8);
+  border: 1px solid rgba(148, 163, 184, 0.2);
+  border-radius: 6px;
+  color: #e2e8f0;
+  font-size: 0.75rem;
+  text-decoration: none;
+  transition: all 0.15s ease;
+  max-width: 280px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.web-source-pill:hover {
+  background: rgba(56, 189, 248, 0.15);
+  border-color: rgba(56, 189, 248, 0.4);
+  color: #38bdf8;
+  transform: translateY(-1px);
+}
+
 .pro-upgrade-btn:hover {
   background: #0d8a6a;
   transform: translateY(-1px);
@@ -1967,6 +2271,169 @@ body {
 }
 
 .pro-fallback-btn:hover {
-  background: var(--surface-3);
-  color: var(--text);
+  background: var(--surface-hover);
+  color: var(--text-main);
+}
+
+/* ─── AI Bubble Markdown Rich Styling ───────────────────────────── */
+.ai-bubble {
+  color: var(--text-main, #f8fafc);
+  font-size: 0.93rem;
+  line-height: 1.65;
+  word-break: break-word;
+}
+
+.ai-bubble p {
+  margin-bottom: 0.75em;
+}
+
+.ai-bubble p:last-child {
+  margin-bottom: 0;
+}
+
+.ai-bubble h1,
+.ai-bubble h2,
+.ai-bubble h3,
+.ai-bubble h4,
+.ai-bubble h5,
+.ai-bubble h6 {
+  color: var(--text-main, #ffffff);
+  font-weight: 700;
+  margin-top: 1.1em;
+  margin-bottom: 0.4em;
+  line-height: 1.3;
+}
+
+.ai-bubble h1 {
+  font-size: 1.35rem;
+  border-bottom: 1px solid var(--border-color, rgba(255, 255, 255, 0.1));
+  padding-bottom: 6px;
+}
+.ai-bubble h2 {
+  font-size: 1.18rem;
+  border-bottom: 1px solid var(--border-color, rgba(255, 255, 255, 0.08));
+  padding-bottom: 4px;
+}
+.ai-bubble h3 {
+  font-size: 1.05rem;
+}
+.ai-bubble h4 {
+  font-size: 0.95rem;
+}
+
+.ai-bubble ul,
+.ai-bubble ol {
+  margin-top: 0.4em;
+  margin-bottom: 0.75em;
+  padding-left: 1.4em;
+}
+
+.ai-bubble li {
+  margin-bottom: 0.3em;
+}
+
+.ai-bubble blockquote {
+  margin: 0.8em 0;
+  padding: 8px 14px;
+  background: rgba(255, 255, 255, 0.04);
+  border-left: 3px solid #38bdf8;
+  border-radius: 0 8px 8px 0;
+  color: var(--text-muted, #cbd5e1);
+  font-style: italic;
+}
+
+.ai-bubble a {
+  color: #38bdf8;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+  transition: color 0.15s ease;
+}
+
+.ai-bubble a:hover {
+  color: #7dd3fc;
+}
+
+.ai-bubble table {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 1em 0;
+  font-size: 0.85rem;
+  overflow-x: auto;
+  display: block;
+  border-radius: 8px;
+  border: 1px solid var(--border-color, rgba(255, 255, 255, 0.12));
+}
+
+.ai-bubble th,
+.ai-bubble td {
+  padding: 8px 12px;
+  border: 1px solid var(--border-color, rgba(255, 255, 255, 0.1));
+  text-align: left;
+}
+
+.ai-bubble th {
+  background: rgba(255, 255, 255, 0.08);
+  font-weight: 600;
+  color: #f8fafc;
+}
+
+.ai-bubble tr:nth-child(even) {
+  background: rgba(255, 255, 255, 0.02);
+}
+
+.ai-bubble code:not(pre code) {
+  background: rgba(255, 255, 255, 0.08);
+  color: #38bdf8;
+  padding: 2px 6px;
+  border-radius: 5px;
+  font-family: "IBM Plex Mono", monospace;
+  font-size: 0.85em;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.ai-bubble hr {
+  border: 0;
+  height: 1px;
+  background: var(--border-color, rgba(255, 255, 255, 0.12));
+  margin: 1.2em 0;
+}
+
+/* ─── Responsive Mobile Styles for Tools Menu (+) ─────────────── */
+@media (max-width: 640px) {
+  .tools-menu-btn {
+    width: 38px;
+    height: 38px;
+  }
+
+  .tools-menu-dropdown {
+    position: absolute;
+    bottom: calc(100% + 12px);
+    left: -4px;
+    width: min(290px, calc(100vw - 28px));
+    padding: 8px;
+    border-radius: 18px;
+    box-shadow:
+      0 20px 50px rgba(0, 0, 0, 0.8),
+      0 0 0 1px rgba(255, 255, 255, 0.12);
+  }
+
+  .tools-menu-item {
+    padding: 12px 14px;
+    border-radius: 14px;
+    gap: 12px;
+  }
+
+  .tools-item-icon {
+    width: 36px;
+    height: 36px;
+    border-radius: 10px;
+  }
+
+  .tools-item-title {
+    font-size: 0.88rem;
+  }
+
+  .tools-item-desc {
+    font-size: 0.75rem;
+  }
 }
