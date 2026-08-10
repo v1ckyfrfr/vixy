@@ -1041,76 +1041,106 @@
       </div>
     </div>
 
-    <!-- ── Vixy Pro Subscription Modal ── -->
+    <!-- ── Vixy Pro Subscription & Credit Store Modal ── -->
     <div
       class="pro-modal-backdrop"
       id="proModalBackdrop"
       onclick="closeProModalOnBackdrop(event)"
     >
-      <div class="pro-modal">
+      <div class="pro-modal" style="max-width: 480px">
         <div class="pro-modal-header">
-          <div class="pro-badge-glow">🪙 VIXY CREDITS</div>
-          <h2>Credit Balance Info</h2>
+          <div class="pro-badge-glow">🪙 VIXY AI CREDITS STORE</div>
+          <h2>Top Up Vixy Credits</h2>
           <p id="proModalMsg">
-            You can use Llama 3.3 70B for 100% FREE (0 Credits). Paid models and
-            AI tools deduct credits based on usage.
+            Llama 3.3 70B is 100% FREE. Get credits for DeepSeek V3, DeepSeek R1, Image Gen &amp; Web Search!
           </p>
         </div>
 
-        <div class="pro-features-list">
-          <div class="pro-feature-item">
-            <span class="pro-icon">🎁</span>
-            <div>
-              <strong>Llama 3.3 70B is 100% Free</strong>
-              <p>
-                Every user gets unlimited access to Meta's flagship Llama 3.3
-                70B model with 0 credit deduction!
-              </p>
-            </div>
+        <!-- Payment Currency / Region Tabs -->
+        <div class="payment-region-tabs">
+          <button class="payment-tab-btn active" id="tabIDR" onclick="selectPaymentRegion('IDR')">
+            🇮🇩 Indonesia (IDR)
+          </button>
+          <button class="payment-tab-btn" id="tabUSD" onclick="selectPaymentRegion('USD')">
+            🌐 International (USD)
+          </button>
+        </div>
+
+        <!-- Package Selection Cards -->
+        <div class="pkg-cards-grid">
+          <div class="pkg-card" id="pkg-pro-starter" onclick="selectPackageCard('pro-starter')">
+            <div class="pkg-card-title">Starter</div>
+            <div class="pkg-card-credits">1,000 Cr</div>
+            <div class="pkg-card-price" id="price-pro-starter">Rp 15.000</div>
           </div>
-          <div class="pro-feature-item">
-            <span class="pro-icon">⚡</span>
-            <div>
-              <strong>Flexible Usage-Based Credits</strong>
-              <p>
-                Use DeepSeek V3 (2 Cr), DeepSeek R1 (4 Cr), Gemini Flash (1 Cr),
-                Image Gen (10 Cr), and Web Scraping (2 Cr).
-              </p>
-            </div>
+          <div class="pkg-card selected" id="pkg-pro-monthly" onclick="selectPackageCard('pro-monthly')">
+            <div class="pkg-card-title">Monthly 🔥</div>
+            <div class="pkg-card-credits">5,000 Cr</div>
+            <div class="pkg-card-price" id="price-pro-monthly">Rp 49.000</div>
           </div>
-          <div class="pro-feature-item">
-            <span class="pro-icon">🚀</span>
-            <div>
-              <strong>Ultra-Fast Priority Responses</strong>
-              <p>
-                Guaranteed top response times with zero queue delays during peak
-                hours.
-              </p>
-            </div>
-          </div>
-          <div class="pro-feature-item">
-            <span class="pro-icon">🎨</span>
-            <div>
-              <strong>HD Image Generation &amp; Web Scraping</strong>
-              <p>
-                Generate Ultra HD images with Google Imagen 3 &amp; SDXL without
-                limits.
-              </p>
-            </div>
+          <div class="pkg-card" id="pkg-pro-unlimited" onclick="selectPackageCard('pro-unlimited')">
+            <div class="pkg-card-title">Ultimate</div>
+            <div class="pkg-card-credits">20,000 Cr</div>
+            <div class="pkg-card-price" id="price-pro-unlimited">Rp 149.000</div>
           </div>
         </div>
 
-        <div class="pro-price-card">
-          <div class="pro-price-amount">$1.99 <span>/ month</span></div>
-          <div class="pro-price-sub">~$0.06 / day • Flexible Pay As You Go</div>
+        <!-- IDR Payment Methods (Tripay) -->
+        <div class="payment-method-box" id="tripayMethodsBox">
+          <label for="tripayChannelSelect">Metode Pembayaran (Tanpa NPWP):</label>
+          <select id="tripayChannelSelect" class="payment-select">
+            <option value="QRIS2">📱 QRIS (GoPay, OVO, DANA, ShopeePay, LinkAja, BCA, Mandiri)</option>
+            <option value="BCAVA">🏦 BCA Virtual Account</option>
+            <option value="MANDIRIVA">🏦 Mandiri Virtual Account</option>
+            <option value="BNIVA">🏦 BNI Virtual Account</option>
+            <option value="BRIVA">🏦 BRI Virtual Account</option>
+            <option value="PERMATAVA">🏦 Permata Virtual Account</option>
+            <option value="ALFAMART">🏪 Alfamart / Dan+Dan</option>
+            <option value="INDOMARET">🏪 Indomaret</option>
+          </select>
+        </div>
+
+        <!-- USD Payment Methods (PayPal / Credit Card) -->
+        <div class="payment-method-box" id="paypalMethodsBox" style="display: none">
+          <label>PayPal &amp; International Credit Card:</label>
+          <div id="paypalButtonContainer" style="margin-top: 8px; text-align: center">
+            <p style="font-size: 0.78rem; color: var(--text-muted)">
+              Pay via Visa, MasterCard, Amex, or PayPal Account in USD.
+            </p>
+          </div>
+        </div>
+
+        <!-- Actions -->
+        <div class="pro-modal-actions">
+          <button class="pro-upgrade-btn" id="paySubmitBtn" onclick="processSelectedPayment()">
+            🚀 Beli Sekarang
+          </button>
+          <button class="pro-fallback-btn" onclick="switchToFreeModel()">
+            Gunakan Model Gratis (Llama 3.3 70B)
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- ── QRIS / Tripay Payment Checkout Viewer Modal ── -->
+    <div class="pro-modal-backdrop" id="checkoutViewBackdrop" onclick="closeCheckoutViewOnBackdrop(event)">
+      <div class="pro-modal" style="max-width: 420px">
+        <div class="pro-modal-header">
+          <div class="pro-badge-glow">💳 INSTANT CHECKOUT</div>
+          <h2 id="checkoutTitle">Bayar Tagihan Vixy</h2>
+          <p id="checkoutSub">Silakan selesaikan pembayaran untuk mendapatkan kredit otomatis.</p>
+        </div>
+
+        <div class="checkout-details-card" id="checkoutCardContent">
+          <!-- Dynamic QRIS / VA Code rendered here -->
         </div>
 
         <div class="pro-modal-actions">
-          <button class="pro-upgrade-btn" onclick="subscribePro()">
-            🔥 Upgrade to Vixy Pro ($1.99/mo)
+          <button class="pro-upgrade-btn" id="simulatedPayBtn" style="background: #3b82f6; display: none" onclick="triggerSimulatedSuccess()">
+            🧪 Simulasikan Pembayaran Berhasil (Dev Mode)
           </button>
-          <button class="pro-fallback-btn" onclick="switchToFreeModel()">
-            Switch to Free Model (Llama 3.3 70B)
+          <button class="pro-fallback-btn" onclick="closeCheckoutView()">
+            Tutup Window
           </button>
         </div>
       </div>
