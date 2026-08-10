@@ -2163,6 +2163,160 @@ body {
   transition: all 0.2s;
 }
 
+.pro-upgrade-btn:hover {
+  background: #0d8a6a;
+  transform: translateY(-1px);
+}
+
+/* ─── Hybrid Payment Modal Styles ────────────────────────────── */
+.payment-region-tabs {
+  display: flex;
+  background: var(--surface-2);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 4px;
+  margin-bottom: 16px;
+  gap: 4px;
+}
+
+.payment-tab-btn {
+  flex: 1;
+  padding: 8px 12px;
+  border: none;
+  background: transparent;
+  color: var(--text-muted);
+  font-size: 0.82rem;
+  font-weight: 600;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+}
+
+.payment-tab-btn.active {
+  background: var(--surface);
+  color: var(--text);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+  border: 1px solid var(--border-focus);
+}
+
+.pkg-cards-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 8px;
+  margin-bottom: 16px;
+}
+
+.pkg-card {
+  background: var(--surface-2);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 10px 8px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  text-align: center;
+}
+
+.pkg-card:hover {
+  border-color: rgba(16, 163, 127, 0.4);
+}
+
+.pkg-card.selected {
+  border-color: #10a37f;
+  background: rgba(16, 163, 127, 0.08);
+  box-shadow: 0 0 12px rgba(16, 163, 127, 0.15);
+}
+
+.pkg-card-title {
+  font-size: 0.75rem;
+  font-weight: 700;
+  color: var(--text);
+  margin-bottom: 4px;
+}
+
+.pkg-card-credits {
+  font-size: 0.7rem;
+  color: #c9a96e;
+  font-weight: 700;
+  margin-bottom: 6px;
+}
+
+.pkg-card-price {
+  font-size: 0.85rem;
+  font-weight: 800;
+  color: #10a37f;
+}
+
+.payment-method-box {
+  background: var(--surface-2);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 12px;
+  margin-bottom: 16px;
+  text-align: left;
+}
+
+.payment-method-box label {
+  display: block;
+  font-size: 0.78rem;
+  font-weight: 700;
+  color: var(--text);
+  margin-bottom: 8px;
+}
+
+.payment-select {
+  width: 100%;
+  padding: 10px;
+  background: var(--surface);
+  border: 1px solid var(--border-focus);
+  border-radius: 8px;
+  color: var(--text);
+  font-size: 0.84rem;
+  outline: none;
+  cursor: pointer;
+}
+
+/* QRIS / Checkout Modal View */
+.checkout-details-card {
+  background: var(--surface-2);
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  padding: 16px;
+  margin-bottom: 16px;
+  text-align: center;
+}
+
+.qris-img-container {
+  background: #ffffff;
+  padding: 12px;
+  border-radius: 12px;
+  display: inline-block;
+  margin: 12px 0;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+}
+
+.qris-img-container img {
+  width: 180px;
+  height: 180px;
+  display: block;
+}
+
+.pay-code-box {
+  background: var(--surface);
+  border: 1px dashed var(--border-focus);
+  border-radius: 8px;
+  padding: 10px;
+  font-family: monospace;
+  font-size: 1.1rem;
+  font-weight: 800;
+  color: #10a37f;
+  margin: 10px 0;
+  user-select: all;
+}
+
 /* ─── Web Search Controls & Sources ─────────────────────────────── */
 .web-search-toggle-btn {
   display: inline-flex;
