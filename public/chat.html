@@ -25,6 +25,7 @@
     />
     <link rel="stylesheet" href="styles/style.css" />
     <link
+      id="hljs-theme"
       rel="stylesheet"
       href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github-dark.min.css"
       crossorigin="anonymous"
@@ -85,16 +86,33 @@
           </div>
           Vixy-AI
         </div>
-        <button
-          class="new-chat-btn"
-          onclick="newChat()"
-          title="New chat"
-          id="newChatBtn"
-        >
-          <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path stroke-width="2" d="M12 5v14M5 12h14" />
-          </svg>
-        </button>
+        <div class="sidebar-header-actions">
+          <button
+            class="new-chat-btn"
+            onclick="newChat()"
+            title="New chat"
+            id="newChatBtn"
+          >
+            <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-width="2" d="M12 5v14M5 12h14" />
+            </svg>
+          </button>
+          <button
+            class="mobile-close-sidebar-btn"
+            onclick="toggleSidebar()"
+            title="Close menu"
+            aria-label="Close sidebar"
+          >
+            <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path
+                stroke-width="2"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                d="M6 18L18 6M6 6l12 12"
+              />
+            </svg>
+          </button>
+        </div>
       </div>
 
       <div class="sidebar-nav-section">
@@ -628,6 +646,59 @@
               </button>
             </div>
           </div>
+
+          <div class="mode-selector-wrap" id="skillsSelectorWrap">
+            <button
+              class="model-selector"
+              id="skillsSelectorBtn"
+              onclick="toggleSkillsDropdown(event)"
+              aria-haspopup="true"
+              aria-expanded="false"
+              title="Skills"
+            >
+              <svg
+                width="12"
+                height="12"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+              >
+                <circle cx="12" cy="12" r="10" stroke-width="2" />
+                <path
+                  stroke-width="2"
+                  stroke-linecap="round"
+                  d="M9.09 9a3 3 0 015.83 1c0 2-3 3-3 3M12 17h.01"
+                />
+              </svg>
+              <span id="skillsLabelText">Skills</span>
+              <svg
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+                width="12"
+                height="12"
+              >
+                <polyline stroke-width="2" points="6 9 12 15 18 9" />
+              </svg>
+            </button>
+            <div
+              class="mode-dropdown skills-dropdown"
+              id="skillsDropdown"
+              role="menu"
+            >
+              <div class="mode-dropdown-header">Skills</div>
+              <div class="skills-dropdown-note">
+                Toggle which skills Vixy may use. Skills are low-authority hints
+                — they cannot override core safety rules.
+              </div>
+              <div id="skillsDropdownList" class="skills-dropdown-list">
+                <div class="skills-dropdown-empty">Loading…</div>
+              </div>
+              <a class="skills-dropdown-manage" href="/settings.html#skills">
+                Manage skills in Settings →
+              </a>
+            </div>
+          </div>
         </div>
 
         <div class="header-actions">
@@ -637,7 +708,16 @@
             title="User Credits"
             onclick="showProModal('Credit Info')"
           >
-            <span class="credit-icon">🪙</span>
+            <span class="credit-icon">
+              <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <circle cx="12" cy="12" r="10" stroke-width="2" />
+                <path
+                  stroke-width="2"
+                  stroke-linecap="round"
+                  d="M12 6.5v11M15 9a3 3 0 00-3-3 3 3 0 100 6 3 3 0 010 6 3 3 0 01-3-3"
+                />
+              </svg>
+            </span>
             <span id="creditBalance">500</span>
             <span class="credit-label">Credits</span>
           </div>
@@ -953,28 +1033,74 @@
             data-img-model="openrouter-flash"
             onclick="selectImgModel(this)"
           >
-            🚀 OpenRouter Flash HD
+            <svg
+              class="chip-icon"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+            >
+              <path
+                stroke-width="2"
+                d="M12 3l1.9 5.8L20 10l-6.1 1.2L12 17l-1.9-5.8L4 10l6.1-1.2L12 3z"
+              />
+            </svg>
+            OpenRouter Flash HD
           </button>
           <button
             class="aspect-chip"
             data-img-model="turbo"
             onclick="selectImgModel(this)"
           >
-            ⚡ SDXL Turbo (High Detail)
+            <svg
+              class="chip-icon"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+            >
+              <path stroke-width="2" d="M13 2L3 14h9l-1 8 10-12h-9l1-8z" />
+            </svg>
+            SDXL Turbo (High Detail)
           </button>
           <button
             class="aspect-chip"
             data-img-model="midjourney"
             onclick="selectImgModel(this)"
           >
-            🎨 Midjourney Style
+            <svg
+              class="chip-icon"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+            >
+              <path
+                stroke-width="2"
+                d="M9.06 11.9l8.07-8.06a2.85 2.85 0 114.03 4.03l-8.06 8.08"
+              />
+              <path
+                stroke-width="2"
+                d="M7.07 14.94c-1.66 0-3 1.35-3 3.02 0 1.33-2.5 1.52-2 2.02 1.08 1.1 2.49 2.02 4 2.02 2.2 0 4-1.8 4-4.04a3.01 3.01 0 00-3-3.02z"
+              />
+            </svg>
+            Midjourney Style
           </button>
           <button
             class="aspect-chip"
             data-img-model="flux"
             onclick="selectImgModel(this)"
           >
-            📸 FLUX.1 Schnell
+            <svg
+              class="chip-icon"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+            >
+              <path
+                stroke-width="2"
+                d="M23 19a2 2 0 01-2 2H3a2 2 0 01-2-2V8a2 2 0 012-2h4l2-3h6l2 3h4a2 2 0 012 2z"
+              />
+              <circle cx="12" cy="13" r="4" stroke-width="2" />
+            </svg>
+            FLUX.1 Schnell
           </button>
         </div>
 
@@ -1049,61 +1175,119 @@
     >
       <div class="pro-modal" style="max-width: 480px">
         <div class="pro-modal-header">
-          <div class="pro-badge-glow">🪙 VIXY AI CREDITS STORE</div>
+          <div class="pro-badge-glow">
+            <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <circle cx="12" cy="12" r="10" stroke-width="2" />
+              <path
+                stroke-width="2"
+                stroke-linecap="round"
+                d="M12 6.5v11M15 9a3 3 0 00-3-3 3 3 0 100 6 3 3 0 010 6 3 3 0 01-3-3"
+              />
+            </svg>
+            VIXY AI CREDITS STORE
+          </div>
           <h2>Top Up Vixy Credits</h2>
           <p id="proModalMsg">
-            Llama 3.3 70B is 100% FREE. Get credits for DeepSeek V3, DeepSeek R1, Image Gen &amp; Web Search!
+            Llama 3.3 70B is 100% FREE. Get credits for DeepSeek V3, DeepSeek
+            R1, Image Gen &amp; Web Search!
           </p>
         </div>
 
         <!-- Payment Currency / Region Tabs -->
         <div class="payment-region-tabs">
-          <button class="payment-tab-btn active" id="tabIDR" onclick="selectPaymentRegion('IDR')">
-            🇮🇩 Indonesia (IDR)
+          <button
+            class="payment-tab-btn active"
+            id="tabIDR"
+            onclick="selectPaymentRegion('IDR')"
+          >
+            <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path
+                stroke-width="2"
+                d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0118 0z"
+              />
+              <circle cx="12" cy="10" r="3" stroke-width="2" />
+            </svg>
+            Indonesia (IDR)
           </button>
-          <button class="payment-tab-btn" id="tabUSD" onclick="selectPaymentRegion('USD')">
-            🌐 International (USD)
+          <button
+            class="payment-tab-btn"
+            id="tabUSD"
+            onclick="selectPaymentRegion('USD')"
+          >
+            <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <circle cx="12" cy="12" r="10" stroke-width="2" />
+              <path
+                stroke-width="2"
+                d="M2 12h20M12 2a15.3 15.3 0 014 10 15.3 15.3 0 01-4 10 15.3 15.3 0 01-4-10 15.3 15.3 0 014-10z"
+              />
+            </svg>
+            International (USD)
           </button>
         </div>
 
         <!-- Package Selection Cards -->
         <div class="pkg-cards-grid">
-          <div class="pkg-card" id="pkg-pro-starter" onclick="selectPackageCard('pro-starter')">
+          <div
+            class="pkg-card"
+            id="pkg-pro-starter"
+            onclick="selectPackageCard('pro-starter')"
+          >
             <div class="pkg-card-title">Starter</div>
             <div class="pkg-card-credits">1,000 Cr</div>
             <div class="pkg-card-price" id="price-pro-starter">Rp 15.000</div>
           </div>
-          <div class="pkg-card selected" id="pkg-pro-monthly" onclick="selectPackageCard('pro-monthly')">
-            <div class="pkg-card-title">Monthly 🔥</div>
+          <div
+            class="pkg-card selected"
+            id="pkg-pro-monthly"
+            onclick="selectPackageCard('pro-monthly')"
+          >
+            <div class="pkg-card-title">Monthly</div>
             <div class="pkg-card-credits">5,000 Cr</div>
             <div class="pkg-card-price" id="price-pro-monthly">Rp 49.000</div>
           </div>
-          <div class="pkg-card" id="pkg-pro-unlimited" onclick="selectPackageCard('pro-unlimited')">
+          <div
+            class="pkg-card"
+            id="pkg-pro-unlimited"
+            onclick="selectPackageCard('pro-unlimited')"
+          >
             <div class="pkg-card-title">Ultimate</div>
             <div class="pkg-card-credits">20,000 Cr</div>
-            <div class="pkg-card-price" id="price-pro-unlimited">Rp 149.000</div>
+            <div class="pkg-card-price" id="price-pro-unlimited">
+              Rp 149.000
+            </div>
           </div>
         </div>
 
         <!-- IDR Payment Methods (Tripay) -->
         <div class="payment-method-box" id="tripayMethodsBox">
-          <label for="tripayChannelSelect">Metode Pembayaran (Tanpa NPWP):</label>
+          <label for="tripayChannelSelect"
+            >Metode Pembayaran (Tanpa NPWP):</label
+          >
           <select id="tripayChannelSelect" class="payment-select">
-            <option value="QRIS2">📱 QRIS (GoPay, OVO, DANA, ShopeePay, LinkAja, BCA, Mandiri)</option>
-            <option value="BCAVA">🏦 BCA Virtual Account</option>
-            <option value="MANDIRIVA">🏦 Mandiri Virtual Account</option>
-            <option value="BNIVA">🏦 BNI Virtual Account</option>
-            <option value="BRIVA">🏦 BRI Virtual Account</option>
-            <option value="PERMATAVA">🏦 Permata Virtual Account</option>
-            <option value="ALFAMART">🏪 Alfamart / Dan+Dan</option>
-            <option value="INDOMARET">🏪 Indomaret</option>
+            <option value="QRIS2">
+              QRIS (GoPay, OVO, DANA, ShopeePay, LinkAja, BCA, Mandiri)
+            </option>
+            <option value="BCAVA">BCA Virtual Account</option>
+            <option value="MANDIRIVA">Mandiri Virtual Account</option>
+            <option value="BNIVA">BNI Virtual Account</option>
+            <option value="BRIVA">BRI Virtual Account</option>
+            <option value="PERMATAVA">Permata Virtual Account</option>
+            <option value="ALFAMART">Alfamart / Dan+Dan</option>
+            <option value="INDOMARET">Indomaret</option>
           </select>
         </div>
 
         <!-- USD Payment Methods (PayPal / Credit Card) -->
-        <div class="payment-method-box" id="paypalMethodsBox" style="display: none">
+        <div
+          class="payment-method-box"
+          id="paypalMethodsBox"
+          style="display: none"
+        >
           <label>PayPal &amp; International Credit Card:</label>
-          <div id="paypalButtonContainer" style="margin-top: 8px; text-align: center">
+          <div
+            id="paypalButtonContainer"
+            style="margin-top: 8px; text-align: center"
+          >
             <p style="font-size: 0.78rem; color: var(--text-muted)">
               Pay via Visa, MasterCard, Amex, or PayPal Account in USD.
             </p>
@@ -1112,8 +1296,12 @@
 
         <!-- Actions -->
         <div class="pro-modal-actions">
-          <button class="pro-upgrade-btn" id="paySubmitBtn" onclick="processSelectedPayment()">
-            🚀 Beli Sekarang
+          <button
+            class="pro-upgrade-btn"
+            id="paySubmitBtn"
+            onclick="processSelectedPayment()"
+          >
+            Beli Sekarang →
           </button>
           <button class="pro-fallback-btn" onclick="switchToFreeModel()">
             Gunakan Model Gratis (Llama 3.3 70B)
@@ -1123,12 +1311,31 @@
     </div>
 
     <!-- ── QRIS / Tripay Payment Checkout Viewer Modal ── -->
-    <div class="pro-modal-backdrop" id="checkoutViewBackdrop" onclick="closeCheckoutViewOnBackdrop(event)">
+    <div
+      class="pro-modal-backdrop"
+      id="checkoutViewBackdrop"
+      onclick="closeCheckoutViewOnBackdrop(event)"
+    >
       <div class="pro-modal" style="max-width: 420px">
         <div class="pro-modal-header">
-          <div class="pro-badge-glow">💳 INSTANT CHECKOUT</div>
+          <div class="pro-badge-glow">
+            <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <rect
+                x="2"
+                y="5"
+                width="20"
+                height="14"
+                rx="2"
+                stroke-width="2"
+              />
+              <line x1="2" y1="10" x2="22" y2="10" stroke-width="2" />
+            </svg>
+            INSTANT CHECKOUT
+          </div>
           <h2 id="checkoutTitle">Bayar Tagihan Vixy</h2>
-          <p id="checkoutSub">Silakan selesaikan pembayaran untuk mendapatkan kredit otomatis.</p>
+          <p id="checkoutSub">
+            Silakan selesaikan pembayaran untuk mendapatkan kredit otomatis.
+          </p>
         </div>
 
         <div class="checkout-details-card" id="checkoutCardContent">
@@ -1136,8 +1343,13 @@
         </div>
 
         <div class="pro-modal-actions">
-          <button class="pro-upgrade-btn" id="simulatedPayBtn" style="background: #3b82f6; display: none" onclick="triggerSimulatedSuccess()">
-            🧪 Simulasikan Pembayaran Berhasil (Dev Mode)
+          <button
+            class="pro-upgrade-btn"
+            id="simulatedPayBtn"
+            style="background: #3b82f6; display: none"
+            onclick="triggerSimulatedSuccess()"
+          >
+            Simulasikan Pembayaran Berhasil (Dev Mode)
           </button>
           <button class="pro-fallback-btn" onclick="closeCheckoutView()">
             Tutup Window
