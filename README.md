@@ -4,6 +4,12 @@
 
 ---
 
+## Preview
+
+<img src="screenshots/vixyAI.png" width="900">
+
+---
+
 ## Key Features
 
 - **Firebase Authentication**:
