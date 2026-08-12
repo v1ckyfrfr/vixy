@@ -6,7 +6,7 @@
 
 ## Preview
 
-<img src="screenshots/vixyAI.png" width="900">
+<img src="screenshot/vixyAI.png" width="900">
 
 ---
 
