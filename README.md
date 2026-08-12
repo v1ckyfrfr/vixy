@@ -6,7 +6,7 @@
 
 ## Preview
 
-<img src="auth-app/screenshot/vixyAI.png" width="900">
+<img src="/auth-app/screenshot/vixyAI.png" width="900">
 
 ---
 
