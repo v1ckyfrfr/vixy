@@ -364,6 +364,14 @@ body {
   color: #fff;
 }
 
+.empty-logo-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border-radius: 13px;
+  display: block;
+}
+
 .empty-title {
   font-size: 1.5rem;
   font-weight: 600;
@@ -477,12 +485,20 @@ body {
   justify-content: center;
   flex-shrink: 0;
   margin-top: 2px;
+  overflow: hidden;
 }
 
 .ai-avatar svg {
   width: 15px;
   height: 15px;
   color: #fff;
+}
+
+.ai-avatar-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
 }
 
 .ai-content {
@@ -726,6 +742,17 @@ body {
   z-index: 1;
 }
 
+.thinking-avatar .ai-avatar-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border-radius: 50%;
+  display: block;
+  position: relative;
+  z-index: 1;
+  background: var(--accent);
+}
+
 /* Subtle border animation instead of glow ring */
 .thinking-avatar-ring {
   position: absolute;
@@ -965,6 +992,74 @@ body {
 }
 .stop-btn.visible {
   display: flex;
+}
+
+/* ─── Voice Input (Mic) Button ───────────────────────────────── */
+.mic-btn {
+  width: 34px;
+  height: 34px;
+  background: var(--surface-2);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  flex-shrink: 0;
+  color: var(--text-muted);
+  transition:
+    background 0.15s,
+    color 0.15s,
+    border-color 0.15s,
+    box-shadow 0.15s;
+  -webkit-tap-highlight-color: transparent;
+  touch-action: manipulation;
+}
+
+.mic-btn:hover {
+  background: var(--surface-3);
+  color: var(--text-dim);
+}
+
+.mic-btn svg {
+  width: 14px;
+  height: 14px;
+}
+
+.mic-btn.listening {
+  background: #ef4444;
+  border-color: #ef4444;
+  color: #fff;
+  animation: mic-pulse 1.4s ease-in-out infinite;
+}
+
+@keyframes mic-pulse {
+  0%,
+  100% {
+    box-shadow: 0 0 0 0 rgba(239, 68, 68, 0.45);
+  }
+  50% {
+    box-shadow: 0 0 0 6px rgba(239, 68, 68, 0);
+  }
+}
+
+/* ─── Speak (Text-to-Speech) Button ──────────────────────────── */
+.msg-action-btn.speaking {
+  color: var(--accent);
+}
+
+.msg-action-btn.speaking svg {
+  animation: action-blink 1s ease-in-out infinite;
+}
+
+@keyframes action-blink {
+  0%,
+  100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.35;
+  }
 }
 
 /* ─── Image Gen Button ──────────────────────────────────────── */
@@ -3233,4 +3328,194 @@ html.light .hljs-deletion {
 
 .skills-dropdown-manage:hover {
   background: var(--surface-hover);
+}
+
+/* ─── Mobile layout polish ──────────────────────────────────────
+   Keep the chat usable on narrow devices without hiding any feature: header
+   controls become compact icon triggers, while their menus retain full labels. */
+@media (max-width: 640px) {
+  .chat-wrap {
+    width: 100%;
+    min-width: 0;
+  }
+
+  .chat-header {
+    padding-right: 8px;
+    padding-left: 8px;
+    gap: 4px;
+  }
+
+  .header-left {
+    gap: 2px;
+    min-width: 0;
+  }
+
+  .mode-selector-wrap {
+    display: flex;
+    min-width: 0;
+  }
+
+  #modeSelectorBtn,
+  #skillsSelectorBtn {
+    width: 40px;
+    min-width: 40px;
+    padding: 0;
+    justify-content: center;
+    gap: 4px;
+  }
+
+  #modeSelectorBtn #modeLabelText,
+  #skillsSelectorBtn #skillsLabelText {
+    display: none;
+  }
+
+  #modelSelectorBtn {
+    flex: 1;
+    min-width: 0;
+    max-width: none;
+    padding-right: 7px;
+    padding-left: 7px;
+  }
+
+  #modelLabelText {
+    min-width: 0;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  .header-actions {
+    flex-shrink: 0;
+    gap: 2px;
+  }
+
+  .credit-badge {
+    width: 40px;
+    min-width: 40px;
+    min-height: 40px;
+    padding: 0;
+    justify-content: center;
+    gap: 3px;
+  }
+
+  .credit-icon svg {
+    width: 13px;
+    height: 13px;
+  }
+
+  /* The dropdowns always stay inside the viewport, including at 320 px wide. */
+  .mode-dropdown,
+  .model-dropdown,
+  .skills-dropdown {
+    width: min(320px, calc(100vw - 16px));
+    min-width: min(280px, calc(100vw - 16px));
+    max-height: min(460px, 70dvh);
+  }
+
+  #modelSelectorWrap .model-dropdown,
+  #skillsSelectorWrap .skills-dropdown {
+    right: 0;
+    left: auto;
+    transform-origin: top right;
+  }
+
+  .chat-messages {
+    padding-bottom: 8px;
+    overscroll-behavior: contain;
+  }
+
+  .msg-group {
+    padding: 14px 0;
+  }
+
+  .msg-user,
+  .msg-ai {
+    padding-right: 12px;
+    padding-left: 12px;
+  }
+
+  .msg-ai {
+    gap: 9px;
+  }
+
+  .ai-bubble,
+  .msg-user-bubble {
+    overflow-wrap: anywhere;
+  }
+
+  .ai-bubble table {
+    display: block;
+    width: max-content;
+    max-width: 100%;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  .web-source-pill {
+    max-width: 100%;
+  }
+
+  .chat-input-wrapper {
+    padding: 0 8px max(10px, calc(env(safe-area-inset-bottom, 0px) + 6px));
+  }
+
+  .input-container {
+    gap: 4px;
+    padding: 6px 6px 6px 10px;
+  }
+
+  .input-actions {
+    gap: 2px;
+  }
+
+  .tools-menu-btn,
+  .mic-btn,
+  .send-btn,
+  .stop-btn {
+    width: 40px;
+    height: 40px;
+    min-width: 40px;
+  }
+
+  .tools-menu-dropdown {
+    right: 0;
+    width: min(300px, calc(100vw - 16px));
+    max-height: min(430px, 62dvh);
+  }
+
+  .file-preview-bar {
+    margin-bottom: 6px;
+  }
+}
+
+@media (max-width: 360px) {
+  .mobile-toggle,
+  #modeSelectorBtn,
+  #skillsSelectorBtn,
+  .credit-badge {
+    width: 36px;
+    min-width: 36px;
+    min-height: 36px;
+  }
+
+  .tools-menu-btn,
+  .mic-btn,
+  .send-btn,
+  .stop-btn {
+    width: 36px;
+    height: 36px;
+    min-width: 36px;
+  }
+
+  .model-selector {
+    min-height: 36px;
+  }
+
+  .input-container {
+    padding-left: 8px;
+  }
+
+  .suggestion-card {
+    min-height: 0;
+  }
 }
