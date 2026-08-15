@@ -394,12 +394,7 @@
       <div class="sidebar-header">
         <div class="sidebar-logo">
           <div class="logo-icon">
-            <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path
-                stroke-width="2"
-                d="M12 2a10 10 0 100 20A10 10 0 0012 2zm0 0v20M2 12h20"
-              />
-            </svg>
+            <img src="/img/vixy-logo.png" alt="Vixy" class="logo-icon-img" />
           </div>
           Vixy-AI
         </div>
@@ -643,6 +638,59 @@
                 <span class="toggle-track"></span>
               </label>
             </div>
+          </div>
+        </div>
+
+        <div class="settings-card">
+          <div class="settings-card-header">
+            <div class="settings-icon">
+              <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <circle cx="12" cy="12" r="10" stroke-width="2" />
+                <path
+                  stroke-width="2"
+                  d="M2 12h20M12 2a15.3 15.3 0 014 10 15.3 15.3 0 01-4 10 15.3 15.3 0 01-4-10 15.3 15.3 0 014-10z"
+                />
+              </svg>
+            </div>
+            <div>
+              <div class="settings-title">Language</div>
+              <div class="settings-desc">
+                The language Vixy uses in its responses
+              </div>
+            </div>
+          </div>
+          <div class="settings-body">
+            <div id="langMsg" class="form-msg"></div>
+            <div class="field">
+              <label class="input-label" for="langSelect"
+                >Response Language</label
+              >
+              <select id="langSelect" class="input" onchange="saveLanguage()">
+                <option value="en">English</option>
+                <option value="id">Indonesian (Bahasa Indonesia)</option>
+                <option value="ms">Malay (Bahasa Melayu)</option>
+                <option value="zh">Chinese (简体中文)</option>
+                <option value="es">Spanish (Español)</option>
+                <option value="ar">Arabic (العربية)</option>
+                <option value="fr">French (Français)</option>
+                <option value="de">German (Deutsch)</option>
+                <option value="ja">Japanese (日本語)</option>
+                <option value="ko">Korean (한국어)</option>
+                <option value="hi">Hindi (हिन्दी)</option>
+                <option value="pt">Portuguese (Português)</option>
+              </select>
+            </div>
+            <p
+              style="
+                font-size: 0.78rem;
+                color: var(--text-muted);
+                margin-top: 10px;
+              "
+            >
+              Vixy will reply in this language by default. Code and technical
+              terms stay unchanged. You can still ask Vixy to switch languages
+              in any single message. Default: English.
+            </p>
           </div>
         </div>
 
@@ -1071,6 +1119,26 @@
         toast.classList.add("show");
         setTimeout(() => toast.classList.remove("show"), 2500);
       }
+
+      // ─── Language ──────────────────────────────────────
+      function initLanguage() {
+        const saved = localStorage.getItem("vx_lang") || "en";
+        document.getElementById("langSelect").value = saved;
+        document.documentElement.lang = saved;
+      }
+
+      function saveLanguage() {
+        const val = document.getElementById("langSelect").value;
+        localStorage.setItem("vx_lang", val);
+        document.documentElement.lang = val;
+        const el = document.getElementById("langMsg");
+        el.className = "form-msg success";
+        el.innerHTML =
+          '<svg width="14" height="14" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-width="2" d="M22 11.08V12a10 10 0 11-5.93-9.14"/><polyline stroke-width="2" points="22 4 12 14.01 9 11.01"/></svg><span>Language saved — applies to your next message in chat.</span>';
+        setTimeout(() => (el.className = "form-msg"), 3500);
+      }
+
+      initLanguage();
 
       function toggleSidebar() {
         document.querySelector(".sidebar").classList.toggle("open");
