@@ -77,12 +77,7 @@
       <div class="sidebar-header">
         <div class="sidebar-logo">
           <div class="logo-icon">
-            <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path
-                stroke-width="2"
-                d="M12 2a10 10 0 100 20A10 10 0 0012 2zm0 0v20M2 12h20"
-              />
-            </svg>
+            <img src="/img/vixy-logo.png" alt="Vixy" class="logo-icon-img" />
           </div>
           Vixy-AI
         </div>
@@ -149,6 +144,59 @@
         <div class="nav-section-label" style="margin-top: 16px">
           Recent Chats
         </div>
+        <div class="chat-search-row">
+          <svg
+            class="chat-search-icon"
+            fill="none"
+            stroke="currentColor"
+            viewBox="0 0 24 24"
+          >
+            <circle cx="11" cy="11" r="8" stroke-width="2" />
+            <path stroke-width="2" stroke-linecap="round" d="M21 21l-4.35-4.35" />
+          </svg>
+          <input
+            type="text"
+            id="chatSearchInput"
+            class="chat-search-input"
+            placeholder="Search chats..."
+            autocomplete="off"
+            oninput="filterHistory()"
+          />
+          <button
+            class="chat-import-btn"
+            onclick="document.getElementById('importFileInput').click()"
+            title="Import chat (JSON)"
+          >
+            <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path
+                stroke-width="2"
+                stroke-linecap="round"
+                d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"
+              />
+              <polyline
+                stroke-width="2"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                points="17 8 12 3 7 8"
+              />
+              <line
+                x1="12"
+                y1="3"
+                x2="12"
+                y2="15"
+                stroke-width="2"
+                stroke-linecap="round"
+              />
+            </svg>
+          </button>
+        </div>
+        <input
+          type="file"
+          id="importFileInput"
+          style="display: none"
+          accept=".json,application/json"
+          onchange="handleImportFile(this)"
+        />
         <div id="chatHistoryList"></div>
       </div>
 
@@ -214,7 +262,7 @@
                 <div class="mode-opt-info">
                   <span class="mode-opt-label">Auto</span>
                   <span class="mode-opt-desc"
-                    >Model decides — balanced for most tasks</span
+                    >Model decides - balanced for most tasks</span
                   >
                 </div>
                 <svg
@@ -241,7 +289,7 @@
                 <div class="mode-opt-info">
                   <span class="mode-opt-label">Fast</span>
                   <span class="mode-opt-desc"
-                    >Instant replies — best for casual chat</span
+                    >Instant replies - best for casual chat</span
                   >
                 </div>
                 <svg
@@ -731,12 +779,7 @@
       <div class="chat-messages" id="chatBox">
         <div class="empty-state" id="emptyState">
           <div class="empty-logo">
-            <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path
-                stroke-width="2"
-                d="M12 2a10 10 0 100 20A10 10 0 0012 2zm0 0v20M2 12h20"
-              />
-            </svg>
+            <img src="/img/vixy-logo.png" alt="Vixy" class="empty-logo-img" />
           </div>
           <h1 class="empty-title">How can I help you?</h1>
           <p class="empty-sub">
@@ -934,6 +977,46 @@
 
                 <button
                   class="tools-menu-item"
+                  id="toolsAutoReadItem"
+                  onclick="toggleAutoRead()"
+                >
+                  <span class="tools-item-icon">
+                    <svg
+                      fill="none"
+                      stroke="currentColor"
+                      viewBox="0 0 24 24"
+                      width="16"
+                      height="16"
+                    >
+                      <polygon
+                        stroke-width="2"
+                        points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"
+                      />
+                      <path
+                        stroke-width="2"
+                        stroke-linecap="round"
+                        d="M15.54 8.46a5 5 0 010 7.07"
+                      />
+                      <path
+                        stroke-width="2"
+                        stroke-linecap="round"
+                        d="M19.07 4.93a10 10 0 010 14.14"
+                      />
+                    </svg>
+                  </span>
+                  <div class="tools-item-info">
+                    <span class="tools-item-title">Read Responses Aloud</span>
+                    <span class="tools-item-desc"
+                      >Auto text-to-speech for AI replies</span
+                    >
+                  </div>
+                  <span class="tools-item-badge" id="toolsAutoReadBadge"
+                    >Off</span
+                  >
+                </button>
+
+                <button
+                  class="tools-menu-item"
                   onclick="openImageModalFromMenu()"
                 >
                   <span class="tools-item-icon">
@@ -965,6 +1048,41 @@
                 </button>
               </div>
             </div>
+            <button
+              class="mic-btn"
+              id="voiceBtn"
+              onclick="toggleVoiceInput()"
+              title="Voice input (Speech-to-Text)"
+            >
+              <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path
+                  stroke-width="2"
+                  stroke-linecap="round"
+                  d="M12 1a3 3 0 00-3 3v8a3 3 0 006 0V4a3 3 0 00-3-3z"
+                />
+                <path
+                  stroke-width="2"
+                  stroke-linecap="round"
+                  d="M19 10v2a7 7 0 01-14 0v-2"
+                />
+                <line
+                  x1="12"
+                  y1="19"
+                  x2="12"
+                  y2="23"
+                  stroke-width="2"
+                  stroke-linecap="round"
+                />
+                <line
+                  x1="8"
+                  y1="23"
+                  x2="16"
+                  y2="23"
+                  stroke-width="2"
+                  stroke-linecap="round"
+                />
+              </svg>
+            </button>
             <button
               class="stop-btn"
               id="stopBtn"
