@@ -879,6 +879,38 @@ a {
   border-color: var(--border-subtle);
 }
 
+.mobile-close-sidebar-btn svg {
+  width: 18px;
+  height: 18px;
+}
+
+/* ─── Desktop Collapsible Sidebar ───────────────────────────── */
+@media (min-width: 769px) {
+  .sidebar {
+    transition: transform 0.28s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+
+  body.sidebar-collapsed .sidebar {
+    transform: translateX(-100%);
+  }
+
+  .main {
+    transition: margin-left 0.28s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+
+  body.sidebar-collapsed .main {
+    margin-left: 0;
+  }
+
+  .mobile-close-sidebar-btn {
+    display: flex;
+  }
+
+  body.sidebar-collapsed .mobile-toggle {
+    display: flex;
+  }
+}
+
 /* ─── Responsive ────────────────────────────────────────────── */
 @media (min-width: 769px) and (max-width: 1024px) {
   :root {
@@ -973,9 +1005,6 @@ a {
 
   .chat-header {
     padding: 10px 14px;
-    position: sticky;
-    top: 0;
-    z-index: 10;
     padding-top: max(10px, env(safe-area-inset-top, 10px));
   }
 
@@ -1093,9 +1122,6 @@ a {
   }
   .empty-title {
     font-size: 1.2rem;
-  }
-  .empty-sub {
-    font-size: 0.81rem;
     margin-bottom: 18px;
   }
 
