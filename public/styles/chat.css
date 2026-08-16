@@ -41,7 +41,7 @@ body {
   border: 1px solid var(--border);
   border-radius: var(--radius);
   box-shadow: var(--shadow-lg);
-  z-index: 200;
+  z-index: 1100;
   overflow: hidden;
   opacity: 0;
   pointer-events: none;
@@ -58,6 +58,9 @@ body {
 }
 
 .mode-dropdown-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
   padding: 10px 14px 7px;
   font-size: 0.68rem;
   font-weight: 600;
@@ -65,6 +68,112 @@ body {
   text-transform: uppercase;
   color: var(--text-muted);
   border-bottom: 1px solid var(--border-subtle);
+}
+
+/* ─── Backdrop & Bottom Sheet Helpers ─────────────────────── */
+.dropdown-backdrop {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.55);
+  z-index: 1040;
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+  transition:
+    opacity 0.25s cubic-bezier(0.16, 1, 0.3, 1),
+    visibility 0.25s;
+}
+
+.dropdown-backdrop.open {
+  opacity: 1;
+  visibility: visible;
+  pointer-events: auto;
+}
+
+.sheet-drag-handle {
+  display: none;
+  width: 38px;
+  height: 4px;
+  border-radius: 2px;
+  background: rgba(255, 255, 255, 0.25);
+  margin: 0 auto 12px;
+  flex-shrink: 0;
+}
+
+html.light .sheet-drag-handle {
+  background: rgba(0, 0, 0, 0.2);
+}
+
+.sheet-close-btn {
+  display: none;
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  border: 1px solid var(--border-color, rgba(255, 255, 255, 0.12));
+  background: var(--surface-2);
+  color: var(--text-dim);
+  align-items: center;
+  justify-content: center;
+  font-size: 0.8rem;
+  cursor: pointer;
+  touch-action: manipulation;
+  -webkit-tap-highlight-color: transparent;
+  transition:
+    background 0.15s,
+    color 0.15s;
+}
+
+.sheet-close-btn:hover,
+.sheet-close-btn:active {
+  background: var(--surface-3);
+  color: var(--text);
+}
+
+/* ─── Active Tools Bar (Status indicator above textarea) ────── */
+.active-tools-bar {
+  max-width: 700px;
+  margin: 0 auto 6px;
+  display: flex;
+  gap: 6px;
+  flex-wrap: wrap;
+  padding: 0 4px;
+}
+
+.active-tool-pill {
+  display: none;
+  align-items: center;
+  gap: 6px;
+  padding: 4px 10px;
+  border-radius: 20px;
+  font-size: 0.74rem;
+  font-weight: 500;
+  background: var(--accent-subtle);
+  border: 1px solid var(--accent-border);
+  color: var(--accent);
+  cursor: pointer;
+  touch-action: manipulation;
+  -webkit-tap-highlight-color: transparent;
+  transition:
+    background 0.15s ease,
+    transform 0.1s ease;
+}
+
+.active-tool-pill.visible {
+  display: inline-flex;
+}
+
+.active-tool-pill:hover {
+  background: var(--accent-faint);
+}
+
+.active-tool-pill:active {
+  transform: scale(0.96);
+}
+
+.active-tool-pill .pill-remove {
+  font-size: 0.65rem;
+  opacity: 0.75;
+  margin-left: 2px;
 }
 
 /* Individual option row */
@@ -213,6 +322,16 @@ body {
   flex: 1;
   background: var(--bg);
   min-width: 0;
+}
+
+@media (min-width: 769px) {
+  .chat-wrap {
+    transition: margin-left 0.28s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+
+  body.sidebar-collapsed .chat-wrap {
+    margin-left: 0;
+  }
 }
 
 /* ─── Chat Header ───────────────────────────────────────────── */
@@ -377,15 +496,7 @@ body {
   font-weight: 600;
   letter-spacing: -0.03em;
   color: var(--text);
-  margin-bottom: 8px;
-}
-
-.empty-sub {
-  font-size: 0.875rem;
-  color: var(--text-muted);
   margin-bottom: 28px;
-  max-width: 360px;
-  line-height: 1.6;
 }
 
 /* ─── Suggestion Cards ──────────────────────────────────────── */
@@ -886,7 +997,7 @@ body {
   background: var(--surface);
   border: 1px solid var(--border);
   border-radius: var(--radius-xl);
-  padding: 8px 8px 8px 16px;
+  padding: 8px 8px 8px 8px;
   display: flex;
   align-items: flex-end;
   gap: 8px;
@@ -1993,8 +2104,6 @@ body {
   width: 275px;
   max-width: calc(100vw - 24px);
   background: var(--surface-card, #171719);
-  backdrop-filter: blur(20px);
-  -webkit-backdrop-filter: blur(20px);
   border: 1px solid var(--border-color, rgba(255, 255, 255, 0.14));
   border-radius: 16px;
   padding: 6px;
@@ -2004,7 +2113,7 @@ body {
   display: flex;
   flex-direction: column;
   gap: 4px;
-  z-index: 1000;
+  z-index: 1100;
   opacity: 0;
   visibility: hidden;
   transform: translateY(10px) scale(0.95);
@@ -2692,131 +2801,293 @@ body {
 }
 
 /* ─── Touch Device & Mobile Message Actions ──────────────────── */
+/* ─── Mobile / Touch Devices (<= 768px) ───────────────────────── */
 @media (max-width: 768px), (pointer: coarse) {
-  .msg-actions {
-    opacity: 1 !important;
-    flex-wrap: wrap;
-    gap: 6px;
-    margin-top: 10px;
-  }
+  /* Dropdowns stay desktop-style: anchored to their trigger button,
+     never bottom sheets. On phones they become viewport-safe cards
+     (full-width, right-aligned for buttons near the right edge). */
 
-  .msg-action-btn {
-    padding: 6px 12px;
-    font-size: 0.78rem;
-    min-height: 36px;
-    border-radius: var(--radius-sm);
-    background: var(--surface-2);
-    border: 1px solid var(--border-subtle);
-  }
-
-  .chat-input-wrapper {
-    padding: 0 12px max(12px, calc(env(safe-area-inset-bottom, 0px) + 8px));
-  }
-
-  .input-container {
-    padding: 6px 8px 6px 12px;
-    border-radius: 22px;
-  }
-
-  .send-btn {
-    width: 40px;
-    height: 40px;
-    border-radius: 12px;
-  }
-}
-
-/* ─── Responsive Mobile Styles for Tools Menu (+) ─────────────── */
-@media (max-width: 640px) {
-  .tools-menu-btn {
-    width: 40px;
-    height: 40px;
-    border-radius: 12px;
-  }
-
+  .mode-dropdown,
+  .model-dropdown,
+  .skills-dropdown,
   .tools-menu-dropdown {
-    position: absolute;
-    bottom: calc(100% + 10px);
-    right: 0;
-    left: auto;
-    top: auto;
-    width: min(285px, calc(100vw - 28px));
-    max-height: min(420px, 60vh);
+    max-height: min(430px, 72vh);
     overflow-y: auto;
+    overscroll-behavior: contain;
     -webkit-overflow-scrolling: touch;
-    z-index: 1050;
-    border-radius: 18px;
-    background: var(--surface-card, #171719);
-    backdrop-filter: blur(20px);
-    -webkit-backdrop-filter: blur(20px);
-    border: 1px solid var(--border-color, rgba(255, 255, 255, 0.14));
-    box-shadow:
-      0 16px 45px rgba(0, 0, 0, 0.65),
-      0 0 0 1px rgba(255, 255, 255, 0.05);
-    padding: 8px;
+  }
+
+  /* Response Mode menu: anchored below the trigger (left side) */
+  .mode-dropdown {
+    left: 0;
+    right: auto;
+    width: 260px;
+    max-width: calc(100vw - 68px);
+  }
+
+  /* AI Model menu: compact card just below the header, right-aligned */
+  .model-dropdown {
+    position: fixed;
+    top: calc(62px + env(safe-area-inset-top, 0px));
+    bottom: auto;
+    left: auto;
+    right: 12px;
+    width: min(320px, calc(100vw - 24px));
+    min-width: 0;
+    max-width: none;
+  }
+
+  /* Skills menu: full-width card just below the header */
+  .skills-dropdown {
+    position: fixed;
+    top: calc(62px + env(safe-area-inset-top, 0px));
+    bottom: auto;
+    left: 12px;
+    right: 12px;
+    width: auto;
+    min-width: 0;
+    max-width: none;
+  }
+
+  /* Tools (+) menu: anchored to its trigger's right edge like desktop */
+  .tools-menu-dropdown {
+    left: auto;
+    right: 0;
+    width: 275px;
+    max-width: calc(100vw - 56px);
     transform-origin: bottom right;
+  }
+
+  /* Tablets & coarse pointers with room: size menus like desktop */
+  @media (min-width: 641px) and (pointer: coarse) {
+    .mode-dropdown,
+    .model-dropdown,
+    .skills-dropdown {
+      position: absolute;
+      top: calc(100% + 8px);
+      width: auto;
+    }
+    .mode-dropdown {
+      left: 0;
+      right: auto;
+      min-width: 260px;
+      max-width: 420px;
+    }
+    .model-dropdown {
+      left: 0;
+      right: auto;
+      min-width: 320px;
+      max-width: 420px;
+    }
+    .skills-dropdown {
+      left: 0;
+      right: auto;
+      min-width: 290px;
+      max-width: 320px;
+    }
+    .tools-menu-dropdown {
+      left: 0;
+      right: auto;
+      width: 275px;
+      max-width: calc(100vw - 24px);
+    }
+  }
+
+  .mode-dropdown-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    position: sticky;
+    top: 0;
+    z-index: 2;
+    padding: 4px 4px 10px;
+    font-size: 0.82rem;
+    font-weight: 600;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    color: var(--text);
+    border-bottom: 1px solid var(--border-subtle);
+    margin-bottom: 8px;
+    background: var(--surface-card, #171719);
+    flex-shrink: 0;
+  }
+
+  .mode-option {
+    padding: 13px 14px;
+    min-height: 48px;
+    border-radius: 14px;
+    margin-bottom: 4px;
+    gap: 12px;
+    touch-action: manipulation;
+    -webkit-tap-highlight-color: transparent;
+  }
+
+  .mode-option:active {
+    background: var(--surface-hover);
+  }
+
+  .mode-opt-label {
+    font-size: 0.92rem;
+    font-weight: 500;
+  }
+
+  .mode-opt-desc {
+    font-size: 0.76rem;
+    color: var(--text-dim);
+  }
+
+  .model-group-label {
+    padding: 12px 8px 6px;
+    font-size: 0.72rem;
+    letter-spacing: 0.06em;
   }
 
   .tools-menu-item {
     padding: 12px 14px;
+    min-height: 52px;
     border-radius: 14px;
-    gap: 12px;
-    min-height: 48px;
+    margin-bottom: 6px;
+    gap: 14px;
+    touch-action: manipulation;
+    -webkit-tap-highlight-color: transparent;
+  }
+
+  .tools-menu-item:active {
+    background: var(--surface-hover);
+  }
+
+  .tools-item-badge {
+    flex-shrink: 0;
   }
 
   .tools-item-icon {
-    width: 36px;
-    height: 36px;
-    border-radius: 10px;
+    width: 38px;
+    height: 38px;
+    border-radius: 11px;
+    flex-shrink: 0;
   }
 
   .tools-item-title {
-    font-size: 0.88rem;
+    font-size: 0.9rem;
+    font-weight: 500;
   }
 
   .tools-item-desc {
-    font-size: 0.75rem;
+    font-size: 0.76rem;
+    color: var(--text-dim);
   }
-}
 
-/* ─── Mobile Chat Header & Dropdowns ─────────────────────────── */
-@media (max-width: 640px) {
+  .tools-item-badge {
+    padding: 3px 8px;
+    font-size: 0.72rem;
+  }
+
+  .skills-dropdown-item {
+    padding: 13px 14px;
+    min-height: 48px;
+    border-radius: 14px;
+    margin-bottom: 4px;
+    touch-action: manipulation;
+  }
+
+  /* Header Layout */
+  .chat-wrap {
+    width: 100%;
+    min-width: 0;
+  }
+
   .chat-header {
     padding: 8px 12px;
-    gap: 8px;
-    min-height: 56px;
+    padding-top: max(8px, env(safe-area-inset-top, 8px));
+    gap: 6px;
+    min-height: 54px;
+    background: var(--bg);
+    border-bottom: 1px solid var(--border-subtle);
   }
 
   .header-left {
+    display: flex;
+    align-items: center;
     gap: 6px;
     min-width: 0;
     flex: 1;
   }
 
-  .model-selector {
-    max-width: 140px;
-    min-height: 38px;
+  .mobile-toggle {
+    width: 38px;
+    height: 38px;
+    min-width: 38px;
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    touch-action: manipulation;
+    -webkit-tap-highlight-color: transparent;
+  }
+
+  #modelSelectorBtn {
+    flex: 1;
+    min-width: 0;
+    height: 38px;
+    padding: 0 10px;
+    border-radius: 10px;
+    font-size: 0.82rem;
+    font-weight: 500;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 6px;
+    touch-action: manipulation;
+    -webkit-tap-highlight-color: transparent;
+  }
+
+  #modelLabelText {
     overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;
-    padding: 6px 10px;
-    font-size: 0.82rem;
-    border-radius: var(--radius-sm);
+    min-width: 0;
   }
 
-  .mode-selector {
-    min-height: 38px;
-    padding: 6px 10px;
-    font-size: 0.82rem;
+  #modeSelectorBtn,
+  #skillsSelectorBtn {
+    width: 38px;
+    min-width: 38px;
+    height: 38px;
+    padding: 0;
+    justify-content: center;
+    border-radius: 10px;
+    flex-shrink: 0;
+    touch-action: manipulation;
+    -webkit-tap-highlight-color: transparent;
+  }
+
+  #modeSelectorBtn #modeLabelText,
+  #modeSelectorBtn svg,
+  #skillsSelectorBtn #skillsLabelText,
+  #skillsSelectorBtn svg:last-child {
+    display: none;
   }
 
   .header-actions {
+    display: flex;
+    align-items: center;
     gap: 6px;
+    flex-shrink: 0;
   }
 
   .credit-badge {
-    padding: 6px 10px;
-    font-size: 0.78rem;
-    min-height: 36px;
+    height: 38px;
+    min-height: 38px;
+    padding: 0 10px;
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    font-size: 0.8rem;
+    font-weight: 600;
+    flex-shrink: 0;
+    touch-action: manipulation;
+    -webkit-tap-highlight-color: transparent;
   }
 
   .credit-label {
@@ -2827,64 +3098,246 @@ body {
     display: none;
   }
 
-  /* Anchored popdowns for AI Model & Response Mode directly beneath header triggers */
-  .mode-dropdown,
-  .model-dropdown {
-    position: absolute;
-    top: calc(100% + 8px);
-    left: 0;
-    right: auto;
-    bottom: auto;
-    min-width: 250px;
-    width: min(320px, calc(100vw - 24px));
-    max-height: min(460px, 68vh);
-    border-radius: 16px;
-    background: var(--surface);
-    backdrop-filter: blur(20px);
-    -webkit-backdrop-filter: blur(20px);
-    box-shadow:
-      0 16px 45px rgba(0, 0, 0, 0.65),
-      0 0 0 1px var(--border);
-    z-index: 1100;
+  /* Chat Messages & Bubbles */
+  .chat-messages {
+    padding: 8px 10px 14px;
+    overscroll-behavior-y: contain;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  .msg-group {
+    padding: 10px 0;
+  }
+
+  .msg-user {
+    padding: 0 4px;
+  }
+
+  .msg-user-bubble {
+    max-width: 88%;
+    padding: 10px 14px;
+    font-size: 0.9rem;
+    line-height: 1.55;
+    border-radius: 18px 18px 4px 18px;
+    overflow-wrap: anywhere;
+    word-break: break-word;
+  }
+
+  .msg-ai {
+    padding: 0 4px;
+    gap: 8px;
+  }
+
+  .ai-avatar {
+    width: 26px;
+    height: 26px;
+    border-radius: 8px;
+  }
+
+  .ai-bubble {
+    font-size: 0.92rem;
+    line-height: 1.65;
+    overflow-wrap: anywhere;
+    word-break: break-word;
+  }
+
+  .ai-bubble table {
+    display: block;
+    width: max-content;
+    max-width: 100%;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    margin: 10px 0;
+    border-radius: 8px;
+  }
+
+  .code-block-wrap {
+    margin: 8px 0;
+    border-radius: 10px;
+  }
+
+  .code-block-header {
+    padding: 6px 10px;
+  }
+
+  .code-copy-btn,
+  .code-dl-btn {
+    min-height: 30px;
+    padding: 4px 8px;
+    font-size: 0.72rem;
+    border-radius: 6px;
+    touch-action: manipulation;
+  }
+
+  .ai-bubble pre {
+    padding: 10px 12px;
+    font-size: 0.8rem;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  .web-source-pill {
+    max-width: 100%;
+  }
+
+  /* Message Action Buttons (Always accessible on touch) */
+  .msg-actions {
+    opacity: 1 !important;
+    display: flex !important;
+    flex-wrap: wrap !important;
+    gap: 6px !important;
+    margin-top: 8px !important;
+  }
+
+  .msg-action-btn {
+    padding: 6px 10px !important;
+    font-size: 0.76rem !important;
+    min-height: 32px !important;
+    border-radius: 8px !important;
+    background: var(--surface-2) !important;
+    border: 1px solid var(--border-subtle) !important;
+    touch-action: manipulation !important;
+    -webkit-tap-highlight-color: transparent !important;
+  }
+
+  .msg-action-btn:active {
+    transform: scale(0.95);
+    background: var(--surface-hover) !important;
+  }
+
+  /* Chat Input Area */
+  .chat-input-wrapper {
+    padding: 0 10px max(10px, calc(env(safe-area-inset-bottom, 0px) + 6px));
+  }
+
+  .input-container {
+    padding: 6px 6px 6px 8px;
+    border-radius: 20px;
+    gap: 6px;
+  }
+
+  #msgInput {
+    font-size: 16px !important; /* Prevents iOS auto-zoom */
+    padding: 6px 0;
+    min-height: 24px;
+    max-height: 130px;
+    line-height: 1.45;
+  }
+
+  .input-actions {
+    gap: 4px;
+  }
+
+  .tools-menu-btn,
+  .mic-btn,
+  .send-btn,
+  .stop-btn {
+    width: 38px;
+    height: 38px;
+    min-width: 38px;
+    border-radius: 50%;
+    touch-action: manipulation;
+    -webkit-tap-highlight-color: transparent;
+  }
+
+  .tools-menu-btn:active,
+  .mic-btn:active,
+  .send-btn:active,
+  .stop-btn:active {
+    transform: scale(0.92);
+  }
+
+  .file-preview-bar {
+    max-width: 100%;
+    margin-bottom: 6px;
+    padding: 6px 10px;
+  }
+
+  .file-remove-btn {
+    width: 32px;
+    height: 32px;
+    min-width: 32px;
+  }
+
+  /* Empty State / Suggestions on Mobile */
+  .empty-state {
+    padding: 24px 10px 16px;
+  }
+
+  .empty-logo {
+    width: 48px;
+    height: 48px;
+    margin-bottom: 12px;
+  }
+
+  .empty-title {
+    font-size: 1.2rem;
+    margin-bottom: 16px;
+  }
+
+  /* Suggestion cards: exactly the desktop stacked layout */
+  .suggestions-grid {
+    grid-template-columns: 1fr;
+    gap: 10px;
+    max-width: 100%;
+  }
+
+  .suggestion-card {
+    padding: 14px;
+    border-radius: 14px;
+    text-align: left;
+    touch-action: manipulation;
+    -webkit-tap-highlight-color: transparent;
+  }
+
+  .suggestion-card:active {
+    transform: scale(0.98);
+    background: var(--surface-hover);
+  }
+
+  .suggestion-card .suggestion-icon {
+    width: 30px;
+    height: 30px;
+    border-radius: 8px;
+    background: var(--surface-2);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1rem;
+    margin-bottom: 8px;
+    opacity: 0.85;
+  }
+
+  .suggestion-card .suggestion-icon svg {
+    width: 15px;
+    height: 15px;
+  }
+
+  .suggestion-card .suggestion-title {
+    font-size: 0.83rem;
+    font-weight: 600;
+    color: var(--text);
+    margin-bottom: 2px;
+  }
+
+  .suggestion-card .suggestion-desc {
+    font-size: 0.75rem;
+    color: var(--text-muted);
+    line-height: 1.4;
+  }
+
+  /* Modals: centered cards like desktop — touch-friendly sizing */
+  .img-modal-backdrop,
+  .pro-modal-backdrop,
+  .scrape-modal-backdrop {
+    padding: 16px;
+  }
+
+  .img-modal,
+  .pro-modal,
+  .scrape-modal {
+    max-height: 90dvh;
     overflow-y: auto;
     -webkit-overflow-scrolling: touch;
-    transform-origin: top left;
-  }
-}
-
-@keyframes slideUpMobile {
-  from {
-    opacity: 0;
-    transform: translateY(20px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
-
-/* ─── Pro / Checkout Modal — bottom sheet on mobile ──────────── */
-@media (max-width: 640px) {
-  .pro-modal-backdrop {
-    align-items: flex-end;
-    padding: 0;
-  }
-
-  .pro-modal {
-    width: 100%;
-    max-width: 100%;
-    max-height: 92vh;
-    overflow-y: auto;
-    border-radius: 24px 24px 0 0;
-    padding: 24px 18px;
-    padding-bottom: max(24px, calc(env(safe-area-inset-bottom, 0px) + 16px));
-    animation: none;
-    transform: translateY(100%);
-    transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-  }
-
-  .pro-modal-backdrop.open .pro-modal {
-    transform: translateY(0);
   }
 
   .pkg-cards-grid {
@@ -2907,22 +3360,33 @@ body {
   .payment-select {
     width: 100%;
     min-height: 46px;
+    font-size: 16px !important;
   }
 
-  .pro-modal-actions {
+  .pro-modal-actions,
+  .img-modal-actions,
+  .scrape-modal-actions {
     flex-direction: column-reverse;
-    gap: 10px;
+    gap: 8px;
   }
 
   .pro-upgrade-btn,
-  .pro-fallback-btn {
+  .pro-fallback-btn,
+  .img-cancel-btn,
+  .img-generate-btn,
+  .scrape-cancel-btn,
+  .scrape-start-btn {
     width: 100%;
     min-height: 48px;
     justify-content: center;
+    font-size: 0.9rem;
+    touch-action: manipulation;
   }
 
-  .pro-modal-header p {
-    margin-bottom: 14px;
+  #imgPromptInput,
+  #scrapeUrlInput,
+  #scrapeQueryInput {
+    font-size: 16px !important;
   }
 }
 
@@ -3330,192 +3794,83 @@ html.light .hljs-deletion {
   background: var(--surface-hover);
 }
 
-/* ─── Mobile layout polish ──────────────────────────────────────
-   Keep the chat usable on narrow devices without hiding any feature: header
-   controls become compact icon triggers, while their menus retain full labels. */
-@media (max-width: 640px) {
-  .chat-wrap {
-    width: 100%;
-    min-width: 0;
-  }
-
-  .chat-header {
-    padding-right: 8px;
-    padding-left: 8px;
-    gap: 4px;
-  }
-
-  .header-left {
-    gap: 2px;
-    min-width: 0;
-  }
-
-  .mode-selector-wrap {
-    display: flex;
-    min-width: 0;
-  }
-
-  #modeSelectorBtn,
-  #skillsSelectorBtn {
-    width: 40px;
-    min-width: 40px;
-    padding: 0;
-    justify-content: center;
-    gap: 4px;
-  }
-
-  #modeSelectorBtn #modeLabelText,
-  #skillsSelectorBtn #skillsLabelText {
-    display: none;
-  }
-
-  #modelSelectorBtn {
-    flex: 1;
-    min-width: 0;
-    max-width: none;
-    padding-right: 7px;
-    padding-left: 7px;
-  }
-
-  #modelLabelText {
-    min-width: 0;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    white-space: nowrap;
-  }
-
-  .header-actions {
-    flex-shrink: 0;
-    gap: 2px;
-  }
-
-  .credit-badge {
-    width: 40px;
-    min-width: 40px;
-    min-height: 40px;
-    padding: 0;
-    justify-content: center;
-    gap: 3px;
-  }
-
-  .credit-icon svg {
-    width: 13px;
-    height: 13px;
-  }
-
-  /* The dropdowns always stay inside the viewport, including at 320 px wide. */
-  .mode-dropdown,
-  .model-dropdown,
-  .skills-dropdown {
-    width: min(320px, calc(100vw - 16px));
-    min-width: min(280px, calc(100vw - 16px));
-    max-height: min(460px, 70dvh);
-  }
-
-  #modelSelectorWrap .model-dropdown,
-  #skillsSelectorWrap .skills-dropdown {
-    right: 0;
-    left: auto;
-    transform-origin: top right;
-  }
-
-  .chat-messages {
-    padding-bottom: 8px;
-    overscroll-behavior: contain;
-  }
-
-  .msg-group {
-    padding: 14px 0;
-  }
-
-  .msg-user,
-  .msg-ai {
-    padding-right: 12px;
-    padding-left: 12px;
-  }
-
-  .msg-ai {
-    gap: 9px;
-  }
-
-  .ai-bubble,
-  .msg-user-bubble {
-    overflow-wrap: anywhere;
-  }
-
-  .ai-bubble table {
-    display: block;
-    width: max-content;
-    max-width: 100%;
-    overflow-x: auto;
-    -webkit-overflow-scrolling: touch;
-  }
-
-  .web-source-pill {
-    max-width: 100%;
-  }
-
-  .chat-input-wrapper {
-    padding: 0 8px max(10px, calc(env(safe-area-inset-bottom, 0px) + 6px));
-  }
-
-  .input-container {
-    gap: 4px;
-    padding: 6px 6px 6px 10px;
-  }
-
-  .input-actions {
-    gap: 2px;
-  }
-
-  .tools-menu-btn,
-  .mic-btn,
-  .send-btn,
-  .stop-btn {
-    width: 40px;
-    height: 40px;
-    min-width: 40px;
-  }
-
-  .tools-menu-dropdown {
-    right: 0;
-    width: min(300px, calc(100vw - 16px));
-    max-height: min(430px, 62dvh);
-  }
-
-  .file-preview-bar {
-    margin-bottom: 6px;
-  }
-}
-
+/* Extra small devices (<= 360px) */
 @media (max-width: 360px) {
+  .chat-header {
+    padding-left: 6px;
+    padding-right: 6px;
+    gap: 4px;
+  }
+
   .mobile-toggle,
   #modeSelectorBtn,
   #skillsSelectorBtn,
   .credit-badge {
-    width: 36px;
-    min-width: 36px;
-    min-height: 36px;
+    width: 34px;
+    min-width: 34px;
+    height: 34px;
+    min-height: 34px;
   }
 
   .tools-menu-btn,
   .mic-btn,
   .send-btn,
   .stop-btn {
-    width: 36px;
-    height: 36px;
-    min-width: 36px;
+    width: 34px;
+    height: 34px;
+    min-width: 34px;
   }
 
-  .model-selector {
-    min-height: 36px;
+  #modelSelectorBtn {
+    height: 34px;
+    padding: 0 8px;
+    font-size: 0.78rem;
   }
 
   .input-container {
     padding-left: 8px;
   }
+}
 
-  .suggestion-card {
-    min-height: 0;
+/* ─── Desktop-like refinements for larger phones (>= 401px) ────── */
+@media (min-width: 401px) and (max-width: 768px) {
+  /* Suggestions grid matches desktop: two columns */
+  .suggestions-grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 10px;
+  }
+}
+
+@media (min-width: 481px) and (max-width: 768px) {
+  /* Mode & Skills triggers show their labels, like desktop */
+  #modeSelectorBtn,
+  #skillsSelectorBtn {
+    width: auto;
+    min-width: 0;
+    padding: 0 10px;
+    gap: 6px;
+    display: flex;
+    justify-content: center;
+  }
+
+  #modeSelectorBtn #modeLabelText,
+  #skillsSelectorBtn #skillsLabelText {
+    display: inline;
+  }
+
+  #modeSelectorBtn svg:last-child,
+  #skillsSelectorBtn svg:last-child {
+    display: inline;
+  }
+
+  #modeSelectorBtn .mode-dot {
+    width: 8px;
+    height: 8px;
+  }
+
+  /* Message bubbles breathe a bit more like desktop chat */
+  .msg-user-bubble {
+    max-width: 80%;
+    border-radius: 18px 18px 6px 18px;
   }
 }
