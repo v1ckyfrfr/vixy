@@ -129,6 +129,13 @@ a {
   overflow: hidden;
 }
 
+.logo-text {
+  font-family: "IBM Plex Sans", sans-serif;
+  font-size: 18px;
+  font-weight: 600;
+  letter-spacing: -0.25px;
+}
+
 .sidebar-header {
   display: flex;
   align-items: center;
@@ -973,6 +980,13 @@ a {
     padding-bottom: max(14px, env(safe-area-inset-bottom, 14px));
     box-shadow: 0 0 40px rgba(0, 0, 0, 0.5);
     will-change: transform;
+  }
+
+  .logo-text {
+    font-family: "Plus Jakarta Sans", sans-serif;
+    font-size: 18px;
+    font-weight: 600;
+    letter-spacing: -0.25px;
   }
 
   .sidebar.open {
