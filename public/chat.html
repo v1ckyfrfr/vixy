@@ -16,7 +16,7 @@
       content="#ffffff"
       media="(prefers-color-scheme: light)"
     />
-    <meta name="description" content="Vixy-AI — Chat with your AI assistant" />
+    <meta name="description" content="Vixy-AI - Chat with your AI assistant" />
     <title>Vixy-AI - Chat</title>
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link
@@ -79,7 +79,7 @@
           <div class="logo-icon">
             <img src="/img/vixy-logo.png" alt="Vixy" class="logo-icon-img" />
           </div>
-          Vixy-AI
+          <h3 class="logo-text">VixyAI</h3>
         </div>
         <div class="sidebar-header-actions">
           <button
@@ -403,7 +403,7 @@
                   d="M12 2v3M12 19v3M4.22 4.22l2.12 2.12M17.66 17.66l2.12 2.12M2 12h3M19 12h3M4.22 19.78l2.12-2.12M17.66 6.34l2.12-2.12"
                 />
               </svg>
-              <span id="modelLabelText">Llama 3.3 70B</span>
+              <span id="modelLabelText">GPT-OSS 120B</span>
 
               <svg
                 fill="none"
@@ -556,9 +556,9 @@
               >
                 <span class="model-tier-badge tier-free">Free</span>
                 <div class="mode-opt-info">
-                  <span class="mode-opt-label">Llama 3.3 70B</span>
+                  <span class="mode-opt-label">GPT-OSS 120B</span>
                   <span class="mode-opt-desc"
-                    >⚡⚡⚡ Blazing fast · Meta's 70B flagship</span
+                    >⚡⚡⚡ Blazing fast · Groq's flagship free model</span
                   >
                 </div>
                 <svg
@@ -612,7 +612,7 @@
               >
                 <span class="model-tier-badge tier-free">Free</span>
                 <div class="mode-opt-info">
-                  <span class="mode-opt-label">Llama 3.1 8B Instant</span>
+                  <span class="mode-opt-label">GPT-OSS 20B</span>
                   <span class="mode-opt-desc"
                     >🚀 Instant response · Lightweight chat</span
                   >
@@ -730,7 +730,7 @@
                 <div class="mode-opt-info">
                   <span class="mode-opt-label">Gemini 1.5 Flash</span>
                   <span class="mode-opt-desc"
-                    >⚡ Fast · Reliable — Large context (1M tokens)</span
+                    >⚡ Fast · Reliable - Large context (1M tokens)</span
                   >
                 </div>
                 <svg
@@ -802,7 +802,7 @@
               </div>
               <div class="skills-dropdown-note">
                 Toggle which skills Vixy may use. Skills are low-authority hints
-                — they cannot override core safety rules.
+                - they cannot override core safety rules.
               </div>
               <div id="skillsDropdownList" class="skills-dropdown-list">
                 <div class="skills-dropdown-empty">Loading…</div>
@@ -846,59 +846,127 @@
           <div class="empty-logo">
             <img src="/img/vixy-logo.png" alt="Vixy" class="empty-logo-img" />
           </div>
-          <h1 class="empty-title">How can I help you?</h1>
-          <div class="suggestions-grid">
+          <h1 class="empty-title">What are you building today?</h1>
+          <div class="cap-grid">
             <button
-              class="suggestion-card"
-              onclick="
-                useSuggestion('Explain quantum computing in simple terms')
-              "
+              class="cap-card"
+              onclick="toggleModelDropdown()"
+              title="Choose the right AI for your task"
             >
-              <span class="suggestion-icon"><i data-lucide="zap"></i></span>
-              <div class="suggestion-title">Explain a concept</div>
-              <div class="suggestion-desc">
-                Explain quantum computing simply
+              <span class="cap-icon"><i data-lucide="brain"></i></span>
+              <div class="cap-info">
+                <div class="cap-title">Multi-Model</div>
+                <div class="cap-desc">
+                  11 models · Groq, OpenRouter &amp; Gemini
+                </div>
               </div>
+              <svg
+                class="cap-arrow"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+              >
+                <polyline stroke-width="2" points="9 18 15 12 9 6" />
+              </svg>
             </button>
             <button
-              class="suggestion-card"
-              onclick="
-                useSuggestion('Help me write a professional email to my team')
-              "
+              class="cap-card"
+              onclick="openScrapeModal()"
+              title="Extract and analyze any webpage"
             >
-              <span class="suggestion-icon"
-                ><i data-lucide="pen-tool"></i
-              ></span>
-              <div class="suggestion-title">Help me write</div>
-              <div class="suggestion-desc">Draft a professional email</div>
+              <span class="cap-icon"><i data-lucide="globe"></i></span>
+              <div class="cap-info">
+                <div class="cap-title">Web Scraper</div>
+                <div class="cap-desc">Extract information from websites</div>
+              </div>
+              <svg
+                class="cap-arrow"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+              >
+                <polyline stroke-width="2" points="9 18 15 12 9 6" />
+              </svg>
             </button>
             <button
-              class="suggestion-card"
+              class="cap-card"
+              onclick="toggleSkillsDropdown(event)"
+              title="Give Vixy specialized capabilities"
+            >
+              <span class="cap-icon"><i data-lucide="zap"></i></span>
+              <div class="cap-info">
+                <div class="cap-title">Skills</div>
+                <div class="cap-desc">Activate specialized capabilities</div>
+              </div>
+              <svg
+                class="cap-arrow"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+              >
+                <polyline stroke-width="2" points="9 18 15 12 9 6" />
+              </svg>
+            </button>
+            <button
+              class="cap-card"
+              onclick="enableWebSearchFromEmpty()"
+              title="Gather and analyze information from the web"
+            >
+              <span class="cap-icon"><i data-lucide="search"></i></span>
+              <div class="cap-info">
+                <div class="cap-title">Research</div>
+                <div class="cap-desc">Live web search &amp; sources</div>
+              </div>
+              <svg
+                class="cap-arrow"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+              >
+                <polyline stroke-width="2" points="9 18 15 12 9 6" />
+              </svg>
+            </button>
+            <button
+              class="cap-card"
               onclick="
                 useSuggestion(
                   'Write a Python function to sort a list of dictionaries',
                 )
               "
             >
-              <span class="suggestion-icon"><i data-lucide="code"></i></span>
-              <div class="suggestion-title">Code something</div>
-              <div class="suggestion-desc">Python function to sort data</div>
+              <span class="cap-icon"><i data-lucide="code"></i></span>
+              <div class="cap-info">
+                <div class="cap-title">Coding</div>
+                <div class="cap-desc">Build, debug, and review software</div>
+              </div>
+              <svg
+                class="cap-arrow"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+              >
+                <polyline stroke-width="2" points="9 18 15 12 9 6" />
+              </svg>
             </button>
             <button
-              class="suggestion-card"
+              class="cap-card"
               onclick="
-                useSuggestion(
-                  'Audit this code for security vulnerabilities: SQLi, XSS, and CSRF',
-                )
+                useSuggestion('Help me write a professional email to my team')
               "
             >
-              <span class="suggestion-icon"
-                ><i data-lucide="shield-alert"></i
-              ></span>
-              <div class="suggestion-title">Security Audit</div>
-              <div class="suggestion-desc">
-                Analyze code for OWASP Top 10 vulnerabilities
+              <span class="cap-icon"><i data-lucide="pen-tool"></i></span>
+              <div class="cap-info">
+                <div class="cap-title">Writing</div>
+                <div class="cap-desc">Write, rewrite, and improve content</div>
               </div>
+              <svg
+                class="cap-arrow"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+              >
+                <polyline stroke-width="2" points="9 18 15 12 9 6" />
+              </svg>
             </button>
           </div>
         </div>
@@ -995,11 +1063,7 @@
               <span class="tools-indicator-dot" id="toolsIndicatorDot"></span>
             </button>
 
-            <div
-              class="tools-menu-dropdown"
-              id="toolsMenuDropdown"
-              role="menu"
-            >
+            <div class="tools-menu-dropdown" id="toolsMenuDropdown" role="menu">
               <div class="sheet-drag-handle"></div>
               <div class="mode-dropdown-header tools-dropdown-header">
                 <span>Chat Tools</span>
@@ -1035,110 +1099,110 @@
                 </div>
               </button>
 
-                <button
-                  class="tools-menu-item"
-                  id="toolsWebSearchItem"
-                  onclick="toggleWebSearchInMenu()"
-                >
-                  <span class="tools-item-icon">
-                    <svg
-                      fill="none"
-                      stroke="currentColor"
-                      viewBox="0 0 24 24"
-                      width="16"
-                      height="16"
-                    >
-                      <circle cx="12" cy="12" r="10" stroke-width="2" />
-                      <path
-                        stroke-width="2"
-                        d="M2 12h20M12 2a15.3 15.3 0 014 10 15.3 15.3 0 01-4 10 15.3 15.3 0 01-4-10 15.3 15.3 0 014-10z"
-                      />
-                    </svg>
-                  </span>
-                  <div class="tools-item-info">
-                    <span class="tools-item-title">Live Web Search</span>
-                    <span class="tools-item-desc"
-                      >Search real-time news & web data</span
-                    >
-                  </div>
-                  <span class="tools-item-badge" id="toolsWebSearchBadge"
-                    >Off</span
+              <button
+                class="tools-menu-item"
+                id="toolsWebSearchItem"
+                onclick="toggleWebSearchInMenu()"
+              >
+                <span class="tools-item-icon">
+                  <svg
+                    fill="none"
+                    stroke="currentColor"
+                    viewBox="0 0 24 24"
+                    width="16"
+                    height="16"
                   >
-                </button>
-
-                <button
-                  class="tools-menu-item"
-                  id="toolsAutoReadItem"
-                  onclick="toggleAutoRead()"
-                >
-                  <span class="tools-item-icon">
-                    <svg
-                      fill="none"
-                      stroke="currentColor"
-                      viewBox="0 0 24 24"
-                      width="16"
-                      height="16"
-                    >
-                      <polygon
-                        stroke-width="2"
-                        points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"
-                      />
-                      <path
-                        stroke-width="2"
-                        stroke-linecap="round"
-                        d="M15.54 8.46a5 5 0 010 7.07"
-                      />
-                      <path
-                        stroke-width="2"
-                        stroke-linecap="round"
-                        d="M19.07 4.93a10 10 0 010 14.14"
-                      />
-                    </svg>
-                  </span>
-                  <div class="tools-item-info">
-                    <span class="tools-item-title">Read Responses Aloud</span>
-                    <span class="tools-item-desc"
-                      >Auto text-to-speech for AI replies</span
-                    >
-                  </div>
-                  <span class="tools-item-badge" id="toolsAutoReadBadge"
-                    >Off</span
+                    <circle cx="12" cy="12" r="10" stroke-width="2" />
+                    <path
+                      stroke-width="2"
+                      d="M2 12h20M12 2a15.3 15.3 0 014 10 15.3 15.3 0 01-4 10 15.3 15.3 0 01-4-10 15.3 15.3 0 014-10z"
+                    />
+                  </svg>
+                </span>
+                <div class="tools-item-info">
+                  <span class="tools-item-title">Live Web Search</span>
+                  <span class="tools-item-desc"
+                    >Search real-time news & web data</span
                   >
-                </button>
-
-                <button
-                  class="tools-menu-item"
-                  onclick="openImageModalFromMenu()"
+                </div>
+                <span class="tools-item-badge" id="toolsWebSearchBadge"
+                  >Off</span
                 >
-                  <span class="tools-item-icon">
-                    <svg
-                      fill="none"
-                      stroke="currentColor"
-                      viewBox="0 0 24 24"
-                      width="16"
-                      height="16"
-                    >
-                      <rect
-                        x="3"
-                        y="3"
-                        width="18"
-                        height="18"
-                        rx="3"
-                        stroke-width="2"
-                      />
-                      <circle cx="8.5" cy="8.5" r="1.5" stroke-width="2" />
-                      <polyline stroke-width="2" points="21 15 16 10 5 21" />
-                    </svg>
-                  </span>
-                  <div class="tools-item-info">
-                    <span class="tools-item-title">Generate AI Image</span>
-                    <span class="tools-item-desc"
-                      >Create AI images with OpenRouter &amp; SDXL</span
-                    >
-                  </div>
-                </button>
-              </div>
+              </button>
+
+              <button
+                class="tools-menu-item"
+                id="toolsAutoReadItem"
+                onclick="toggleAutoRead()"
+              >
+                <span class="tools-item-icon">
+                  <svg
+                    fill="none"
+                    stroke="currentColor"
+                    viewBox="0 0 24 24"
+                    width="16"
+                    height="16"
+                  >
+                    <polygon
+                      stroke-width="2"
+                      points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"
+                    />
+                    <path
+                      stroke-width="2"
+                      stroke-linecap="round"
+                      d="M15.54 8.46a5 5 0 010 7.07"
+                    />
+                    <path
+                      stroke-width="2"
+                      stroke-linecap="round"
+                      d="M19.07 4.93a10 10 0 010 14.14"
+                    />
+                  </svg>
+                </span>
+                <div class="tools-item-info">
+                  <span class="tools-item-title">Read Responses Aloud</span>
+                  <span class="tools-item-desc"
+                    >Auto text-to-speech for AI replies</span
+                  >
+                </div>
+                <span class="tools-item-badge" id="toolsAutoReadBadge"
+                  >Off</span
+                >
+              </button>
+
+              <button
+                class="tools-menu-item"
+                onclick="openImageModalFromMenu()"
+              >
+                <span class="tools-item-icon">
+                  <svg
+                    fill="none"
+                    stroke="currentColor"
+                    viewBox="0 0 24 24"
+                    width="16"
+                    height="16"
+                  >
+                    <rect
+                      x="3"
+                      y="3"
+                      width="18"
+                      height="18"
+                      rx="3"
+                      stroke-width="2"
+                    />
+                    <circle cx="8.5" cy="8.5" r="1.5" stroke-width="2" />
+                    <polyline stroke-width="2" points="21 15 16 10 5 21" />
+                  </svg>
+                </span>
+                <div class="tools-item-info">
+                  <span class="tools-item-title">Generate AI Image</span>
+                  <span class="tools-item-desc"
+                    >Create AI images with OpenRouter &amp; SDXL</span
+                  >
+                </div>
+              </button>
             </div>
+          </div>
           <textarea
             id="msgInput"
             rows="1"
@@ -1411,7 +1475,7 @@
           </div>
           <h2>Top Up Vixy Credits</h2>
           <p id="proModalMsg">
-            Llama 3.3 70B is 100% FREE. Get credits for DeepSeek V3, DeepSeek
+            GPT-OSS 120B is 100% FREE. Get credits for DeepSeek V3, DeepSeek
             R1, Image Gen &amp; Web Search!
           </p>
         </div>
@@ -1527,7 +1591,7 @@
             Beli Sekarang →
           </button>
           <button class="pro-fallback-btn" onclick="switchToFreeModel()">
-            Gunakan Model Gratis (Llama 3.3 70B)
+            Gunakan Model Gratis (GPT-OSS 120B)
           </button>
         </div>
       </div>
