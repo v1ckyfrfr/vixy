@@ -406,7 +406,14 @@
             aria-label="Close sidebar"
           >
             <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <rect x="3" y="3" width="18" height="18" rx="2" stroke-width="2" />
+              <rect
+                x="3"
+                y="3"
+                width="18"
+                height="18"
+                rx="2"
+                stroke-width="2"
+              />
               <path d="M9 3v18" stroke-width="2" />
               <path
                 d="m10 9 3 3-3 3"
@@ -529,62 +536,6 @@
           <div class="settings-card-header">
             <div class="settings-icon">
               <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <rect
-                  x="3"
-                  y="11"
-                  width="18"
-                  height="11"
-                  rx="2"
-                  stroke-width="2"
-                />
-                <path stroke-width="2" d="M7 11V7a5 5 0 0110 0v4" />
-              </svg>
-            </div>
-            <div>
-              <div class="settings-title">Change Password</div>
-              <div class="settings-desc">Update your account password</div>
-            </div>
-          </div>
-          <div class="settings-body">
-            <div id="pwMsg" class="form-msg"></div>
-            <div class="input-grid">
-              <div class="field">
-                <label class="input-label" for="newPass">New Password</label>
-                <input
-                  type="password"
-                  id="newPass"
-                  class="input"
-                  placeholder="Min. 8 characters"
-                  autocomplete="new-password"
-                />
-              </div>
-              <div class="field">
-                <label class="input-label" for="confirmPass"
-                  >Confirm Password</label
-                >
-                <input
-                  type="password"
-                  id="confirmPass"
-                  class="input"
-                  placeholder="Repeat new password"
-                  autocomplete="new-password"
-                />
-              </div>
-            </div>
-            <button
-              class="btn btn-primary"
-              onclick="savePassword()"
-              id="savePwBtn"
-            >
-              Save Password
-            </button>
-          </div>
-        </div>
-
-        <div class="settings-card">
-          <div class="settings-card-header">
-            <div class="settings-icon">
-              <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <circle cx="12" cy="12" r="5" stroke-width="2" />
                 <line x1="12" y1="1" x2="12" y2="3" stroke-width="2" />
                 <line x1="12" y1="21" x2="12" y2="23" stroke-width="2" />
@@ -670,6 +621,7 @@
                 >Response Language</label
               >
               <select id="langSelect" class="input" onchange="saveLanguage()">
+                <option value="auto">Auto (match my language)</option>
                 <option value="en">English</option>
                 <option value="id">Indonesian (Bahasa Indonesia)</option>
                 <option value="ms">Malay (Bahasa Melayu)</option>
@@ -691,9 +643,10 @@
                 margin-top: 10px;
               "
             >
-              Vixy will reply in this language by default. Code and technical
-              terms stay unchanged. You can still ask Vixy to switch languages
-              in any single message. Default: English.
+              Vixy will reply in the language you choose, or match the
+              language you write in when set to "Auto" (the default). Code and
+              technical terms stay unchanged. You can still ask Vixy to switch
+              languages in any single message.
             </p>
           </div>
         </div>
@@ -824,6 +777,112 @@
                   style="display: none"
                 >
                   Cancel
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
+
+        <div class="settings-card" id="memoryCard">
+          <div class="settings-card-header">
+            <div class="settings-icon">
+              <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path
+                  stroke-width="2"
+                  d="M9 3v2m6-2v2M9 19v2m6-2v2M5 9H3m2 6H3m18-6h-2m2 6h-2M7 19h10a2 2 0 002-2V7a2 2 0 00-2-2H7a2 2 0 00-2 2v10a2 2 0 002 2zM9 9h6v6H9z"
+                />
+              </svg>
+            </div>
+            <div>
+              <div class="settings-title">AI Memory</div>
+              <div class="settings-desc">
+                Facts Vixy remembers about you across chat sessions
+              </div>
+            </div>
+          </div>
+          <div class="settings-body">
+            <div class="skill-notice">
+              <svg
+                width="14"
+                height="14"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  stroke-width="2"
+                  d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"
+                />
+              </svg>
+              <span>
+                Vixy automatically remembers preferences, facts, and project
+                context from your conversations. These memories persist across
+                sessions and help Vixy personalize every answer. You can review
+                or delete them at any time.
+              </span>
+            </div>
+
+            <div id="memoryMsg" class="form-msg"></div>
+
+            <div id="memoriesList" class="skill-list">
+              <p class="skill-empty">Loading your memories…</p>
+            </div>
+
+            <div id="episodesList" class="skill-list" style="margin-top: 14px">
+              <p class="skill-empty">Loading recent conversation memories…</p>
+            </div>
+
+            <form
+              class="skill-form"
+              id="memoryForm"
+              onsubmit="submitMemoryForm(event)"
+            >
+              <div class="skill-form-head">
+                <span class="skill-form-title">Add a memory manually</span>
+              </div>
+              <div class="input-grid">
+                <div class="field">
+                  <label class="input-label" for="memoryKey"
+                    >What to remember</label
+                  >
+                  <input
+                    type="text"
+                    id="memoryKey"
+                    class="input"
+                    maxlength="120"
+                    placeholder="e.g. preferred language"
+                  />
+                </div>
+                <div class="field">
+                  <label class="input-label" for="memoryValue">Value</label>
+                  <input
+                    type="text"
+                    id="memoryValue"
+                    class="input"
+                    maxlength="500"
+                    placeholder="e.g. Indonesian"
+                  />
+                </div>
+              </div>
+              <div class="field" style="margin-bottom: 12px">
+                <label class="input-label" for="memoryCategory">Category</label>
+                <select id="memoryCategory" class="input">
+                  <option value="preference">Preference</option>
+                  <option value="fact">Fact</option>
+                  <option value="project">Project</option>
+                  <option value="instruction">Instruction</option>
+                </select>
+              </div>
+              <div class="skill-form-actions">
+                <button type="submit" class="btn btn-primary">
+                  Add Memory
+                </button>
+                <button
+                  type="button"
+                  class="btn btn-danger"
+                  onclick="clearAllMemories()"
+                >
+                  Clear All Memory
                 </button>
               </div>
             </form>
@@ -1072,8 +1131,182 @@
 
       loadSkills();
 
-      if (window.location.hash === "#skills") {
-        const card = document.getElementById("skillsCard");
+      // ─── AI Memory ─────────────────────────────────────
+      function apiMemories(path, options = {}) {
+        return fetch(`/api/memories${path}`, {
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${localStorage.getItem("token") || ""}`,
+          },
+          ...options,
+        });
+      }
+
+      function showMemoryMsg(text, type) {
+        const el = document.getElementById("memoryMsg");
+        el.className = `form-msg ${type || ""}`;
+        el.innerHTML = text
+          ? type === "error"
+            ? `<svg width="14" height="14" fill="none" stroke="currentColor" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10" stroke-width="2"/><line x1="12" y1="8" x2="12" y2="12" stroke-width="2"/><line x1="12" y1="16" x2="12.01" y2="16" stroke-width="2"/></svg><span>${text}</span>`
+            : `<svg width="14" height="14" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-width="2" d="M22 11.08V12a10 10 0 11-5.93-9.14"/><polyline stroke-width="2" points="22 4 12 14.01 9 11.01"/></svg><span>${text}</span>`
+          : "";
+      }
+
+      const CATEGORY_LABELS = {
+        preference: "Preference",
+        fact: "Fact",
+        project: "Project",
+        instruction: "Instruction",
+        episode: "Episode",
+        web: "Web",
+      };
+
+      async function loadMemories() {
+        try {
+          const res = await apiMemories("");
+          if (res.status === 401 || res.status === 403) return logout();
+          if (!res.ok) throw new Error("load failed");
+          const data = await res.json();
+          renderMemories(data.memories || []);
+          renderEpisodes(data.episodes || []);
+        } catch (e) {
+          document.getElementById("memoriesList").innerHTML =
+            '<p class="skill-empty">Failed to load memories.</p>';
+        }
+      }
+
+      function renderMemories(memories) {
+        const list = document.getElementById("memoriesList");
+        if (!memories.length) {
+          list.innerHTML =
+            '<p class="skill-empty">No long-term memories yet. Vixy learns them automatically as you chat.</p>';
+          return;
+        }
+        list.innerHTML =
+          '<div style="font-size:.78rem;color:var(--text-muted);margin-bottom:8px">LONG-TERM MEMORIES</div>' +
+          memories
+            .map(
+              (m) => `
+          <div class="skill-item">
+            <div class="skill-item-info">
+              <div class="skill-item-name">${esc(m.memory_key)}</div>
+              <div class="skill-item-desc">${esc(m.memory_value)} · ${CATEGORY_LABELS[m.category] || m.category}</div>
+            </div>
+            <div class="skill-item-actions">
+              <button class="skill-btn danger" title="Delete memory" onclick="deleteMemory(${m.id})">
+                <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><polyline stroke-width="2" points="3 6 5 6 21 6"/><path stroke-width="2" d="M19 6v14a2 2 0 01-2 2H7a2 2 0 01-2-2V6m3 0V4a2 2 0 012-2h4a2 2 0 012 2v2"/></svg>
+              </button>
+            </div>
+          </div>`,
+            )
+            .join("");
+      }
+
+      function renderEpisodes(episodes) {
+        const list = document.getElementById("episodesList");
+        if (!episodes.length) {
+          list.innerHTML =
+            '<p class="skill-empty">No conversation memories yet. Turn on web search or chat about projects — Vixy stores key moments.</p>';
+          return;
+        }
+        list.innerHTML =
+          '<div style="font-size:.78rem;color:var(--text-muted);margin-bottom:8px">RECENT CONVERSATION MEMORIES (SEMANTIC)</div>' +
+          episodes
+            .slice(0, 8)
+            .map(
+              (e) => `
+          <div class="skill-item">
+            <div class="skill-item-info">
+              <div class="skill-item-name">${esc(e.category)} · ${esc(e.source)}</div>
+              <div class="skill-item-desc">${esc(e.content.length > 140 ? e.content.slice(0, 140) + "…" : e.content)}</div>
+            </div>
+            <div class="skill-item-actions">
+              <button class="skill-btn danger" title="Delete memory" onclick="deleteEpisode(${e.id})">
+                <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><polyline stroke-width="2" points="3 6 5 6 21 6"/><path stroke-width="2" d="M19 6v14a2 2 0 01-2 2H7a2 2 0 01-2-2V6m3 0V4a2 2 0 012-2h4a2 2 0 012 2v2"/></svg>
+              </button>
+            </div>
+          </div>`,
+            )
+            .join("");
+      }
+
+      async function submitMemoryForm(event) {
+        event.preventDefault();
+        const key = document.getElementById("memoryKey").value.trim();
+        const value = document.getElementById("memoryValue").value.trim();
+        const category = document.getElementById("memoryCategory").value;
+        if (!key || !value) {
+          return showMemoryMsg("Both fields are required.", "error");
+        }
+        try {
+          const res = await apiMemories("", {
+            method: "POST",
+            body: JSON.stringify({
+              memory_key: key,
+              memory_value: value,
+              category,
+            }),
+          });
+          const data = await res.json().catch(() => ({}));
+          if (!res.ok) {
+            return showMemoryMsg(
+              data.message || "Could not save memory.",
+              "error",
+            );
+          }
+          showMemoryMsg("Memory saved — Vixy will remember it.", "success");
+          document.getElementById("memoryForm").reset();
+          loadMemories();
+        } catch (e) {
+          showMemoryMsg("Could not save memory. Try again.", "error");
+        }
+      }
+
+      async function deleteMemory(id) {
+        try {
+          const res = await apiMemories(`/${id}`, { method: "DELETE" });
+          if (!res.ok) throw new Error("delete failed");
+          showMemoryMsg("Memory deleted.", "success");
+          loadMemories();
+        } catch (e) {
+          showMemoryMsg("Failed to delete memory.", "error");
+        }
+      }
+
+      async function deleteEpisode(id) {
+        try {
+          const res = await apiMemories(`/episodes/${id}`, {
+            method: "DELETE",
+          });
+          if (!res.ok) throw new Error("delete failed");
+          showMemoryMsg("Conversation memory deleted.", "success");
+          loadMemories();
+        } catch (e) {
+          showMemoryMsg("Failed to delete memory.", "error");
+        }
+      }
+
+      async function clearAllMemories() {
+        if (
+          !confirm(
+            "This permanently deletes ALL of Vixy's memories about you, including conversation memories. Continue?",
+          )
+        )
+          return;
+        try {
+          const res = await apiMemories("", { method: "DELETE" });
+          if (!res.ok) throw new Error("clear failed");
+          showMemoryMsg("All memories cleared.", "success");
+          loadMemories();
+        } catch (e) {
+          showMemoryMsg("Failed to clear memories.", "error");
+        }
+      }
+
+      loadMemories();
+
+      if (window.location.hash === "#memory") {
+        const card = document.getElementById("memoryCard");
         if (card) {
           card.scrollIntoView({ behavior: "smooth", block: "start" });
           card.style.borderColor = "var(--accent)";
@@ -1081,40 +1314,13 @@
         }
       }
 
-      function showPwMsg(text, type) {
-        const el = document.getElementById("pwMsg");
-        el.className = `form-msg ${type}`;
-        el.innerHTML =
-          type === "error"
-            ? `<svg width="14" height="14" fill="none" stroke="currentColor" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10" stroke-width="2"/><line x1="12" y1="8" x2="12" y2="12" stroke-width="2"/><line x1="12" y1="16" x2="12.01" y2="16" stroke-width="2"/></svg><span>${text}</span>`
-            : `<svg width="14" height="14" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-width="2" d="M22 11.08V12a10 10 0 11-5.93-9.14"/><polyline stroke-width="2" points="22 4 12 14.01 9 11.01"/></svg><span>${text}</span>`;
-      }
-
-      function savePassword() {
-        const p = document.getElementById("newPass").value;
-        const c = document.getElementById("confirmPass").value;
-
-        if (!p) return showPwMsg("Please enter a new password.", "error");
-        if (p.length < 8)
-          return showPwMsg("Password must be at least 8 characters.", "error");
-        if (!/[a-zA-Z]/.test(p))
-          return showPwMsg(
-            "Password must contain at least one letter.",
-            "error",
-          );
-        if (!/[0-9]/.test(p))
-          return showPwMsg(
-            "Password must contain at least one number.",
-            "error",
-          );
-        if (p !== c) return showPwMsg("Passwords don't match.", "error");
-
-        showPwMsg("Password saved successfully!", "success");
-        document.getElementById("newPass").value = "";
-        document.getElementById("confirmPass").value = "";
-        setTimeout(() => {
-          document.getElementById("pwMsg").className = "form-msg";
-        }, 3000);
+      if (window.location.hash === "#skills") {
+        const card = document.getElementById("skillsCard");
+        if (card) {
+          card.scrollIntoView({ behavior: "smooth", block: "start" });
+          card.style.borderColor = "var(--accent)";
+          setTimeout(() => (card.style.borderColor = ""), 2500);
+        }
       }
 
       function showToast(msg) {
@@ -1126,9 +1332,10 @@
 
       // ─── Language ──────────────────────────────────────
       function initLanguage() {
-        const saved = localStorage.getItem("vx_lang") || "en";
+        const saved = localStorage.getItem("vx_lang") || "auto";
         document.getElementById("langSelect").value = saved;
-        document.documentElement.lang = saved;
+        document.documentElement.lang =
+          saved === "auto" ? "en" : saved;
       }
 
       function saveLanguage() {
