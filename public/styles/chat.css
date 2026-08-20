@@ -496,7 +496,110 @@ html.light .sheet-drag-handle {
   font-weight: 600;
   letter-spacing: -0.03em;
   color: var(--text);
-  margin-bottom: 28px;
+  margin-bottom: 10px;
+}
+
+.empty-sub {
+  font-size: 0.86rem;
+  color: var(--text-muted);
+  line-height: 1.5;
+  max-width: 460px;
+  margin: 0 auto 26px;
+}
+
+/* ─── Capability Cards ───────────────────────────────────────── */
+.cap-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 8px;
+  width: 100%;
+  max-width: 520px;
+  transform: translateX(-12px);
+}
+
+.cap-card {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 13px 14px;
+  background: var(--surface);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius);
+  cursor: pointer;
+  transition:
+    border-color 0.18s,
+    background 0.18s,
+    transform 0.12s;
+  text-align: left;
+  -webkit-tap-highlight-color: transparent;
+  touch-action: manipulation;
+}
+
+.cap-card:hover {
+  border-color: var(--border);
+  background: var(--surface-2);
+}
+
+.cap-card:active {
+  transform: scale(0.985);
+}
+
+.cap-icon {
+  flex-shrink: 0;
+  width: 32px;
+  height: 32px;
+  border-radius: 9px;
+  background: var(--surface-2);
+  border: 1px solid var(--border-subtle);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--accent);
+}
+
+.cap-icon i {
+  width: 15px;
+  height: 15px;
+}
+
+.cap-info {
+  flex: 1;
+  min-width: 0;
+}
+
+.cap-title {
+  font-weight: 600;
+  font-size: 0.84rem;
+  color: var(--text);
+  margin-bottom: 2px;
+}
+
+.cap-desc {
+  font-size: 0.74rem;
+  color: var(--text-muted);
+  line-height: 1.4;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.cap-arrow {
+  flex-shrink: 0;
+  width: 13px;
+  height: 13px;
+  color: var(--text-dim);
+  opacity: 0.6;
+}
+
+/* ─── Response metadata line (model · provider · time · credits) ─── */
+.msg-meta {
+  margin-top: 6px;
+  font-size: 0.68rem;
+  color: var(--text-dim);
+  font-family: "IBM Plex Mono", ui-monospace, monospace;
+  opacity: 0.85;
+  line-height: 1.4;
+  user-select: text;
 }
 
 /* ─── Suggestion Cards ──────────────────────────────────────── */
@@ -3271,7 +3374,41 @@ html.light .sheet-drag-handle {
 
   .empty-title {
     font-size: 1.2rem;
-    margin-bottom: 16px;
+    margin-bottom: 10px;
+  }
+
+  .empty-sub {
+    font-size: 0.8rem;
+    margin-bottom: 18px;
+  }
+
+  /* Capability cards: single column on mobile */
+  .cap-grid {
+    grid-template-columns: 1fr;
+    gap: 8px;
+    max-width: 100%;
+    transform: none;
+  }
+
+  .cap-card {
+    padding: 12px 14px;
+    border-radius: 14px;
+    touch-action: manipulation;
+    -webkit-tap-highlight-color: transparent;
+  }
+
+  .cap-card:active {
+    transform: scale(0.98);
+    background: var(--surface-hover);
+  }
+
+  .cap-title {
+    font-size: 0.83rem;
+  }
+
+  .cap-desc {
+    font-size: 0.75rem;
+    white-space: normal;
   }
 
   /* Suggestion cards: exactly the desktop stacked layout */
