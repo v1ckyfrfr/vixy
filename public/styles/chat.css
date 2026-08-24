@@ -2906,9 +2906,12 @@ html.light .sheet-drag-handle {
 /* ─── Touch Device & Mobile Message Actions ──────────────────── */
 /* ─── Mobile / Touch Devices (<= 768px) ───────────────────────── */
 @media (max-width: 768px), (pointer: coarse) {
-  /* Dropdowns stay desktop-style: anchored to their trigger button,
-     never bottom sheets. On phones they become viewport-safe cards
-     (full-width, right-aligned for buttons near the right edge). */
+  /* Keep the desktop-style anchored popovers, but size them so they always
+     fit a phone/tablet and never overflow off-screen. Triggers sit on the
+     left, so menus open to the right (left:0). The Tools (+) menu previously
+     used right:0 and was pushed off the left edge — now it opens rightward
+     from the + button. The Skills menu is centered under its trigger so it
+     stays on-screen on narrow phones. */
 
   .mode-dropdown,
   .model-dropdown,
@@ -2918,82 +2921,50 @@ html.light .sheet-drag-handle {
     overflow-y: auto;
     overscroll-behavior: contain;
     -webkit-overflow-scrolling: touch;
+    min-width: 0;
   }
 
-  /* Response Mode menu: anchored below the trigger (left side) */
+  /* Response Mode: below its trigger, left-aligned */
   .mode-dropdown {
     left: 0;
     right: auto;
     width: 260px;
-    max-width: calc(100vw - 68px);
+    max-width: calc(100vw - 16px);
+    transform-origin: top left;
   }
 
-  /* AI Model menu: compact card just below the header, right-aligned */
+  /* AI Model: below its trigger, left-aligned (full-width row on phones) */
   .model-dropdown {
-    position: fixed;
-    top: calc(62px + env(safe-area-inset-top, 0px));
+    top: calc(100% + 8px);
     bottom: auto;
-    left: auto;
-    right: 12px;
-    width: min(320px, calc(100vw - 24px));
-    min-width: 0;
-    max-width: none;
+    left: 0;
+    right: auto;
+    width: 300px;
+    max-width: calc(100vw - 16px);
   }
 
-  /* Skills menu: full-width card just below the header */
+  /* Skills: centered under its trigger so it never runs off-screen */
   .skills-dropdown {
-    position: fixed;
-    top: calc(62px + env(safe-area-inset-top, 0px));
+    top: calc(100% + 8px);
     bottom: auto;
-    left: 12px;
-    right: 12px;
-    width: auto;
-    min-width: 0;
-    max-width: none;
+    left: 50%;
+    right: auto;
+    width: 280px;
+    max-width: calc(100vw - 16px);
+    transform: translateX(-50%) translateY(-6px) scale(0.98);
+    transform-origin: top center;
+  }
+  .skills-dropdown.open {
+    transform: translateX(-50%) translateY(0) scale(1);
   }
 
-  /* Tools (+) menu: anchored to its trigger's right edge like desktop */
+  /* Tools (+) menu: above its trigger, left-aligned (opens rightward) */
   .tools-menu-dropdown {
-    left: auto;
-    right: 0;
-    width: 275px;
-    max-width: calc(100vw - 56px);
-    transform-origin: bottom right;
-  }
-
-  /* Tablets & coarse pointers with room: size menus like desktop */
-  @media (min-width: 641px) and (pointer: coarse) {
-    .mode-dropdown,
-    .model-dropdown,
-    .skills-dropdown {
-      position: absolute;
-      top: calc(100% + 8px);
-      width: auto;
-    }
-    .mode-dropdown {
-      left: 0;
-      right: auto;
-      min-width: 260px;
-      max-width: 420px;
-    }
-    .model-dropdown {
-      left: 0;
-      right: auto;
-      min-width: 320px;
-      max-width: 420px;
-    }
-    .skills-dropdown {
-      left: 0;
-      right: auto;
-      min-width: 290px;
-      max-width: 320px;
-    }
-    .tools-menu-dropdown {
-      left: 0;
-      right: auto;
-      width: 275px;
-      max-width: calc(100vw - 24px);
-    }
+    left: 0;
+    right: auto;
+    width: 260px;
+    max-width: calc(100vw - 16px);
+    transform-origin: bottom left;
   }
 
   .mode-dropdown-header {
@@ -3100,6 +3071,8 @@ html.light .sheet-drag-handle {
   }
 
   .chat-header {
+    flex-wrap: wrap;
+    row-gap: 6px;
     padding: 8px 12px;
     padding-top: max(8px, env(safe-area-inset-top, 8px));
     gap: 6px;
@@ -3129,8 +3102,9 @@ html.light .sheet-drag-handle {
   }
 
   #modelSelectorBtn {
-    flex: 1;
+    flex: 1 1 220px;
     min-width: 0;
+    max-width: 100%;
     height: 38px;
     padding: 0 10px;
     border-radius: 10px;
@@ -3151,24 +3125,36 @@ html.light .sheet-drag-handle {
     min-width: 0;
   }
 
+  /* Mode & Skills keep their labels — desktop look on mobile */
   #modeSelectorBtn,
   #skillsSelectorBtn {
-    width: 38px;
-    min-width: 38px;
+    width: auto;
+    min-width: 0;
     height: 38px;
-    padding: 0;
-    justify-content: center;
+    padding: 0 10px;
+    gap: 6px;
     border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
     flex-shrink: 0;
     touch-action: manipulation;
     -webkit-tap-highlight-color: transparent;
   }
 
   #modeSelectorBtn #modeLabelText,
-  #modeSelectorBtn svg,
-  #skillsSelectorBtn #skillsLabelText,
+  #skillsSelectorBtn #skillsLabelText {
+    display: inline;
+  }
+
+  #modeSelectorBtn svg:last-child,
   #skillsSelectorBtn svg:last-child {
-    display: none;
+    display: inline;
+  }
+
+  #modeSelectorBtn .mode-dot {
+    width: 8px;
+    height: 8px;
   }
 
   .header-actions {
@@ -3176,6 +3162,7 @@ html.light .sheet-drag-handle {
     align-items: center;
     gap: 6px;
     flex-shrink: 0;
+    margin-left: auto;
   }
 
   .credit-badge {
@@ -3199,6 +3186,33 @@ html.light .sheet-drag-handle {
 
   #statusBadge {
     display: none;
+  }
+
+  /* Narrow phones: model selector drops to its own full-width row so it
+     stays readable, while Mode/Skills keep their desktop-style labels. */
+  @media (max-width: 640px) {
+    .header-left {
+      flex-wrap: wrap;
+      row-gap: 6px;
+    }
+    #modelSelectorBtn {
+      flex: 1 0 100%;
+      order: 9;
+      max-width: 100%;
+    }
+    .header-actions {
+      align-self: flex-start;
+    }
+  }
+
+  /* Wider phones / tablets: restore full desktop header details */
+  @media (min-width: 641px) {
+    #statusBadge {
+      display: inline-flex;
+    }
+    .credit-label {
+      display: inline;
+    }
   }
 
   /* Chat Messages & Bubbles */
@@ -3316,6 +3330,22 @@ html.light .sheet-drag-handle {
     padding: 6px 6px 6px 8px;
     border-radius: 20px;
     gap: 6px;
+  }
+
+  /* Tablets & larger phones: center the composer like desktop */
+  @media (min-width: 641px) and (max-width: 768px) {
+    .chat-input-wrapper {
+      padding: 0 20px 20px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+    .input-container,
+    .file-preview-bar,
+    .active-tools-bar {
+      width: 100%;
+      max-width: 700px;
+    }
   }
 
   #msgInput {
@@ -3462,10 +3492,14 @@ html.light .sheet-drag-handle {
     line-height: 1.4;
   }
 
-  /* Modals: centered cards like desktop — touch-friendly sizing */
+  /* Image & Scraper modals: proper edge-to-edge bottom sheets like desktop cards */
   .img-modal-backdrop,
-  .pro-modal-backdrop,
   .scrape-modal-backdrop {
+    padding: 0;
+  }
+
+  /* Pro/upgrade modal stays a centered desktop-style card */
+  .pro-modal-backdrop {
     padding: 16px;
   }
 
@@ -3939,14 +3973,36 @@ html.light .hljs-deletion {
     gap: 4px;
   }
 
-  .mobile-toggle,
-  #modeSelectorBtn,
-  #skillsSelectorBtn,
-  .credit-badge {
+  .mobile-toggle {
     width: 34px;
     min-width: 34px;
     height: 34px;
     min-height: 34px;
+  }
+
+  #modeSelectorBtn,
+  #skillsSelectorBtn {
+    width: auto;
+    min-width: 0;
+    height: 34px;
+    min-height: 34px;
+    padding: 0 8px;
+    gap: 4px;
+    font-size: 0.78rem;
+  }
+
+  #modeSelectorBtn .mode-dot {
+    width: 7px;
+    height: 7px;
+  }
+
+  .credit-badge {
+    width: auto;
+    min-width: 0;
+    height: 34px;
+    min-height: 34px;
+    padding: 0 8px;
+    font-size: 0.78rem;
   }
 
   .tools-menu-btn,
@@ -3971,7 +4027,10 @@ html.light .hljs-deletion {
 
 /* ─── Desktop-like refinements for larger phones (>= 401px) ────── */
 @media (min-width: 401px) and (max-width: 768px) {
-  /* Suggestions grid matches desktop: two columns */
+  /* Capability + suggestions grids match desktop: two columns */
+  .cap-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
   .suggestions-grid {
     grid-template-columns: repeat(2, 1fr);
     gap: 10px;
@@ -3979,32 +4038,6 @@ html.light .hljs-deletion {
 }
 
 @media (min-width: 481px) and (max-width: 768px) {
-  /* Mode & Skills triggers show their labels, like desktop */
-  #modeSelectorBtn,
-  #skillsSelectorBtn {
-    width: auto;
-    min-width: 0;
-    padding: 0 10px;
-    gap: 6px;
-    display: flex;
-    justify-content: center;
-  }
-
-  #modeSelectorBtn #modeLabelText,
-  #skillsSelectorBtn #skillsLabelText {
-    display: inline;
-  }
-
-  #modeSelectorBtn svg:last-child,
-  #skillsSelectorBtn svg:last-child {
-    display: inline;
-  }
-
-  #modeSelectorBtn .mode-dot {
-    width: 8px;
-    height: 8px;
-  }
-
   /* Message bubbles breathe a bit more like desktop chat */
   .msg-user-bubble {
     max-width: 80%;
