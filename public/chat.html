@@ -726,7 +726,9 @@
               >
                 <span class="model-tier-badge tier-free">Free</span>
                 <div class="mode-opt-info">
-                  <span class="mode-opt-label">Nemotron 3.5 Lightning (Free)</span>
+                  <span class="mode-opt-label"
+                    >Nemotron 3.5 Lightning (Free)</span
+                  >
                   <span class="mode-opt-desc"
                     >⚡ Fast NVIDIA model · 1M token context</span
                   >
@@ -894,7 +896,9 @@
               >
                 <span class="model-tier-badge tier-free">Free</span>
                 <div class="mode-opt-info">
-                  <span class="mode-opt-label">Nemotron Nano 12B VL (Free)</span>
+                  <span class="mode-opt-label"
+                    >Nemotron Nano 12B VL (Free)</span
+                  >
                   <span class="mode-opt-desc"
                     >📷 NVIDIA vision-language · Image understanding</span
                   >
@@ -1028,33 +1032,6 @@
                 </svg>
               </button>
 
-              <button
-                class="mode-option"
-                data-model="gemini-1.5-flash"
-                onclick="setModel('gemini-1.5-flash')"
-                role="menuitem"
-              >
-                <span class="model-tier-badge tier-free">Free</span>
-                <div class="mode-opt-info">
-                  <span class="mode-opt-label">Gemini 1.5 Flash</span>
-                  <span class="mode-opt-desc"
-                    >⚡ Fast · Reliable - Large context (1M tokens)</span
-                  >
-                </div>
-                <svg
-                  class="mode-check"
-                  id="check-model-gemini-1.5-flash"
-                  fill="none"
-                  stroke="currentColor"
-                  viewBox="0 0 24 24"
-                >
-                  <polyline
-                    stroke-width="2.5"
-                    stroke-linecap="round"
-                    points="20 6 9 17 4 12"
-                  />
-                </svg>
-              </button>
             </div>
           </div>
 
@@ -1783,8 +1760,8 @@
           </div>
           <h2>Top Up Vixy Credits</h2>
           <p id="proModalMsg">
-            GPT-OSS 120B is 100% FREE. Get credits for DeepSeek V3, DeepSeek
-            R1, Image Gen &amp; Web Search!
+            GPT-OSS 120B is 100% FREE. Get credits for DeepSeek V3, DeepSeek R1,
+            Image Gen &amp; Web Search!
           </p>
         </div>
 
@@ -1815,20 +1792,48 @@
           >
             <div class="pkg-card-title">Ultimate</div>
             <div class="pkg-card-credits">20,000 Cr</div>
-            <div class="pkg-card-price" id="price-pro-unlimited">
-              $9.99 USD
-            </div>
+            <div class="pkg-card-price" id="price-pro-unlimited">$9.99 USD</div>
           </div>
         </div>
 
         <!-- Dodo Payments Global Method Banner -->
         <div class="payment-method-box" id="dodoMethodsBox">
-          <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 6px;">
-            <span style="font-size: 0.82rem; font-weight: 700; color: var(--text)">Global &amp; Secure Checkout</span>
-            <span style="font-size: 0.72rem; padding: 2px 7px; border-radius: 4px; background: rgba(16, 163, 127, 0.15); color: #10a37f; font-weight: 700; border: 1px solid rgba(16,163,127,0.3)">Dodo Payments</span>
+          <div
+            style="
+              display: flex;
+              align-items: center;
+              justify-content: space-between;
+              margin-bottom: 6px;
+            "
+          >
+            <span
+              style="font-size: 0.82rem; font-weight: 700; color: var(--text)"
+              >Global &amp; Secure Checkout</span
+            >
+            <span
+              style="
+                font-size: 0.72rem;
+                padding: 2px 7px;
+                border-radius: 4px;
+                background: rgba(16, 163, 127, 0.15);
+                color: #10a37f;
+                font-weight: 700;
+                border: 1px solid rgba(16, 163, 127, 0.3);
+              "
+              >Dodo Payments</span
+            >
           </div>
-          <p style="font-size: 0.78rem; color: var(--text-muted); margin: 0; line-height: 1.4;">
-            Worldwide checkout in USD. Supports Credit &amp; Debit Cards (Visa, MasterCard, Amex), Apple Pay, and Google Pay with instant automated credit top-up.
+          <p
+            style="
+              font-size: 0.78rem;
+              color: var(--text-muted);
+              margin: 0;
+              line-height: 1.4;
+            "
+          >
+            Worldwide checkout in USD. Supports Credit &amp; Debit Cards (Visa,
+            MasterCard, Amex), Apple Pay, and Google Pay with instant automated
+            credit top-up.
           </p>
         </div>
 
@@ -1839,10 +1844,10 @@
             id="paySubmitBtn"
             onclick="processSelectedPayment()"
           >
-            Beli Sekarang via Dodo Payments →
+            Buy Now via Dodo Payments →
           </button>
           <button class="pro-fallback-btn" onclick="switchToFreeModel()">
-            Gunakan Model Gratis (GPT-OSS 120B)
+            Use Free Model (GPT-OSS 120B)
           </button>
         </div>
       </div>
@@ -1871,9 +1876,9 @@
             </svg>
             CHECKOUT SESSION
           </div>
-          <h2 id="checkoutTitle">Selesaikan Pembayaran</h2>
+          <h2 id="checkoutTitle">Complete Payment</h2>
           <p id="checkoutSub">
-            Klik tombol di bawah untuk membuka halaman pembayaran aman Dodo Payments.
+            Click the button below to open Dodo Payments' secure checkout page.
           </p>
         </div>
 
@@ -1888,10 +1893,10 @@
             style="background: #3b82f6; display: none"
             onclick="triggerSimulatedSuccess()"
           >
-            Simulasikan Pembayaran Berhasil (Dev Mode)
+            Simulate Successful Payment (Dev Mode)
           </button>
           <button class="pro-fallback-btn" onclick="closeCheckoutView()">
-            Tutup Window
+            Close Window
           </button>
         </div>
       </div>
@@ -2066,7 +2071,7 @@
       </div>
     </div>
 
-    <script src="/js/chat.js"></script>
+    <script type="module" src="/js/chat.js"></script>
     <script type="module" src="/js/auth-guard.js"></script>
   </body>
 </html>
