@@ -2,14 +2,28 @@
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
-    <meta name="theme-color" content="#141414" media="(prefers-color-scheme: dark)" />
-    <meta name="theme-color" content="#fafaf9" media="(prefers-color-scheme: light)" />
-    <meta name="description" content="Vixy-AI — Your dashboard overview" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1.0, viewport-fit=cover"
+    />
+    <meta
+      name="theme-color"
+      content="#141414"
+      media="(prefers-color-scheme: dark)"
+    />
+    <meta
+      name="theme-color"
+      content="#fafaf9"
+      media="(prefers-color-scheme: light)"
+    />
+    <meta name="description" content="Vixy-AI - Your dashboard overview" />
     <title>Dashboard - Vixy-AI</title>
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link href="https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,300;0,14..32,400;0,14..32,500;0,14..32,600;0,14..32,700;1,14..32,400&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet" />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,300;0,14..32,400;0,14..32,500;0,14..32,600;0,14..32,700;1,14..32,400&family=IBM+Plex+Mono:wght@400;500&display=swap"
+      rel="stylesheet"
+    />
     <link rel="stylesheet" href="styles/style.css" />
     <link rel="stylesheet" href="styles/dashboard.css" />
     <script src="js/theme.js"></script>
@@ -31,9 +45,21 @@
             aria-label="Close sidebar"
           >
             <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <rect x="3" y="3" width="18" height="18" rx="2" stroke-width="2"/>
-              <path d="M9 3v18" stroke-width="2"/>
-              <path stroke-width="2" stroke-linecap="round" stroke-linejoin="round" d="m10 9 3 3-3 3"/>
+              <rect
+                x="3"
+                y="3"
+                width="18"
+                height="18"
+                rx="2"
+                stroke-width="2"
+              />
+              <path d="M9 3v18" stroke-width="2" />
+              <path
+                stroke-width="2"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                d="m10 9 3 3-3 3"
+              />
             </svg>
           </button>
         </div>
@@ -95,18 +121,35 @@
           align-items: flex-start;
         "
       >
-        <div style="display: flex; align-items: flex-start; gap: 12px;">
+        <div style="display: flex; align-items: flex-start; gap: 12px">
           <button class="mobile-toggle" onclick="toggleSidebar()">
-            <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="2" stroke-width="2"/><path d="M9 3v18" stroke-width="2"/><path stroke-width="2" stroke-linecap="round" stroke-linejoin="round" d="m14 9-3 3 3 3"/></svg>
+            <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <rect
+                x="3"
+                y="3"
+                width="18"
+                height="18"
+                rx="2"
+                stroke-width="2"
+              />
+              <path d="M9 3v18" stroke-width="2" />
+              <path
+                stroke-width="2"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                d="m14 9-3 3 3 3"
+              />
+            </svg>
           </button>
           <div>
-          <h1 class="page-title">
-            <span id="greetingPrefix">Good to see you</span>, <span id="greeting">there</span>
-          </h1>
-          <p class="page-subtitle">
-            Your session is active and everything looks good.
-          </p>
-        </div>
+            <h1 class="page-title">
+              <span id="greetingPrefix">Good to see you</span>,
+              <span id="greeting">there</span>
+            </h1>
+            <p class="page-subtitle">
+              Your session is active and everything looks good.
+            </p>
+          </div>
         </div>
         <div class="badge">
           <span class="dot"></span>
@@ -158,23 +201,33 @@
         </button>
       </div>
 
-            <div class="stat-grid">
+      <div class="stat-grid">
         <div class="stat-card accent-left">
           <div class="stat-icon">
             <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <circle cx="12" cy="12" r="10" stroke-width="2" />
-              <path stroke-width="2" stroke-linecap="round" d="M9.09 9a3 3 0 015.83 1c0 2-3 3-3 3M12 17h.01" />
+              <path
+                stroke-width="2"
+                stroke-linecap="round"
+                d="M9.09 9a3 3 0 015.83 1c0 2-3 3-3 3M12 17h.01"
+              />
             </svg>
           </div>
           <div class="stat-label">Credit Balance</div>
           <div class="stat-value mono" id="creditBalance">—</div>
-          <div class="stat-hint">Available credits · <a href="/chat.html#topup" class="inline-link">Top up</a></div>
+          <div class="stat-hint">
+            Available credits ·
+            <a href="/chat.html#topup" class="inline-link">Top up</a>
+          </div>
         </div>
 
         <div class="stat-card">
           <div class="stat-icon">
             <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <polyline points="22 12 18 12 15 21 9 3 6 12 2 12" stroke-width="2" />
+              <polyline
+                points="22 12 18 12 15 21 9 3 6 12 2 12"
+                stroke-width="2"
+              />
             </svg>
           </div>
           <div class="stat-label">Total Spent</div>
@@ -191,11 +244,13 @@
           </div>
           <div class="stat-label">Spent Today</div>
           <div class="stat-value mono" id="spentToday">—</div>
-          <div class="stat-hint" id="spentTodayHint">This week · this month</div>
+          <div class="stat-hint" id="spentTodayHint">
+            This week · this month
+          </div>
         </div>
       </div>
 
-            <div class="bottom-grid">
+      <div class="bottom-grid">
         <div class="info-card">
           <div class="info-card-header">Account Info</div>
           <div class="info-row">
@@ -228,7 +283,11 @@
               <span class="usage-summary-val" id="requestCount">—</span>
             </div>
             <div class="credit-bar-track">
-              <div class="credit-bar-fill" id="creditBar" style="width: 0%"></div>
+              <div
+                class="credit-bar-fill"
+                id="creditBar"
+                style="width: 0%"
+              ></div>
             </div>
             <div class="credit-bar-labels">
               <span id="creditBarLabel">0% of credits used</span>
@@ -246,8 +305,9 @@
         const name = profile.username || "there";
 
         document.getElementById("greeting").textContent = name;
-        document.getElementById("sidebarAvatar").textContent =
-          name.charAt(0).toUpperCase();
+        document.getElementById("sidebarAvatar").textContent = name
+          .charAt(0)
+          .toUpperCase();
         document.getElementById("sidebarName").textContent = name;
         document.getElementById("sidebarEmail").textContent =
           profile.email || "—";
@@ -287,18 +347,30 @@
 
           setText("creditBalance", fmt(balance));
           setText("totalSpent", fmt(totalSpent));
-          setText("totalSpentHint", `${fmt(requests)} paid request(s) all time`);
+          setText(
+            "totalSpentHint",
+            `${fmt(requests)} paid request(s) all time`,
+          );
           setText("spentToday", fmt(spentToday));
-          setText("spentTodayHint", `${fmt(spentWeek)} this week · ${fmt(spentMonth)} this month`);
+          setText(
+            "spentTodayHint",
+            `${fmt(spentWeek)} this week · ${fmt(spentMonth)} this month`,
+          );
           setText("spentMonth", fmt(spentMonth));
           setText("requestCount", fmt(requests));
 
           // Progress bar: % of total acquired credits already spent
           const acquired = balance + totalSpent;
-          const pct = acquired > 0 ? Math.min(100, Math.round((totalSpent / acquired) * 100)) : 0;
+          const pct =
+            acquired > 0
+              ? Math.min(100, Math.round((totalSpent / acquired) * 100))
+              : 0;
           const bar = document.getElementById("creditBar");
           if (bar) bar.style.width = pct + "%";
-          setText("creditBarLabel", `${pct}% of credits used · ${fmt(balance)} left`);
+          setText(
+            "creditBarLabel",
+            `${pct}% of credits used · ${fmt(balance)} left`,
+          );
 
           renderUsageList((usage.recent || []).slice(0, 6));
         } catch (e) {
@@ -318,7 +390,8 @@
         list.innerHTML = rows
           .map((row) => {
             const refunded = row.refunded > 0;
-            const model = row.model === "image-generation" ? "Image Generation" : row.model;
+            const model =
+              row.model === "image-generation" ? "Image Generation" : row.model;
             const modeTag =
               row.mode && row.mode !== "auto"
                 ? `<span class="usage-mode">${row.mode}</span>`
