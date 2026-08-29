@@ -1564,6 +1564,108 @@
       </div>
     </div>
 
+    <!-- Claude-style Artifact Panel (Live HTML Preview & Code Workspace) -->
+    <aside class="artifact-panel" id="artifactPanel" aria-label="Artifact Preview Workspace">
+      <div class="artifact-header">
+        <div class="artifact-header-left">
+          <div class="artifact-badge">
+            <svg class="art-icon" width="14" height="14" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-width="2" stroke-linecap="round" stroke-linejoin="round" d="M10 20l4-16m4 4l4 4-4 4M6 16l-4-4 4-4"/>
+            </svg>
+            <span id="artifactTitle">HTML Preview</span>
+          </div>
+          <div class="artifact-tabs" role="tablist">
+            <button class="artifact-tab active" id="artifactTabPreview" role="tab" aria-selected="true" onclick="switchArtifactTab('preview')">
+              <svg width="13" height="13" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/>
+                <path stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/>
+              </svg>
+              <span>Preview</span>
+            </button>
+            <button class="artifact-tab" id="artifactTabCode" role="tab" aria-selected="false" onclick="switchArtifactTab('code')">
+              <svg width="13" height="13" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <polyline stroke-width="2" points="16 18 22 12 16 6"/>
+                <polyline stroke-width="2" points="8 6 2 12 8 18"/>
+              </svg>
+              <span>Code</span>
+            </button>
+          </div>
+        </div>
+
+        <div class="artifact-header-right">
+          <button class="art-btn" id="artReloadBtn" title="Reload Preview" onclick="reloadArtifact()" aria-label="Reload Preview">
+            <svg width="14" height="14" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-width="2" stroke-linecap="round" stroke-linejoin="round" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"/>
+            </svg>
+          </button>
+          <button class="art-btn" id="artPopoutBtn" title="Open in New Tab" onclick="popoutArtifact()" aria-label="Open in New Tab">
+            <svg width="14" height="14" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-width="2" stroke-linecap="round" stroke-linejoin="round" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"/>
+            </svg>
+          </button>
+          <button class="art-btn" id="artCopyBtn" title="Copy Code" onclick="copyArtifactCode()" aria-label="Copy Code">
+            <svg width="14" height="14" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <rect x="9" y="9" width="13" height="13" rx="2" stroke-width="2"/>
+              <path stroke-width="2" d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"/>
+            </svg>
+          </button>
+          <button class="art-btn" id="artDlBtn" title="Download HTML File" onclick="downloadArtifactCode()" aria-label="Download HTML">
+            <svg width="14" height="14" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-width="2" stroke-linecap="round" stroke-linejoin="round" d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/>
+              <polyline stroke-width="2" points="7 10 12 15 17 10"/>
+              <line x1="12" y1="15" x2="12" y2="3" stroke-width="2"/>
+            </svg>
+          </button>
+          <div class="art-divider"></div>
+          <button class="art-btn art-close-btn" title="Close Panel (Esc)" onclick="closeArtifactPanel()" aria-label="Close Panel">
+            <svg width="14" height="14" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-width="2" stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12"/>
+            </svg>
+          </button>
+        </div>
+      </div>
+
+      <div class="artifact-subbar" id="artifactSubbar">
+        <div class="art-device-group">
+          <button class="art-device-btn active" data-viewport="desktop" onclick="setArtifactViewport('desktop')">
+            <svg width="13" height="13" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <rect x="2" y="3" width="20" height="14" rx="2" stroke-width="2"/>
+              <line x1="8" y1="21" x2="16" y2="21" stroke-width="2"/>
+              <line x1="12" y1="17" x2="12" y2="21" stroke-width="2"/>
+            </svg>
+            <span>Desktop</span>
+          </button>
+          <button class="art-device-btn" data-viewport="tablet" onclick="setArtifactViewport('tablet')">
+            <svg width="13" height="13" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <rect x="4" y="2" width="16" height="20" rx="2" stroke-width="2"/>
+              <line x1="12" y1="18" x2="12.01" y2="18" stroke-width="2"/>
+            </svg>
+            <span>Tablet</span>
+          </button>
+          <button class="art-device-btn" data-viewport="mobile" onclick="setArtifactViewport('mobile')">
+            <svg width="13" height="13" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <rect x="5" y="2" width="14" height="20" rx="2" stroke-width="2"/>
+              <line x1="12" y1="18" x2="12.01" y2="18" stroke-width="2"/>
+            </svg>
+            <span>Mobile</span>
+          </button>
+        </div>
+        <span class="art-viewport-label" id="artViewportSize">100% (Desktop)</span>
+      </div>
+
+      <div class="artifact-content">
+        <div class="artifact-view-pane active" id="artifactPreviewPane">
+          <div class="artifact-iframe-canvas" id="artifactIframeCanvas">
+            <iframe id="artifactIframe" sandbox="allow-scripts allow-modals allow-forms" loading="lazy" title="Live Preview"></iframe>
+          </div>
+        </div>
+
+        <div class="artifact-view-pane" id="artifactCodePane">
+          <pre class="artifact-code-pre"><code id="artifactCodeBlock" class="language-html"></code></pre>
+        </div>
+      </div>
+    </aside>
+
     <div
       class="img-modal-backdrop"
       id="imgModalBackdrop"
