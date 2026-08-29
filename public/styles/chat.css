@@ -4057,3 +4057,460 @@ html.light .hljs-deletion {
     border-radius: 18px 18px 6px 18px;
   }
 }
+
+/* ═══════════════════════════════════════════════════════════════
+   CLAUDE-STYLE ARTIFACT PANEL & LIVE PREVIEW WORKSPACE
+   ═══════════════════════════════════════════════════════════════ */
+
+/* Layout shift when Artifact panel is open on Desktop */
+@media (min-width: 1025px) {
+  body.artifact-open .chat-wrap {
+    margin-right: 50vw;
+    transition: margin-right 0.28s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+}
+
+/* Artifact Workspace (Right Slide-over Panel) */
+.artifact-panel {
+  position: fixed;
+  top: 0;
+  right: 0;
+  width: 50vw;
+  height: 100dvh;
+  background: #111113;
+  border-left: 1px solid var(--border-subtle, rgba(255, 255, 255, 0.08));
+  box-shadow: -8px 0 32px rgba(0, 0, 0, 0.55);
+  display: flex;
+  flex-direction: column;
+  z-index: 1050;
+  transform: translateX(100%);
+  transition: transform 0.28s cubic-bezier(0.16, 1, 0.3, 1);
+  overflow: hidden;
+}
+
+.artifact-panel.open {
+  transform: translateX(0);
+}
+
+@media (max-width: 1024px) {
+  .artifact-panel {
+    width: 100vw;
+  }
+}
+
+/* ─── Artifact Header ─────────────────────────────────────────── */
+.artifact-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 8px 14px;
+  background: #0d0d0f;
+  border-bottom: 1px solid var(--border-subtle, rgba(255, 255, 255, 0.06));
+  min-height: 48px;
+  gap: 10px;
+}
+
+.artifact-header-left,
+.artifact-header-right {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  min-width: 0;
+}
+
+.artifact-badge {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 0.78rem;
+  font-weight: 600;
+  color: var(--text-primary, #ededed);
+  padding-right: 10px;
+  border-right: 1px solid rgba(255, 255, 255, 0.08);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 160px;
+}
+
+.artifact-badge .art-icon {
+  color: var(--accent, #38ef7d);
+  flex-shrink: 0;
+}
+
+/* Tab Switcher (Preview ⇄ Code) */
+.artifact-tabs {
+  display: flex;
+  align-items: center;
+  background: rgba(255, 255, 255, 0.04);
+  padding: 2px;
+  border-radius: 6px;
+  gap: 2px;
+}
+
+.artifact-tab {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  background: transparent;
+  border: none;
+  color: var(--text-muted, #8e8e93);
+  padding: 4px 10px;
+  border-radius: 5px;
+  font-size: 0.73rem;
+  font-weight: 500;
+  font-family: var(--font-sans, inherit);
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.artifact-tab svg {
+  flex-shrink: 0;
+}
+
+.artifact-tab.active {
+  background: rgba(255, 255, 255, 0.1);
+  color: var(--text-primary, #ffffff);
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.25);
+}
+
+.artifact-tab:hover:not(.active) {
+  color: var(--text-primary, #ededed);
+  background: rgba(255, 255, 255, 0.05);
+}
+
+/* Header Action Buttons */
+.art-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 30px;
+  height: 30px;
+  background: transparent;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  color: var(--text-muted, #a1a1aa);
+  border-radius: 6px;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.art-btn svg {
+  flex-shrink: 0;
+}
+
+.art-btn:hover {
+  background: rgba(255, 255, 255, 0.08);
+  color: var(--text-primary, #ffffff);
+  border-color: rgba(255, 255, 255, 0.18);
+}
+
+.art-btn.spinning svg {
+  animation: artSpin 0.6s linear infinite;
+}
+
+@keyframes artSpin {
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+.art-close-btn:hover {
+  background: rgba(239, 68, 68, 0.12);
+  color: #ef4444;
+  border-color: rgba(239, 68, 68, 0.25);
+}
+
+.art-divider {
+  width: 1px;
+  height: 16px;
+  background: rgba(255, 255, 255, 0.08);
+  margin: 0 2px;
+}
+
+/* ─── Device Viewport Subbar ──────────────────────────────────── */
+.artifact-subbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 6px 14px;
+  background: #141417;
+  border-bottom: 1px solid var(--border-subtle, rgba(255, 255, 255, 0.05));
+}
+
+.art-device-group {
+  display: flex;
+  align-items: center;
+  gap: 3px;
+}
+
+.art-device-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  background: transparent;
+  border: none;
+  color: var(--text-muted, #71717a);
+  padding: 3px 8px;
+  border-radius: 4px;
+  font-size: 0.72rem;
+  font-family: var(--font-sans, inherit);
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.art-device-btn svg {
+  flex-shrink: 0;
+}
+
+.art-device-btn.active,
+.art-device-btn:hover {
+  background: rgba(255, 255, 255, 0.07);
+  color: var(--text-primary, #e4e4e7);
+}
+
+.art-viewport-label {
+  font-size: 0.68rem;
+  font-family: var(--font-mono, monospace);
+  color: var(--text-muted, #71717a);
+}
+
+/* ─── Content Workspace (Panes) ───────────────────────────────── */
+.artifact-content {
+  flex: 1;
+  position: relative;
+  overflow: hidden;
+  background: #09090b;
+}
+
+.artifact-view-pane {
+  display: none;
+  width: 100%;
+  height: 100%;
+}
+
+.artifact-view-pane.active {
+  display: flex;
+}
+
+/* Preview Pane with Centered Responsive Canvas */
+#artifactPreviewPane {
+  justify-content: center;
+  align-items: stretch;
+  padding: 12px;
+  background: radial-gradient(circle at center, #161619 0%, #09090b 100%);
+  overflow: hidden;
+}
+
+.artifact-iframe-canvas {
+  width: 100%;
+  height: 100%;
+  background: #ffffff;
+  border-radius: 8px;
+  overflow: hidden;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.45);
+  transition: max-width 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+  display: flex;
+}
+
+#artifactIframe {
+  width: 100%;
+  height: 100%;
+  border: none;
+  background: #ffffff;
+  flex: 1;
+}
+
+/* Code Pane */
+#artifactCodePane {
+  overflow: auto;
+  padding: 16px;
+  background: #0c0c0e;
+}
+
+.artifact-code-pre {
+  margin: 0;
+  padding: 0;
+  background: transparent;
+  border: none;
+}
+
+.artifact-code-pre code {
+  font-family: var(--font-mono, "IBM Plex Mono", monospace);
+  font-size: 0.82rem;
+  line-height: 1.6;
+  white-space: pre-wrap;
+  word-break: break-word;
+}
+
+/* ─── In-Chat Artifact Card ───────────────────────────────────── */
+.artifact-chat-card {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 10px 14px;
+  margin: 8px 0;
+  background: rgba(56, 239, 125, 0.04);
+  border: 1px solid rgba(56, 239, 125, 0.2);
+  border-radius: 9px;
+  cursor: pointer;
+  transition: all 0.18s ease;
+  user-select: none;
+}
+
+.artifact-chat-card:hover {
+  background: rgba(56, 239, 125, 0.08);
+  border-color: rgba(56, 239, 125, 0.35);
+  transform: translateY(-1px);
+}
+
+.art-card-left {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  min-width: 0;
+}
+
+.art-card-icon-box {
+  width: 32px;
+  height: 32px;
+  border-radius: 7px;
+  background: rgba(56, 239, 125, 0.12);
+  border: 1px solid rgba(56, 239, 125, 0.25);
+  color: var(--accent, #38ef7d);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.art-card-info {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+}
+
+.art-card-title {
+  font-size: 0.82rem;
+  font-weight: 600;
+  color: var(--text-primary, #ededed);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.art-card-sub {
+  font-size: 0.7rem;
+  color: var(--text-muted, #8e8e93);
+}
+
+.art-card-action-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  background: rgba(56, 239, 125, 0.12);
+  color: var(--accent, #38ef7d);
+  border: 1px solid rgba(56, 239, 125, 0.3);
+  padding: 4px 10px;
+  border-radius: 6px;
+  font-size: 0.72rem;
+  font-weight: 600;
+  font-family: var(--font-sans, inherit);
+  cursor: pointer;
+  transition: all 0.15s ease;
+  flex-shrink: 0;
+}
+
+.art-card-action-btn svg {
+  flex-shrink: 0;
+}
+
+.art-card-action-btn:hover {
+  background: rgba(56, 239, 125, 0.2);
+  border-color: rgba(56, 239, 125, 0.5);
+  color: #5aff99;
+}
+
+/* Header Live Preview Action Button */
+.code-art-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  color: var(--accent, #38ef7d);
+  border-color: rgba(56, 239, 125, 0.25);
+}
+
+.code-art-btn svg {
+  flex-shrink: 0;
+}
+
+.code-art-btn:hover {
+  background: rgba(56, 239, 125, 0.1);
+  color: #5aff99;
+  border-color: rgba(56, 239, 125, 0.45);
+}
+
+/* ─── Light Mode Support for Artifact Panel ──────────────────── */
+html.light .artifact-panel {
+  background: #fbfbfd;
+  border-left-color: rgba(0, 0, 0, 0.1);
+  box-shadow: -8px 0 32px rgba(0, 0, 0, 0.12);
+}
+
+html.light .artifact-header {
+  background: #f4f4f7;
+  border-bottom-color: rgba(0, 0, 0, 0.08);
+}
+
+html.light .artifact-badge {
+  border-right-color: rgba(0, 0, 0, 0.1);
+}
+
+html.light .artifact-tabs {
+  background: rgba(0, 0, 0, 0.06);
+}
+
+html.light .artifact-tab.active {
+  background: #ffffff;
+  color: #111113;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+}
+
+html.light .art-btn {
+  border-color: rgba(0, 0, 0, 0.1);
+  color: #66666e;
+}
+
+html.light .art-btn:hover {
+  background: rgba(0, 0, 0, 0.06);
+  color: #111113;
+  border-color: rgba(0, 0, 0, 0.2);
+}
+
+html.light .artifact-subbar {
+  background: #eeeeF2;
+  border-bottom-color: rgba(0, 0, 0, 0.06);
+}
+
+html.light .art-device-btn.active,
+html.light .art-device-btn:hover {
+  background: rgba(0, 0, 0, 0.08);
+  color: #111113;
+}
+
+html.light #artifactPreviewPane {
+  background: radial-gradient(circle at center, #e8e8ed 0%, #d8d8de 100%);
+}
+
+html.light #artifactCodePane {
+  background: #f8f8fa;
+}
+
+html.light .artifact-chat-card {
+  background: rgba(22, 163, 74, 0.06);
+  border-color: rgba(22, 163, 74, 0.25);
+}
+
+html.light .artifact-chat-card:hover {
+  background: rgba(22, 163, 74, 0.1);
+}
+
