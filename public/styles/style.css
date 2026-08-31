@@ -149,12 +149,19 @@ a {
   display: flex;
   align-items: center;
   gap: 9px;
+  user-select: none;
+}
+
+.sidebar-logo .logo-text,
+.sidebar-logo h3 {
   font-family: var(--font-sans);
   font-weight: 600;
-  font-size: 0.95rem;
+  font-size: 1.12rem;
   color: var(--text);
-  user-select: none;
+  margin: 0;
+  padding: 0;
   letter-spacing: -0.025em;
+  line-height: 1;
 }
 
 .sidebar-logo .logo-icon {
@@ -503,8 +510,9 @@ a {
   opacity: 0.9;
 }
 
-/* ─── Sidebar Footer ────────────────────────────────────────── */
+/* ─── Sidebar Footer & User Menu Popover ────────────────────── */
 .sidebar-footer {
+  position: relative;
   padding: 8px;
   border-top: 1px solid var(--border-subtle);
   flex-shrink: 0;
@@ -517,22 +525,38 @@ a {
   padding: 9px 10px;
   border-radius: var(--radius-sm);
   cursor: pointer;
-  transition: background 0.18s;
+  transition: background 0.18s ease;
+  user-select: none;
 }
 
-.user-menu:hover {
+.user-menu:hover,
+.user-menu[aria-expanded="true"] {
   background: var(--surface-hover);
 }
 
+.user-menu-chevron {
+  color: var(--text-muted);
+  opacity: 0.6;
+  transition:
+    transform 0.2s ease,
+    opacity 0.2s ease;
+  flex-shrink: 0;
+}
+
+.user-menu[aria-expanded="true"] .user-menu-chevron {
+  transform: rotate(180deg);
+  opacity: 1;
+}
+
 .user-avatar {
-  width: 30px;
-  height: 30px;
+  width: 32px;
+  height: 32px;
   border-radius: 50%;
   background: var(--accent);
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: 0.76rem;
+  font-size: 0.8rem;
   font-weight: 600;
   color: #fff;
   flex-shrink: 0;
@@ -556,10 +580,214 @@ a {
 .user-email {
   font-size: 0.7rem;
   color: var(--text-muted);
+  opacity: 0.75;
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
   margin-top: 1px;
+}
+
+/* Floating User Popover Menu */
+.user-popover-menu {
+  position: absolute;
+  bottom: calc(100% + 8px);
+  left: 8px;
+  right: 8px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow, 0 12px 32px rgba(0, 0, 0, 0.4));
+  padding: 8px;
+  z-index: 1200;
+  display: none;
+  flex-direction: column;
+  gap: 3px;
+  animation: userPopoverIn 0.16s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.user-popover-menu.open {
+  display: flex;
+}
+
+@keyframes userPopoverIn {
+  from {
+    opacity: 0;
+    transform: translateY(6px) scale(0.97);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+.user-popover-header {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 6px 8px 8px;
+}
+
+.user-popover-avatar {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  background: var(--accent);
+  color: #fff;
+  font-weight: 600;
+  font-size: 0.82rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.user-popover-details {
+  flex: 1;
+  overflow: hidden;
+}
+
+.user-popover-name {
+  font-size: 0.84rem;
+  font-weight: 600;
+  color: var(--text);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.user-popover-email {
+  font-size: 0.72rem;
+  color: var(--text-muted);
+  opacity: 0.75;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  margin-top: 1px;
+}
+
+.user-popover-divider {
+  height: 1px;
+  background: var(--border-subtle);
+  margin: 4px 0;
+}
+
+/* Credits Row in Popover */
+.user-popover-credits-card {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 8px 10px;
+  background: var(--accent-faint, rgba(90, 158, 124, 0.1));
+  border: 1px solid var(--accent-border, rgba(90, 158, 124, 0.22));
+  border-radius: var(--radius-sm);
+  cursor: pointer;
+  transition:
+    background 0.15s ease,
+    border-color 0.15s ease;
+}
+
+.user-popover-credits-card:hover {
+  background: var(--accent-subtle, rgba(90, 158, 124, 0.16));
+  border-color: var(--accent);
+}
+
+.user-popover-credits-left {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.popover-credit-icon {
+  color: var(--accent);
+  flex-shrink: 0;
+}
+
+.user-popover-credits-label {
+  font-size: 0.66rem;
+  color: var(--text-muted);
+  opacity: 0.8;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+
+.user-popover-credits-val {
+  font-size: 0.82rem;
+  font-weight: 600;
+  color: var(--text);
+}
+
+.user-popover-credits-btn {
+  font-size: 0.72rem;
+  font-weight: 600;
+  color: var(--accent);
+  background: var(--accent-faint, rgba(90, 158, 124, 0.15));
+  padding: 3px 8px;
+  border-radius: 5px;
+  transition: background 0.15s ease;
+}
+
+.user-popover-credits-card:hover .user-popover-credits-btn {
+  background: var(--accent);
+  color: #fff;
+}
+
+/* Action Items */
+.user-popover-item {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  width: 100%;
+  padding: 8px 10px;
+  background: transparent;
+  border: none;
+  border-radius: var(--radius-xs);
+  font-size: 0.82rem;
+  font-weight: 500;
+  color: var(--text);
+  cursor: pointer;
+  text-decoration: none;
+  font-family: var(--font-sans);
+  transition:
+    background 0.15s ease,
+    color 0.15s ease;
+  text-align: left;
+}
+
+.user-popover-item svg {
+  flex-shrink: 0;
+  color: var(--text-muted);
+  opacity: 0.8;
+  transition:
+    color 0.15s ease,
+    opacity 0.15s ease;
+}
+
+.user-popover-item:hover {
+  background: var(--surface-hover);
+  color: var(--text);
+}
+
+.user-popover-item:hover svg {
+  color: var(--text);
+  opacity: 1;
+}
+
+.user-popover-item.danger {
+  color: #f87171;
+}
+
+.user-popover-item.danger svg {
+  color: #f87171;
+  opacity: 1;
+}
+
+.user-popover-item.danger:hover {
+  background: rgba(248, 113, 113, 0.12);
+  color: #ef4444;
+}
+
+.user-popover-item.danger:hover svg {
+  color: #ef4444;
 }
 
 /* ─── Buttons ───────────────────────────────────────────────── */
