@@ -16,11 +16,8 @@
       content="#fafaf9"
       media="(prefers-color-scheme: light)"
     />
-    <meta
-      name="description"
-      content="Vixy-AI - Sign In & Sign Up"
-    />
-    <title>Vixy-AI — Sign In</title>
+    <meta name="description" content="Vixy-AI - Sign In & Sign Up" />
+    <title>Vixy-AI - Sign In</title>
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
@@ -145,6 +142,7 @@
                 class="otp-input"
                 placeholder="123456"
                 maxlength="6"
+                inputmode="numeric"
                 autocomplete="one-time-code"
                 required
               />
@@ -178,14 +176,17 @@
           novalidate
         >
           <div>
-            <h1 class="form-title">Choose your Username</h1>
-            <p class="form-subtitle">What should Vixy call you in chat?</p>
+            <h1 class="form-title">One last thing..</h1>
+            <p class="form-subtitle">
+              Choose a username so Vixy knows what to call you.<br />
+              You can always change this later in Settings.
+            </p>
           </div>
 
           <div id="usernameMsg" class="form-msg" role="alert"></div>
 
           <div class="field">
-            <label for="auth_username">Username</label>
+            <label for="auth_username">Your Username</label>
             <div class="input-wrapper">
               <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path
@@ -197,11 +198,15 @@
               <input
                 id="auth_username"
                 type="text"
-                placeholder="Your username"
+                placeholder="e.g. alex_dev"
                 autocomplete="name"
+                maxlength="30"
                 required
               />
             </div>
+            <span class="field-hint"
+              >2–30 characters · letters, numbers, spaces, _ - .</span
+            >
           </div>
 
           <button
@@ -210,7 +215,7 @@
             class="submit-btn"
             onclick="saveUsernameAndContinue()"
           >
-            <span id="setUsernameBtnText">Start Chatting with Vixy</span>
+            <span id="setUsernameBtnText">Start Chatting →</span>
             <div id="setUsernameSpinner" class="spinner"></div>
           </button>
         </form>
