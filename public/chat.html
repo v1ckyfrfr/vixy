@@ -1470,6 +1470,33 @@
                   >
                 </div>
               </button>
+
+              <button class="tools-menu-item" onclick="openDocModalFromMenu()">
+                <span class="tools-item-icon">
+                  <svg
+                    fill="none"
+                    stroke="currentColor"
+                    viewBox="0 0 24 24"
+                    width="16"
+                    height="16"
+                  >
+                    <path
+                      stroke-width="2"
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                      d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"
+                    />
+                  </svg>
+                </span>
+                <div class="tools-item-info">
+                  <span class="tools-item-title"
+                    >Dokumen &amp; Laporan (Report Engine)</span
+                  >
+                  <span class="tools-item-desc"
+                    >Buat laporan terstruktur, proposal, esai &amp; riset</span
+                  >
+                </div>
+              </button>
             </div>
           </div>
           <textarea
@@ -1673,7 +1700,6 @@
                   d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"
                 />
               </svg>
-              <span>Preview</span>
             </button>
             <button
               class="artifact-tab"
@@ -1770,6 +1796,44 @@
               />
             </svg>
           </button>
+          <div
+            id="artDocDlGroup"
+            style="display: none; align-items: center; gap: 6px"
+          >
+            <a
+              class="art-btn"
+              id="artDocxBtn"
+              href="#"
+              download
+              title="Download .DOCX (Microsoft Word)"
+            >
+              <span style="font-size: 11px; font-weight: 600; color: #93c5fd"
+                >.DOCX</span
+              >
+            </a>
+            <a
+              class="art-btn"
+              id="artPdfBtn"
+              href="#"
+              download
+              title="Download .PDF (Adobe PDF)"
+            >
+              <span style="font-size: 11px; font-weight: 600; color: #fca5a5"
+                >.PDF</span
+              >
+            </a>
+            <a
+              class="art-btn"
+              id="artMdBtn"
+              href="#"
+              download
+              title="Download .MD (Markdown)"
+            >
+              <span style="font-size: 11px; font-weight: 600; color: #86efac"
+                >.MD</span
+              >
+            </a>
+          </div>
           <button
             class="art-btn"
             id="artDlBtn"
@@ -2421,6 +2485,221 @@
               />
             </svg>
             Scrape &amp; Analyze
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Document & Report Generator Modal (Phase 1) -->
+    <div
+      class="img-modal-backdrop"
+      id="docModalBackdrop"
+      onclick="closeDocModalOnBackdrop(event)"
+    >
+      <div class="img-modal doc-modal-dialog">
+        <div class="sheet-drag-handle"></div>
+        <div class="img-modal-title">
+          <svg
+            fill="none"
+            stroke="currentColor"
+            viewBox="0 0 24 24"
+            width="20"
+            height="20"
+          >
+            <path
+              stroke-width="2"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"
+            />
+          </svg>
+          Document &amp; Report Generator
+        </div>
+        <p class="img-modal-sub">
+          Susun dokumen dan laporan resmi terstruktur dengan standar industri
+          multi-model.
+        </p>
+
+        <label for="docPromptInput">Topik atau Ringkasan Dokumen</label>
+        <textarea
+          id="docPromptInput"
+          placeholder="Contoh: Laporan observasi UMKM kedai kopi lokal mengenai efisiensi rantai pasok dan adopsi pembayaran digital..."
+          rows="3"
+        ></textarea>
+
+        <label style="margin-top: 14px; display: block">Tipe Dokumen</label>
+        <div class="doc-type-chips-wrap" id="docTypeChips">
+          <button
+            type="button"
+            class="aspect-chip active"
+            onclick="selectDocType('observation_report', this)"
+          >
+            🔍 Laporan Observasi
+          </button>
+          <button
+            type="button"
+            class="aspect-chip"
+            onclick="selectDocType('business_report', this)"
+          >
+            💼 Laporan Bisnis
+          </button>
+          <button
+            type="button"
+            class="aspect-chip"
+            onclick="selectDocType('proposal', this)"
+          >
+            📑 Proposal Proyek
+          </button>
+          <button
+            type="button"
+            class="aspect-chip"
+            onclick="selectDocType('technical_report', this)"
+          >
+            ⚡ Laporan Teknis
+          </button>
+          <button
+            type="button"
+            class="aspect-chip"
+            onclick="selectDocType('project_report', this)"
+          >
+            📂 Laporan Proyek
+          </button>
+          <button
+            type="button"
+            class="aspect-chip"
+            onclick="selectDocType('case_study', this)"
+          >
+            📖 Studi Kasus
+          </button>
+          <button
+            type="button"
+            class="aspect-chip"
+            onclick="selectDocType('internship_report', this)"
+          >
+            🎓 Laporan Magang
+          </button>
+          <button
+            type="button"
+            class="aspect-chip"
+            onclick="selectDocType('meeting_report', this)"
+          >
+            👥 Notulensi Rapat
+          </button>
+          <button
+            type="button"
+            class="aspect-chip"
+            onclick="selectDocType('research_report', this)"
+          >
+            🔬 Laporan Riset
+          </button>
+          <button
+            type="button"
+            class="aspect-chip"
+            onclick="selectDocType('essay', this)"
+          >
+            ✍️ Esai Formal
+          </button>
+          <button
+            type="button"
+            class="aspect-chip"
+            onclick="selectDocType('summary', this)"
+          >
+            📌 Executive Summary
+          </button>
+          <button
+            type="button"
+            class="aspect-chip"
+            onclick="selectDocType('general_report', this)"
+          >
+            📄 Laporan Umum
+          </button>
+        </div>
+
+        <div class="doc-options-row">
+          <div class="doc-option-col">
+            <label for="docToneSelect">Gaya Bahasa</label>
+            <select id="docToneSelect" class="doc-select">
+              <option value="formal">Formal &amp; Profesional</option>
+              <option value="executive">Eksekutif (C-Level)</option>
+              <option value="academic">Akademik &amp; Ilmiah</option>
+              <option value="persuasive">Persuasif &amp; Komersial</option>
+            </select>
+          </div>
+
+          <div class="doc-option-col">
+            <label for="docLangSelect">Bahasa</label>
+            <select id="docLangSelect" class="doc-select">
+              <option value="id-ID">Bahasa Indonesia</option>
+              <option value="en-US">English</option>
+            </select>
+          </div>
+        </div>
+
+        <label style="margin-top: 14px; display: block"
+          >Tingkat Kedalaman Dokumen</label
+        >
+        <div
+          class="img-aspect-options"
+          id="docLengthChips"
+          style="grid-template-columns: repeat(3, 1fr); gap: 6px"
+        >
+          <button
+            type="button"
+            class="aspect-chip"
+            onclick="selectDocLength('short', this)"
+          >
+            Ringkas (400-600 kata)
+          </button>
+          <button
+            type="button"
+            class="aspect-chip active"
+            onclick="selectDocLength('medium', this)"
+          >
+            Standar (600-1200 kata)
+          </button>
+          <button
+            type="button"
+            class="aspect-chip"
+            onclick="selectDocLength('long', this)"
+          >
+            Mendalam (1200+ kata)
+          </button>
+        </div>
+
+        <div
+          id="docModalError"
+          class="doc-modal-error"
+          style="display: none"
+        ></div>
+
+        <div class="scrape-modal-actions" style="margin-top: 20px">
+          <button
+            type="button"
+            class="scrape-cancel-btn"
+            onclick="closeDocModal()"
+          >
+            Batal
+          </button>
+          <button
+            type="button"
+            class="scrape-start-btn"
+            id="docGenerateBtn"
+            onclick="startGeneratingDocument()"
+          >
+            <div
+              class="scrape-spinner"
+              id="docSpinner"
+              style="display: none"
+            ></div>
+            <svg
+              class="btn-icon"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+            >
+              <path stroke-width="2" d="M12 4v16m8-8H4" />
+            </svg>
+            <span id="docBtnText">Generate Document</span>
           </button>
         </div>
       </div>
