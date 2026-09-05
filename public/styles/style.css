@@ -958,6 +958,17 @@ a {
   animation: dotSpin 1s linear infinite;
 }
 
+/* ── state: searching ── sky blue, soft pulse */
+.badge[data-state="searching"] {
+  background: rgba(56, 189, 248, 0.12);
+  color: #38bdf8;
+  border: 1px solid rgba(56, 189, 248, 0.25);
+}
+.badge[data-state="searching"] .dot {
+  background: #38bdf8;
+  animation: softPulse 1.2s ease-in-out infinite;
+}
+
 /* ── state: processing ── amber (same palette, no spin) */
 .badge[data-state="processing"] {
   background: rgba(201, 169, 110, 0.12);
@@ -1708,6 +1719,12 @@ a {
   flex-wrap: wrap;
 }
 
+.doc-card-meta span {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+}
+
 .doc-pill {
   font-size: 10.5px;
   font-weight: 600;
@@ -1818,8 +1835,14 @@ a {
 }
 
 @keyframes doc-card-appear {
-  from { opacity: 0; transform: translateY(8px); }
-  to   { opacity: 1; transform: translateY(0); }
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 
 .doc-card-live-meta {
@@ -1838,8 +1861,15 @@ a {
 }
 
 @keyframes doc-pulse {
-  0%, 100% { opacity: 1; transform: scale(1); }
-  50%       { opacity: 0.4; transform: scale(0.75); }
+  0%,
+  100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 0.4;
+    transform: scale(0.75);
+  }
 }
 
 .doc-live-label {
