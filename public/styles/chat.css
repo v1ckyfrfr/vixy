@@ -1087,6 +1087,150 @@ body.is-empty-chat .input-container {
   }
 }
 
+/* ───────────────────────────────────────────────────────────────
+   WEB SEARCH RESPONSE MODE ANIMATION
+   Minimal · Technical · Premium · Focused
+─────────────────────────────────────────────────────────────── */
+.thinking-row.searching-mode {
+  animation: searchRowFadeIn 0.28s cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+
+@keyframes searchRowFadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(6px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Dual Radar Sonar Rings around Avatar */
+.thinking-avatar-ring.search-radar-ring {
+  border-color: var(--accent);
+  animation: searchRadarSonar 2s cubic-bezier(0.2, 0.8, 0.2, 1) infinite;
+}
+
+.thinking-avatar-ring.search-radar-ring-2 {
+  border-color: var(--accent);
+  animation: searchRadarSonar 2s cubic-bezier(0.2, 0.8, 0.2, 1) infinite;
+  animation-delay: 0.9s;
+}
+
+@keyframes searchRadarSonar {
+  0% {
+    transform: scale(0.92);
+    opacity: 0.85;
+  }
+  70% {
+    transform: scale(1.45);
+    opacity: 0.15;
+  }
+  100% {
+    transform: scale(1.8);
+    opacity: 0;
+  }
+}
+
+/* Search Header Badge with Animated Globe */
+.thinking-badge.search-badge {
+  background: var(--accent-subtle, rgba(16, 185, 129, 0.12));
+  border: 1px solid var(--accent-border, rgba(16, 185, 129, 0.25));
+  color: var(--accent, #10b981);
+  padding: 3px 10px 3px 8px;
+  gap: 6px;
+  box-shadow: 0 0 12px rgba(16, 185, 129, 0.08);
+}
+
+.search-badge-globe {
+  width: 13px;
+  height: 13px;
+  flex-shrink: 0;
+  color: var(--accent, #10b981);
+  animation: searchGlobePulse 2.6s ease-in-out infinite;
+}
+
+@keyframes searchGlobePulse {
+  0%, 100% {
+    transform: rotate(0deg) scale(1);
+    opacity: 0.85;
+  }
+  50% {
+    transform: rotate(20deg) scale(1.08);
+    opacity: 1;
+  }
+}
+
+.thinking-badge.search-badge .thinking-phase {
+  color: var(--accent, #10b981);
+  font-weight: 600;
+  font-size: 0.72rem;
+}
+
+/* Search Query Tag / Chip */
+.search-query-tag {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  background: var(--surface-hover, rgba(255, 255, 255, 0.05));
+  border: 1px solid var(--border, rgba(255, 255, 255, 0.1));
+  border-radius: 12px;
+  padding: 2px 8px;
+  font-size: 0.68rem;
+  color: var(--text-muted, #94a3b8);
+  max-width: 280px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  animation: fadeIn 0.2s ease;
+}
+
+.search-query-lens {
+  width: 11px;
+  height: 11px;
+  flex-shrink: 0;
+  color: var(--accent, #10b981);
+}
+
+.search-query-text {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  font-style: italic;
+}
+
+/* Status Badge in Header while Searching */
+.badge[data-state="searching"] {
+  background: var(--accent-subtle, rgba(16, 185, 129, 0.12)) !important;
+  color: var(--accent, #10b981) !important;
+  border-color: var(--accent-border, rgba(16, 185, 129, 0.3)) !important;
+}
+
+.badge[data-state="searching"] .dot {
+  background: var(--accent, #10b981) !important;
+  box-shadow: 0 0 6px var(--accent, #10b981) !important;
+  animation: searchDotRadar 1.3s ease-in-out infinite !important;
+}
+
+@keyframes searchDotRadar {
+  0%, 100% {
+    transform: scale(1);
+    opacity: 0.8;
+  }
+  50% {
+    transform: scale(1.35);
+    opacity: 1;
+  }
+}
+
+/* Light mode overrides for Search Animation */
+html.light .thinking-badge.search-badge {
+  background: var(--accent-subtle);
+  border-color: var(--accent-border);
+  color: var(--accent);
+}
+
 @media (max-width: 768px) {
   .thinking-row {
     padding: 12px 10px;
@@ -2180,12 +2324,6 @@ body.is-empty-chat .input-container {
   transform: scale(0.95);
 }
 
-.tools-menu-btn.active {
-  background: var(--accent-subtle);
-  border-color: var(--accent-border);
-  color: var(--accent);
-}
-
 .tools-menu-btn svg.plus-icon {
   width: 16px;
   height: 16px;
@@ -2205,6 +2343,7 @@ body.is-empty-chat .input-container {
   background: var(--accent);
   border-radius: 50%;
   display: none;
+  box-shadow: 0 0 0 1.5px var(--surface);
 }
 
 .tools-indicator-dot.visible {
@@ -3968,11 +4107,6 @@ html.light .tools-menu-btn:hover {
   border-color: var(--border-focus);
 }
 
-html.light .tools-menu-btn.active {
-  background: var(--accent-subtle);
-  border-color: var(--accent-border);
-  color: var(--accent);
-}
 
 html.light .tools-menu-item {
   color: var(--text);
