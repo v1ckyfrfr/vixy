@@ -534,6 +534,17 @@ body.is-empty-chat .input-container {
   box-shadow: 0 12px 36px rgba(0, 0, 0, 0.35);
 }
 
+.chat-wrap.is-empty .input-footer,
+.chat-wrap:has(#emptyState) .input-footer,
+body.is-empty-chat .input-footer {
+  position: absolute;
+  right: 20px;
+  bottom: max(10px, env(safe-area-inset-bottom, 0px));
+  left: 20px;
+  max-width: none;
+  margin: 0;
+}
+
 /* ─── Suggestion Pills Row (Linear horizontal layout, not a grid) ── */
 .cap-row {
   display: flex;
@@ -1152,7 +1163,8 @@ body.is-empty-chat .input-container {
 }
 
 @keyframes searchGlobePulse {
-  0%, 100% {
+  0%,
+  100% {
     transform: rotate(0deg) scale(1);
     opacity: 0.85;
   }
@@ -1214,7 +1226,8 @@ body.is-empty-chat .input-container {
 }
 
 @keyframes searchDotRadar {
-  0%, 100% {
+  0%,
+  100% {
     transform: scale(1);
     opacity: 0.8;
   }
@@ -1671,9 +1684,69 @@ html.light .thinking-badge.search-badge {
   display: block;
   cursor: pointer;
   transition: opacity 0.15s;
+  opacity: 0;
+}
+.msg-image-wrap img.is-loaded {
+  opacity: 1;
 }
 .msg-image-wrap img:hover {
   opacity: 0.88;
+}
+.generated-image-loading,
+.generated-image-error {
+  max-width: 320px;
+  padding: 18px;
+  border: 1px solid var(--border-subtle);
+  border-radius: 10px;
+  color: var(--text-muted);
+  background: var(--bg-secondary);
+  font-size: 0.82rem;
+}
+
+.doc-generator-modal {
+  width: min(620px, calc(100vw - 28px));
+  max-height: min(820px, calc(100vh - 28px));
+  overflow-y: auto;
+}
+.doc-field-label {
+  display: block;
+  margin-top: 14px;
+}
+.doc-type-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 8px;
+  margin-top: 7px;
+}
+.doc-form-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+  margin-top: 14px;
+}
+.doc-form-grid label {
+  display: block;
+  margin-bottom: 7px;
+}
+.doc-select {
+  width: 100%;
+  min-height: 42px;
+  padding: 0 12px;
+  border: 1px solid var(--border-subtle);
+  border-radius: 9px;
+  color: var(--text-primary);
+  background: var(--bg-secondary);
+}
+@media (max-width: 560px) {
+  .doc-type-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+  .doc-form-grid {
+    grid-template-columns: 1fr;
+  }
+}
+.generated-image-error {
+  color: var(--danger, #ef6b73);
 }
 .msg-image-caption {
   font-size: 0.73rem;
@@ -4106,7 +4179,6 @@ html.light .tools-menu-btn:hover {
   color: var(--text);
   border-color: var(--border-focus);
 }
-
 
 html.light .tools-menu-item {
   color: var(--text);
