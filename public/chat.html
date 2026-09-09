@@ -1211,8 +1211,8 @@
                 </button>
               </div>
               <div class="skills-dropdown-note">
-                Toggle which skills Vixy may use. Skills are low-authority hints
-                - they cannot override core safety rules.
+                Activate structured task profiles with clear use criteria and
+                approved capabilities. Core safety rules always apply.
               </div>
               <div id="skillsDropdownList" class="skills-dropdown-list">
                 <div class="skills-dropdown-empty">Loading…</div>
@@ -1444,6 +1444,20 @@
                   >
                 </div>
               </button>
+              <button class="tools-menu-item" onclick="openDocModalFromMenu()">
+                <span class="tools-item-icon">
+                  <svg fill="none" stroke="currentColor" viewBox="0 0 24 24" width="16" height="16">
+                    <path stroke-width="2" d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/>
+                    <polyline stroke-width="2" points="14 2 14 8 20 8"/>
+                    <line stroke-width="2" x1="8" y1="13" x2="16" y2="13"/>
+                    <line stroke-width="2" x1="8" y1="17" x2="16" y2="17"/>
+                  </svg>
+                </span>
+                <div class="tools-item-info">
+                  <span class="tools-item-title">Document Generator</span>
+                  <span class="tools-item-desc">Create structured reports with DOCX and PDF export</span>
+                </div>
+              </button>
             </div>
           </div>
           <textarea
@@ -1591,6 +1605,36 @@
               </svg>
             </span>
             <span class="cap-pill-label">Writing</span>
+          </button>
+
+          <button
+            class="cap-pill"
+            onclick="openImageModalFromMenu()"
+            title="Create an image with provider fallback"
+          >
+            <span class="cap-pill-icon">
+              <svg width="14" height="14" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <rect x="3" y="3" width="18" height="18" rx="3" stroke-width="2" />
+                <circle cx="8.5" cy="8.5" r="1.5" stroke-width="2" />
+                <polyline stroke-width="2" points="21 15 16 10 5 21" />
+              </svg>
+            </span>
+            <span class="cap-pill-label">Images</span>
+          </button>
+
+          <button
+            class="cap-pill"
+            onclick="openDocModalFromMenu()"
+            title="Generate a structured, downloadable document"
+          >
+            <span class="cap-pill-icon">
+              <svg width="14" height="14" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-width="2" d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z" />
+                <polyline stroke-width="2" points="14 2 14 8 20 8" />
+                <line stroke-width="2" x1="8" y1="13" x2="16" y2="13" />
+              </svg>
+            </span>
+            <span class="cap-pill-label">Documents</span>
           </button>
         </div>
 
@@ -1747,39 +1791,33 @@
             id="artDocDlGroup"
             style="display: none; align-items: center; gap: 6px"
           >
-            <a
+            <button
               class="art-btn"
               id="artDocxBtn"
-              href="#"
-              download
               title="Download .DOCX (Microsoft Word)"
             >
               <span style="font-size: 11px; font-weight: 600; color: #93c5fd"
                 >.DOCX</span
               >
-            </a>
-            <a
+            </button>
+            <button
               class="art-btn"
               id="artPdfBtn"
-              href="#"
-              download
               title="Download .PDF (Adobe PDF)"
             >
               <span style="font-size: 11px; font-weight: 600; color: #fca5a5"
                 >.PDF</span
               >
-            </a>
-            <a
+            </button>
+            <button
               class="art-btn"
               id="artMdBtn"
-              href="#"
-              download
               title="Download .MD (Markdown)"
             >
               <span style="font-size: 11px; font-weight: 600; color: #86efac"
                 >.MD</span
               >
-            </a>
+            </button>
           </div>
           <button
             class="art-btn"
@@ -1930,6 +1968,73 @@
         </div>
       </div>
     </aside>
+
+    <div
+      class="img-modal-backdrop"
+      id="docModalBackdrop"
+      onclick="closeDocModalOnBackdrop(event)"
+    >
+      <div class="img-modal doc-generator-modal" role="dialog" aria-modal="true" aria-labelledby="docModalTitle">
+        <div class="sheet-drag-handle"></div>
+        <div class="img-modal-title" id="docModalTitle">
+          <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-width="2" d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/>
+            <polyline stroke-width="2" points="14 2 14 8 20 8"/>
+          </svg>
+          Document Generator
+        </div>
+        <p class="img-modal-sub">Generate a structured, editable document and export it securely.</p>
+
+        <label for="docPromptInput">Topic and requirements</label>
+        <textarea id="docPromptInput" rows="5" maxlength="12000" placeholder="Describe the topic, audience, facts that must be included, and expected outcome..."></textarea>
+
+        <label class="doc-field-label">Document type</label>
+        <div class="doc-type-grid" id="docTypeChips">
+          <button class="aspect-chip active" onclick="selectDocType('observation_report', this)">Observation</button>
+          <button class="aspect-chip" onclick="selectDocType('business_report', this)">Business</button>
+          <button class="aspect-chip" onclick="selectDocType('proposal', this)">Proposal</button>
+          <button class="aspect-chip" onclick="selectDocType('technical_report', this)">Technical</button>
+          <button class="aspect-chip" onclick="selectDocType('research_report', this)">Research</button>
+          <button class="aspect-chip" onclick="selectDocType('essay', this)">Essay</button>
+        </div>
+
+        <div class="doc-form-grid">
+          <div>
+            <label for="docToneSelect">Tone</label>
+            <select id="docToneSelect" class="doc-select">
+              <option value="formal">Formal</option>
+              <option value="academic">Academic</option>
+              <option value="executive">Executive</option>
+              <option value="technical">Technical</option>
+              <option value="persuasive">Persuasive</option>
+            </select>
+          </div>
+          <div>
+            <label for="docLangSelect">Language</label>
+            <select id="docLangSelect" class="doc-select">
+              <option value="id-ID">Bahasa Indonesia</option>
+              <option value="en-US">English</option>
+            </select>
+          </div>
+        </div>
+
+        <label class="doc-field-label">Length</label>
+        <div class="img-aspect-options" id="docLengthChips">
+          <button class="aspect-chip" onclick="selectDocLength('short', this)">Short</button>
+          <button class="aspect-chip active" onclick="selectDocLength('medium', this)">Medium</button>
+          <button class="aspect-chip" onclick="selectDocLength('long', this)">Long</button>
+        </div>
+
+        <div class="img-modal-error" id="docModalError" role="alert" style="display:none"></div>
+        <div class="img-modal-actions">
+          <button class="img-cancel-btn" onclick="closeDocModal()">Cancel</button>
+          <button class="img-generate-btn" id="docGenerateBtn" onclick="startGeneratingDocument()">
+            <div class="img-spinner" id="docSpinner"></div>
+            <span id="docBtnText">Generate Document</span>
+          </button>
+        </div>
+      </div>
+    </div>
 
     <div
       class="img-modal-backdrop"
