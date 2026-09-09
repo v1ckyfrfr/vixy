@@ -388,6 +388,7 @@
         }
       }
     </style>
+    <link rel="stylesheet" href="styles/settings.css" />
   </head>
   <body>
     <aside class="sidebar">
@@ -620,400 +621,634 @@
         </button>
         <div>
           <h1 class="page-title">Settings</h1>
-          <p class="page-subtitle">Manage your account and preferences.</p>
+          <p class="page-subtitle">Personalize how Vixy works for you.</p>
         </div>
       </div>
 
-      <div class="settings-stack">
-        <div class="settings-card">
-          <div class="settings-card-header">
-            <div class="settings-icon">
-              <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path
-                  stroke-width="2"
-                  d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"
-                />
-                <circle cx="12" cy="7" r="4" stroke-width="2" />
-              </svg>
-            </div>
-            <div>
-              <div class="settings-title">Profile</div>
-              <div class="settings-desc">Your account information</div>
-            </div>
-          </div>
-          <div class="settings-body">
-            <div class="avatar-preview">
-              <div class="avatar-circle" id="avatarPreview">U</div>
+      <div class="settings-layout">
+        <nav
+          class="settings-section-nav"
+          aria-label="Settings categories"
+          aria-orientation="vertical"
+          role="tablist"
+        >
+          <span class="settings-nav-label">Preferences</span>
+          <a
+            href="#account"
+            id="settingsTabAccount"
+            class="settings-tab active"
+            role="tab"
+            aria-selected="true"
+            aria-controls="profileCard"
+            data-settings-tab="account"
+            >Account</a
+          >
+          <a
+            href="#appearance"
+            id="settingsTabAppearance"
+            class="settings-tab"
+            role="tab"
+            aria-selected="false"
+            aria-controls="appearanceCard"
+            data-settings-tab="appearance"
+            tabindex="-1"
+            >Appearance</a
+          >
+          <a
+            href="#language"
+            id="settingsTabLanguage"
+            class="settings-tab"
+            role="tab"
+            aria-selected="false"
+            aria-controls="languageCard"
+            data-settings-tab="language"
+            tabindex="-1"
+            >Language</a
+          >
+          <a
+            href="#security"
+            id="settingsTabSecurity"
+            class="settings-tab"
+            role="tab"
+            aria-selected="false"
+            aria-controls="securityCard"
+            data-settings-tab="security"
+            tabindex="-1"
+            >Security</a
+          >
+          <a
+            href="#skills"
+            id="settingsTabSkills"
+            class="settings-tab"
+            role="tab"
+            aria-selected="false"
+            aria-controls="skillsCard"
+            data-settings-tab="skills"
+            tabindex="-1"
+            >Skills</a
+          >
+          <a
+            href="#memory"
+            id="settingsTabMemory"
+            class="settings-tab"
+            role="tab"
+            aria-selected="false"
+            aria-controls="memoryCard"
+            data-settings-tab="memory"
+            tabindex="-1"
+            >Memory &amp; privacy</a
+          >
+        </nav>
+        <div class="settings-stack">
+          <div
+            class="settings-card settings-tab-panel"
+            id="profileCard"
+            role="tabpanel"
+            aria-labelledby="settingsTabAccount"
+            data-settings-panel="account"
+          >
+            <div class="settings-card-header">
+              <div class="settings-icon">
+                <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path
+                    stroke-width="2"
+                    d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"
+                  />
+                  <circle cx="12" cy="7" r="4" stroke-width="2" />
+                </svg>
+              </div>
               <div>
-                <div
-                  style="font-weight: 500; font-size: 0.9rem"
-                  id="profileName"
-                >
-                  —
-                </div>
-                <div class="avatar-info" id="profileEmailDisplay">—</div>
-                <div class="avatar-info">
-                  ID: <span id="profileIdDisplay">—</span>
-                </div>
+                <div class="settings-title">Profile</div>
+                <div class="settings-desc">Your account information</div>
               </div>
             </div>
-          </div>
-        </div>
-
-        <div class="settings-card">
-          <div class="settings-card-header">
-            <div class="settings-icon">
-              <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <circle cx="12" cy="12" r="5" stroke-width="2" />
-                <line x1="12" y1="1" x2="12" y2="3" stroke-width="2" />
-                <line x1="12" y1="21" x2="12" y2="23" stroke-width="2" />
-                <line
-                  x1="4.22"
-                  y1="4.22"
-                  x2="5.64"
-                  y2="5.64"
-                  stroke-width="2"
-                />
-                <line
-                  x1="18.36"
-                  y1="18.36"
-                  x2="19.78"
-                  y2="19.78"
-                  stroke-width="2"
-                />
-                <line x1="1" y1="12" x2="3" y2="12" stroke-width="2" />
-                <line x1="21" y1="12" x2="23" y2="12" stroke-width="2" />
-                <line
-                  x1="4.22"
-                  y1="19.78"
-                  x2="5.64"
-                  y2="18.36"
-                  stroke-width="2"
-                />
-                <line
-                  x1="18.36"
-                  y1="5.64"
-                  x2="19.78"
-                  y2="4.22"
-                  stroke-width="2"
-                />
-              </svg>
-            </div>
-            <div>
-              <div class="settings-title">Appearance</div>
-              <div class="settings-desc">Customize your visual experience</div>
-            </div>
-          </div>
-          <div class="settings-body">
-            <div class="toggle-row">
-              <div class="toggle-info">
-                <div class="toggle-label">Dark Mode</div>
-                <div class="toggle-hint">
-                  Toggle between light and dark theme
-                </div>
-              </div>
-              <label class="toggle">
-                <input
-                  type="checkbox"
-                  id="darkToggle"
-                  onchange="toggleTheme()"
-                />
-                <span class="toggle-track"></span>
-              </label>
-            </div>
-          </div>
-        </div>
-
-        <div class="settings-card">
-          <div class="settings-card-header">
-            <div class="settings-icon">
-              <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <circle cx="12" cy="12" r="10" stroke-width="2" />
-                <path
-                  stroke-width="2"
-                  d="M2 12h20M12 2a15.3 15.3 0 014 10 15.3 15.3 0 01-4 10 15.3 15.3 0 01-4-10 15.3 15.3 0 014-10z"
-                />
-              </svg>
-            </div>
-            <div>
-              <div class="settings-title">Language</div>
-              <div class="settings-desc">
-                The language Vixy uses in its responses
-              </div>
-            </div>
-          </div>
-          <div class="settings-body">
-            <div id="langMsg" class="form-msg"></div>
-            <div class="field">
-              <label class="input-label" for="langSelect"
-                >Response Language</label
-              >
-              <select id="langSelect" class="input" onchange="saveLanguage()">
-                <option value="auto">Auto (match my language)</option>
-                <option value="en">English</option>
-                <option value="id">Indonesian (Bahasa Indonesia)</option>
-                <option value="ms">Malay (Bahasa Melayu)</option>
-                <option value="zh">Chinese (简体中文)</option>
-                <option value="es">Spanish (Español)</option>
-                <option value="ar">Arabic (العربية)</option>
-                <option value="fr">French (Français)</option>
-                <option value="de">German (Deutsch)</option>
-                <option value="ja">Japanese (日本語)</option>
-                <option value="ko">Korean (한국어)</option>
-                <option value="hi">Hindi (हिन्दी)</option>
-                <option value="pt">Portuguese (Português)</option>
-              </select>
-            </div>
-            <p
-              style="
-                font-size: 0.78rem;
-                color: var(--text-muted);
-                margin-top: 10px;
-              "
-            >
-              Vixy will reply in the language you choose, or match the language
-              you write in when set to "Auto" (the default). Code and technical
-              terms stay unchanged. You can still ask Vixy to switch languages
-              in any single message.
-            </p>
-          </div>
-        </div>
-
-        <div class="settings-card">
-          <div class="settings-card-header">
-            <div class="settings-icon">
-              <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path
-                  stroke-width="2"
-                  d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"
-                />
-              </svg>
-            </div>
-            <div>
-              <div class="settings-title">Session &amp; Security</div>
-              <div class="settings-desc">Manage your active session</div>
-            </div>
-          </div>
-          <div class="settings-body">
-            <p style="font-size: 0.84rem; color: var(--text-muted)">
-              Your session is protected by JWT and expires in 8 hours. To sign
-              out and invalidate your current session, use the
-              <strong>Danger Zone</strong> section below.
-            </p>
-          </div>
-        </div>
-
-        <div class="settings-card" id="skillsCard">
-          <div class="settings-card-header">
-            <div class="settings-icon">
-              <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <circle cx="12" cy="12" r="10" stroke-width="2" />
-                <path
-                  stroke-width="2"
-                  stroke-linecap="round"
-                  d="M9.09 9a3 3 0 015.83 1c0 2-3 3-3 3M12 17h.01"
-                />
-              </svg>
-            </div>
-            <div>
-              <div class="settings-title">AI Skills</div>
-              <div class="settings-desc">
-                Custom behaviors you can teach Vixy
-              </div>
-            </div>
-          </div>
-          <div class="settings-body">
-            <div class="skill-notice">
-              <svg
-                width="14"
-                height="14"
-                fill="none"
-                stroke="currentColor"
-                viewBox="0 0 24 24"
-              >
-                <path
-                  stroke-width="2"
-                  d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"
-                />
-              </svg>
-              <span>
-                Skills are <strong>low-authority hints</strong> — they shape
-                response style and approach only. They can never override Vixy's
-                core instructions, safety rules, or security boundaries. Skill
-                text is checked and must be plain text.
-              </span>
-            </div>
-
-            <div id="skillsMsg" class="form-msg"></div>
-
-            <div id="skillsList" class="skill-list">
-              <p class="skill-empty">Loading your skills…</p>
-            </div>
-
-            <form
-              class="skill-form"
-              id="skillForm"
-              onsubmit="submitSkillForm(event)"
-            >
-              <div class="skill-form-head" id="skillFormHead">
-                <span class="skill-form-title">Add a new skill</span>
-              </div>
-              <div class="input-grid">
-                <div class="field">
-                  <label class="input-label" for="skillName">Skill name</label>
-                  <input
-                    type="text"
-                    id="skillName"
-                    class="input"
-                    maxlength="40"
-                    placeholder="e.g. Concise answers"
-                  />
-                </div>
-                <div class="field">
-                  <label class="input-label" for="skillDesc">Description</label>
-                  <input
-                    type="text"
-                    id="skillDesc"
-                    class="input"
-                    maxlength="150"
-                    placeholder="What should it do?"
-                  />
-                </div>
-              </div>
-              <div class="field" style="margin-bottom: 12px">
-                <label class="input-label" for="skillContent"
-                  >Instructions (plain text)</label
-                >
-                <textarea
-                  id="skillContent"
-                  class="input skill-textarea"
-                  maxlength="1200"
-                  rows="4"
-                  placeholder="e.g. Always answer in under five sentences, lead with the conclusion, and skip pleasantries."
-                ></textarea>
-                <span class="skill-count" id="skillCount">0 / 1200</span>
-              </div>
-              <div class="skill-form-actions">
-                <button type="submit" class="btn btn-primary" id="skillSaveBtn">
-                  Add Skill
-                </button>
-                <button
-                  type="button"
-                  class="btn btn-ghost"
-                  id="skillCancelBtn"
-                  onclick="resetSkillForm()"
-                  style="display: none"
-                >
-                  Cancel
-                </button>
-              </div>
-            </form>
-          </div>
-        </div>
-
-        <div class="settings-card" id="memoryCard">
-          <div class="settings-card-header">
-            <div class="settings-icon">
-              <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path
-                  stroke-width="2"
-                  d="M9 3v2m6-2v2M9 19v2m6-2v2M5 9H3m2 6H3m18-6h-2m2 6h-2M7 19h10a2 2 0 002-2V7a2 2 0 00-2-2H7a2 2 0 00-2 2v10a2 2 0 002 2zM9 9h6v6H9z"
-                />
-              </svg>
-            </div>
-            <div>
-              <div class="settings-title">AI Memory</div>
-              <div class="settings-desc">
-                Facts Vixy remembers about you across chat sessions
-              </div>
-            </div>
-          </div>
-          <div class="settings-body">
-            <div class="skill-notice">
-              <svg
-                width="14"
-                height="14"
-                fill="none"
-                stroke="currentColor"
-                viewBox="0 0 24 24"
-              >
-                <path
-                  stroke-width="2"
-                  d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"
-                />
-              </svg>
-              <span>
-                Vixy automatically remembers preferences, facts, and project
-                context from your conversations. These memories persist across
-                sessions and help Vixy personalize every answer. You can review
-                or delete them at any time.
-              </span>
-            </div>
-
-            <div id="memoryMsg" class="form-msg"></div>
-
-            <div id="memoriesList" class="skill-list">
-              <p class="skill-empty">Loading your memories…</p>
-            </div>
-
-            <div id="episodesList" class="skill-list" style="margin-top: 14px">
-              <p class="skill-empty">Loading recent conversation memories…</p>
-            </div>
-
-            <form
-              class="skill-form"
-              id="memoryForm"
-              onsubmit="submitMemoryForm(event)"
-            >
-              <div class="skill-form-head">
-                <span class="skill-form-title">Add a memory manually</span>
-              </div>
-              <div class="input-grid">
-                <div class="field">
-                  <label class="input-label" for="memoryKey"
-                    >What to remember</label
+            <div class="settings-body">
+              <div class="avatar-preview">
+                <div class="avatar-circle" id="avatarPreview">U</div>
+                <div>
+                  <div
+                    style="font-weight: 500; font-size: 0.9rem"
+                    id="profileName"
                   >
-                  <input
-                    type="text"
-                    id="memoryKey"
-                    class="input"
-                    maxlength="120"
-                    placeholder="e.g. preferred language"
-                  />
-                </div>
-                <div class="field">
-                  <label class="input-label" for="memoryValue">Value</label>
-                  <input
-                    type="text"
-                    id="memoryValue"
-                    class="input"
-                    maxlength="500"
-                    placeholder="e.g. Indonesian"
-                  />
+                    —
+                  </div>
+                  <div class="avatar-info" id="profileEmailDisplay">—</div>
+                  <div class="avatar-info">
+                    ID: <span id="profileIdDisplay">—</span>
+                  </div>
                 </div>
               </div>
-              <div class="field" style="margin-bottom: 12px">
-                <label class="input-label" for="memoryCategory">Category</label>
-                <select id="memoryCategory" class="input">
-                  <option value="preference">Preference</option>
-                  <option value="fact">Fact</option>
-                  <option value="project">Project</option>
-                  <option value="instruction">Instruction</option>
+            </div>
+          </div>
+
+          <div
+            class="settings-card settings-tab-panel"
+            id="appearanceCard"
+            role="tabpanel"
+            aria-labelledby="settingsTabAppearance"
+            data-settings-panel="appearance"
+            hidden
+          >
+            <div class="settings-card-header">
+              <div class="settings-icon">
+                <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <circle cx="12" cy="12" r="5" stroke-width="2" />
+                  <line x1="12" y1="1" x2="12" y2="3" stroke-width="2" />
+                  <line x1="12" y1="21" x2="12" y2="23" stroke-width="2" />
+                  <line
+                    x1="4.22"
+                    y1="4.22"
+                    x2="5.64"
+                    y2="5.64"
+                    stroke-width="2"
+                  />
+                  <line
+                    x1="18.36"
+                    y1="18.36"
+                    x2="19.78"
+                    y2="19.78"
+                    stroke-width="2"
+                  />
+                  <line x1="1" y1="12" x2="3" y2="12" stroke-width="2" />
+                  <line x1="21" y1="12" x2="23" y2="12" stroke-width="2" />
+                  <line
+                    x1="4.22"
+                    y1="19.78"
+                    x2="5.64"
+                    y2="18.36"
+                    stroke-width="2"
+                  />
+                  <line
+                    x1="18.36"
+                    y1="5.64"
+                    x2="19.78"
+                    y2="4.22"
+                    stroke-width="2"
+                  />
+                </svg>
+              </div>
+              <div>
+                <div class="settings-title">Appearance</div>
+                <div class="settings-desc">
+                  Customize your visual experience
+                </div>
+              </div>
+            </div>
+            <div class="settings-body">
+              <div class="toggle-row">
+                <div class="toggle-info">
+                  <div class="toggle-label">Dark Mode</div>
+                  <div class="toggle-hint">
+                    Toggle between light and dark theme
+                  </div>
+                </div>
+                <label class="toggle">
+                  <input
+                    type="checkbox"
+                    id="darkToggle"
+                    onchange="toggleTheme()"
+                  />
+                  <span class="toggle-track"></span>
+                </label>
+              </div>
+            </div>
+          </div>
+
+          <div
+            class="settings-card settings-tab-panel"
+            id="languageCard"
+            role="tabpanel"
+            aria-labelledby="settingsTabLanguage"
+            data-settings-panel="language"
+            hidden
+          >
+            <div class="settings-card-header">
+              <div class="settings-icon">
+                <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <circle cx="12" cy="12" r="10" stroke-width="2" />
+                  <path
+                    stroke-width="2"
+                    d="M2 12h20M12 2a15.3 15.3 0 014 10 15.3 15.3 0 01-4 10 15.3 15.3 0 01-4-10 15.3 15.3 0 014-10z"
+                  />
+                </svg>
+              </div>
+              <div>
+                <div class="settings-title">Language</div>
+                <div class="settings-desc">
+                  The language Vixy uses in its responses
+                </div>
+              </div>
+            </div>
+            <div class="settings-body">
+              <div id="langMsg" class="form-msg"></div>
+              <div class="field">
+                <label class="input-label" for="langSelect"
+                  >Response Language</label
+                >
+                <select id="langSelect" class="input" onchange="saveLanguage()">
+                  <option value="auto">Auto (match my language)</option>
+                  <option value="en">English</option>
+                  <option value="id">Indonesian (Bahasa Indonesia)</option>
+                  <option value="ms">Malay (Bahasa Melayu)</option>
+                  <option value="zh">Chinese (简体中文)</option>
+                  <option value="es">Spanish (Español)</option>
+                  <option value="ar">Arabic (العربية)</option>
+                  <option value="fr">French (Français)</option>
+                  <option value="de">German (Deutsch)</option>
+                  <option value="ja">Japanese (日本語)</option>
+                  <option value="ko">Korean (한국어)</option>
+                  <option value="hi">Hindi (हिन्दी)</option>
+                  <option value="pt">Portuguese (Português)</option>
                 </select>
               </div>
-              <div class="skill-form-actions">
-                <button type="submit" class="btn btn-primary">
-                  Add Memory
-                </button>
-                <button
-                  type="button"
-                  class="btn btn-danger"
-                  onclick="clearAllMemories()"
-                >
-                  Clear All Memory
-                </button>
+              <p
+                style="
+                  font-size: 0.78rem;
+                  color: var(--text-muted);
+                  margin-top: 10px;
+                "
+              >
+                Vixy will reply in the language you choose, or match the
+                language you write in when set to "Auto" (the default). Code and
+                technical terms stay unchanged. You can still ask Vixy to switch
+                languages in any single message.
+              </p>
+            </div>
+          </div>
+
+          <div
+            class="settings-card settings-tab-panel"
+            id="securityCard"
+            role="tabpanel"
+            aria-labelledby="settingsTabSecurity"
+            data-settings-panel="security"
+            hidden
+          >
+            <div class="settings-card-header">
+              <div class="settings-icon">
+                <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path
+                    stroke-width="2"
+                    d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"
+                  />
+                </svg>
               </div>
-            </form>
+              <div>
+                <div class="settings-title">Session &amp; Security</div>
+                <div class="settings-desc">Manage your active session</div>
+              </div>
+            </div>
+            <div class="settings-body">
+              <p style="font-size: 0.84rem; color: var(--text-muted)">
+                Your Firebase session refreshes securely while you are signed
+                in. Sign out when using a shared device. Sensitive actions
+                always require a current verified identity token.
+              </p>
+            </div>
+          </div>
+
+          <div
+            class="settings-card settings-tab-panel"
+            id="skillsCard"
+            role="tabpanel"
+            aria-labelledby="settingsTabSkills"
+            data-settings-panel="skills"
+            hidden
+          >
+            <div class="settings-card-header">
+              <div class="settings-icon">
+                <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <circle cx="12" cy="12" r="10" stroke-width="2" />
+                  <path
+                    stroke-width="2"
+                    stroke-linecap="round"
+                    d="M9.09 9a3 3 0 015.83 1c0 2-3 3-3 3M12 17h.01"
+                  />
+                </svg>
+              </div>
+              <div>
+                <div class="settings-title">AI Skills</div>
+                <div class="settings-desc">
+                  Reusable task profiles and approved capabilities
+                </div>
+              </div>
+            </div>
+            <div class="settings-body">
+              <div class="skill-notice">
+                <svg
+                  width="14"
+                  height="14"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                >
+                  <path
+                    stroke-width="2"
+                    d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"
+                  />
+                </svg>
+                <span>
+                  Skills combine task instructions, activation criteria, and
+                  approved capabilities. They remain below Vixy's safety rules,
+                  and a skill can only activate capabilities shown here.
+                </span>
+              </div>
+
+              <div id="skillsMsg" class="form-msg"></div>
+
+              <div class="skill-starters" aria-label="Starter skill templates">
+                <span class="skill-form-title">Start from a template</span>
+                <div class="skill-starter-actions">
+                  <button
+                    type="button"
+                    class="btn btn-ghost"
+                    onclick="useSkillTemplate('research')"
+                  >
+                    Web Researcher
+                  </button>
+                  <button
+                    type="button"
+                    class="btn btn-ghost"
+                    onclick="useSkillTemplate('reviewer')"
+                  >
+                    Code Reviewer
+                  </button>
+                  <button
+                    type="button"
+                    class="btn btn-ghost"
+                    onclick="useSkillTemplate('writer')"
+                  >
+                    Technical Writer
+                  </button>
+                </div>
+              </div>
+
+              <div id="skillsList" class="skill-list">
+                <p class="skill-empty">Loading your skills…</p>
+              </div>
+
+              <form
+                class="skill-form"
+                id="skillForm"
+                onsubmit="submitSkillForm(event)"
+              >
+                <div class="skill-form-head" id="skillFormHead">
+                  <span class="skill-form-title">Add a new skill</span>
+                </div>
+                <div class="input-grid">
+                  <div class="field">
+                    <label class="input-label" for="skillName"
+                      >Skill name</label
+                    >
+                    <input
+                      type="text"
+                      id="skillName"
+                      class="input"
+                      maxlength="40"
+                      placeholder="e.g. Concise answers"
+                    />
+                  </div>
+                  <div class="field">
+                    <label class="input-label" for="skillDesc"
+                      >Description</label
+                    >
+                    <input
+                      type="text"
+                      id="skillDesc"
+                      class="input"
+                      maxlength="150"
+                      placeholder="What should it do?"
+                    />
+                  </div>
+                </div>
+                <div class="input-grid">
+                  <div class="field">
+                    <label class="input-label" for="skillCategory"
+                      >Category</label
+                    >
+                    <select id="skillCategory" class="input">
+                      <option value="general">General</option>
+                      <option value="coding">Coding</option>
+                      <option value="research">Research</option>
+                      <option value="writing">Writing</option>
+                      <option value="security">Security</option>
+                      <option value="analysis">Analysis</option>
+                    </select>
+                  </div>
+                  <div class="field">
+                    <label class="input-label" for="skillActivation"
+                      >Use this skill when…</label
+                    >
+                    <input
+                      id="skillActivation"
+                      class="input"
+                      maxlength="180"
+                      placeholder="e.g. comparing current products or claims"
+                    />
+                  </div>
+                </div>
+                <div class="toggle-row skill-capability-row">
+                  <div class="toggle-info">
+                    <div class="toggle-label">Live web capability</div>
+                    <div class="toggle-hint">
+                      Automatically enable web search when this skill is active.
+                    </div>
+                  </div>
+                  <label class="toggle">
+                    <input id="skillRequiresWeb" type="checkbox" />
+                    <span class="toggle-track"></span>
+                  </label>
+                </div>
+                <div class="field" style="margin-bottom: 12px">
+                  <label class="input-label" for="skillContent"
+                    >Instructions (plain text)</label
+                  >
+                  <textarea
+                    id="skillContent"
+                    class="input skill-textarea"
+                    maxlength="1200"
+                    rows="4"
+                    placeholder="e.g. Always answer in under five sentences, lead with the conclusion, and skip pleasantries."
+                  ></textarea>
+                  <span class="skill-count" id="skillCount">0 / 1200</span>
+                </div>
+                <div class="skill-form-actions">
+                  <button
+                    type="submit"
+                    class="btn btn-primary"
+                    id="skillSaveBtn"
+                  >
+                    Add Skill
+                  </button>
+                  <button
+                    type="button"
+                    class="btn btn-ghost"
+                    id="skillCancelBtn"
+                    onclick="resetSkillForm()"
+                    style="display: none"
+                  >
+                    Cancel
+                  </button>
+                </div>
+              </form>
+            </div>
+          </div>
+
+          <div
+            class="settings-card settings-tab-panel"
+            id="memoryCard"
+            role="tabpanel"
+            aria-labelledby="settingsTabMemory"
+            data-settings-panel="memory"
+            hidden
+          >
+            <div class="settings-card-header">
+              <div class="settings-icon">
+                <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path
+                    stroke-width="2"
+                    d="M9 3v2m6-2v2M9 19v2m6-2v2M5 9H3m2 6H3m18-6h-2m2 6h-2M7 19h10a2 2 0 002-2V7a2 2 0 00-2-2H7a2 2 0 00-2 2v10a2 2 0 002 2zM9 9h6v6H9z"
+                  />
+                </svg>
+              </div>
+              <div>
+                <div class="settings-title">AI Memory</div>
+                <div class="settings-desc">
+                  Facts Vixy remembers about you across chat sessions
+                </div>
+              </div>
+            </div>
+            <div class="settings-body">
+              <div class="skill-notice">
+                <svg
+                  width="14"
+                  height="14"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                >
+                  <path
+                    stroke-width="2"
+                    d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"
+                  />
+                </svg>
+                <span>
+                  Vixy automatically remembers preferences, facts, and project
+                  context from your conversations. These memories persist across
+                  sessions and help Vixy personalize every answer. You can
+                  review or delete them at any time.
+                </span>
+              </div>
+
+              <div class="memory-controls" aria-label="AI memory controls">
+                <div class="toggle-row">
+                  <div class="toggle-info">
+                    <div class="toggle-label">Long-term memory</div>
+                    <div class="toggle-hint">
+                      Allow Vixy to save durable preferences and use them in
+                      future chats.
+                    </div>
+                  </div>
+                  <label class="toggle">
+                    <input
+                      id="memoryEnabledToggle"
+                      type="checkbox"
+                      checked
+                      onchange="saveMemorySettings()"
+                    />
+                    <span class="toggle-track"></span>
+                  </label>
+                </div>
+                <div class="toggle-row">
+                  <div class="toggle-info">
+                    <div class="toggle-label">Conversation recall (RAG)</div>
+                    <div class="toggle-hint">
+                      Semantically retrieve relevant past conversation moments.
+                    </div>
+                  </div>
+                  <label class="toggle">
+                    <input
+                      id="episodicMemoryToggle"
+                      type="checkbox"
+                      checked
+                      onchange="saveMemorySettings()"
+                    />
+                    <span class="toggle-track"></span>
+                  </label>
+                </div>
+              </div>
+
+              <div id="memoryMsg" class="form-msg"></div>
+
+              <div id="memoriesList" class="skill-list">
+                <p class="skill-empty">Loading your memories…</p>
+              </div>
+
+              <div
+                id="episodesList"
+                class="skill-list"
+                style="margin-top: 14px"
+              >
+                <p class="skill-empty">Loading recent conversation memories…</p>
+              </div>
+
+              <form
+                class="skill-form"
+                id="memoryForm"
+                onsubmit="submitMemoryForm(event)"
+              >
+                <div class="skill-form-head">
+                  <span class="skill-form-title">Add a memory manually</span>
+                </div>
+                <div class="input-grid">
+                  <div class="field">
+                    <label class="input-label" for="memoryKey"
+                      >What to remember</label
+                    >
+                    <input
+                      type="text"
+                      id="memoryKey"
+                      class="input"
+                      maxlength="120"
+                      placeholder="e.g. preferred language"
+                    />
+                  </div>
+                  <div class="field">
+                    <label class="input-label" for="memoryValue">Value</label>
+                    <input
+                      type="text"
+                      id="memoryValue"
+                      class="input"
+                      maxlength="500"
+                      placeholder="e.g. Indonesian"
+                    />
+                  </div>
+                </div>
+                <div class="field" style="margin-bottom: 12px">
+                  <label class="input-label" for="memoryCategory"
+                    >Category</label
+                  >
+                  <select id="memoryCategory" class="input">
+                    <option value="preference">Preference</option>
+                    <option value="fact">Fact</option>
+                    <option value="project">Project</option>
+                    <option value="instruction">Instruction</option>
+                  </select>
+                </div>
+                <div class="skill-form-actions">
+                  <button type="submit" class="btn btn-primary">
+                    Add Memory
+                  </button>
+                  <button
+                    type="button"
+                    class="btn btn-danger"
+                    onclick="clearAllMemories()"
+                  >
+                    Clear All Memory
+                  </button>
+                </div>
+              </form>
+            </div>
           </div>
         </div>
       </div>
@@ -1022,6 +1257,146 @@
     <script type="module" src="/js/auth-guard.js"></script>
     <script type="module" src="/js/signout.js"></script>
     <script>
+      const SETTINGS_TAB_ORDER = [
+        "account",
+        "appearance",
+        "language",
+        "security",
+        "skills",
+        "memory",
+      ];
+      const SETTINGS_TAB_ALIASES = {
+        profilecard: "account",
+        appearancecard: "appearance",
+        languagecard: "language",
+        securitycard: "security",
+        skillscard: "skills",
+        memorycard: "memory",
+      };
+
+      function getSettingsTabFromHash() {
+        const raw = decodeURIComponent(window.location.hash.slice(1))
+          .trim()
+          .toLowerCase();
+        const key = SETTINGS_TAB_ALIASES[raw] || raw;
+        return SETTINGS_TAB_ORDER.includes(key) ? key : null;
+      }
+
+      function activateSettingsTab(tabKey, options = {}) {
+        const key = SETTINGS_TAB_ORDER.includes(tabKey) ? tabKey : "account";
+        const tabs = Array.from(
+          document.querySelectorAll("[data-settings-tab]"),
+        );
+        const panels = Array.from(
+          document.querySelectorAll("[data-settings-panel]"),
+        );
+
+        tabs.forEach((tab) => {
+          const active = tab.dataset.settingsTab === key;
+          tab.classList.toggle("active", active);
+          tab.setAttribute("aria-selected", active ? "true" : "false");
+          tab.tabIndex = active ? 0 : -1;
+        });
+        panels.forEach((panel) => {
+          panel.hidden = panel.dataset.settingsPanel !== key;
+        });
+
+        const activeTab = tabs.find((tab) => tab.dataset.settingsTab === key);
+        if (activeTab && window.innerWidth <= 768) {
+          requestAnimationFrame(() => {
+            activeTab.scrollIntoView({
+              behavior: options.instant ? "auto" : "smooth",
+              block: "nearest",
+              inline: "center",
+            });
+          });
+        }
+
+        try {
+          sessionStorage.setItem("vx_settings_tab", key);
+        } catch (_) {}
+
+        if (options.history === "push" && window.location.hash !== `#${key}`) {
+          window.history.pushState({ settingsTab: key }, "", `#${key}`);
+        } else if (
+          options.history === "replace" &&
+          window.location.hash !== `#${key}`
+        ) {
+          window.history.replaceState({ settingsTab: key }, "", `#${key}`);
+        }
+
+        if (options.focusPanel) {
+          const activePanel = panels.find(
+            (panel) => panel.dataset.settingsPanel === key,
+          );
+          activePanel?.focus({ preventScroll: true });
+        }
+      }
+
+      const settingsTabList = document.querySelector(
+        ".settings-section-nav[role='tablist']",
+      );
+      function syncSettingsTabOrientation() {
+        settingsTabList?.setAttribute(
+          "aria-orientation",
+          window.innerWidth <= 768 ? "horizontal" : "vertical",
+        );
+      }
+      syncSettingsTabOrientation();
+      window.addEventListener("resize", syncSettingsTabOrientation, {
+        passive: true,
+      });
+      settingsTabList?.addEventListener("click", (event) => {
+        const tab = event.target.closest("[data-settings-tab]");
+        if (!tab) return;
+        event.preventDefault();
+        activateSettingsTab(tab.dataset.settingsTab, { history: "push" });
+      });
+      settingsTabList?.addEventListener("keydown", (event) => {
+        const current = event.target.closest("[data-settings-tab]");
+        if (!current) return;
+        const currentIndex = SETTINGS_TAB_ORDER.indexOf(
+          current.dataset.settingsTab,
+        );
+        let nextIndex = null;
+        if (event.key === "ArrowDown" || event.key === "ArrowRight") {
+          nextIndex = (currentIndex + 1) % SETTINGS_TAB_ORDER.length;
+        } else if (event.key === "ArrowUp" || event.key === "ArrowLeft") {
+          nextIndex =
+            (currentIndex - 1 + SETTINGS_TAB_ORDER.length) %
+            SETTINGS_TAB_ORDER.length;
+        } else if (event.key === "Home") {
+          nextIndex = 0;
+        } else if (event.key === "End") {
+          nextIndex = SETTINGS_TAB_ORDER.length - 1;
+        }
+        if (nextIndex === null) return;
+        event.preventDefault();
+        const nextTab = settingsTabList.querySelector(
+          `[data-settings-tab="${SETTINGS_TAB_ORDER[nextIndex]}"]`,
+        );
+        nextTab?.focus();
+        nextTab?.click();
+      });
+
+      window.addEventListener("popstate", () => {
+        activateSettingsTab(getSettingsTabFromHash() || "account");
+      });
+
+      let initialSettingsTab = getSettingsTabFromHash();
+      if (!initialSettingsTab) {
+        try {
+          const savedTab = sessionStorage.getItem("vx_settings_tab");
+          if (SETTINGS_TAB_ORDER.includes(savedTab)) {
+            initialSettingsTab = savedTab;
+          }
+        } catch (_) {}
+      }
+      activateSettingsTab(initialSettingsTab || "account", {
+        history: window.location.hash ? undefined : "replace",
+        instant: true,
+      });
+
       window.toggleUserPopover = function (e) {
         if (e) {
           e.stopPropagation();
@@ -1167,8 +1542,8 @@
               <span class="toggle-track"></span>
             </label>
             <div class="skill-item-info">
-              <div class="skill-item-name">${esc(s.name)}</div>
-              <div class="skill-item-desc">${esc(s.description) || "No description"}</div>
+              <div class="skill-item-name">${esc(s.name)} <span class="skill-category-badge">${esc(s.category || "general")}</span></div>
+              <div class="skill-item-desc">${esc(s.description) || "No description"}${s.requires_web ? " · Web enabled" : ""}</div>
             </div>
             <div class="skill-item-actions">
               <button class="skill-btn" title="Edit" onclick="editSkill(${s.id})">
@@ -1211,6 +1586,12 @@
         document.getElementById("skillName").value = skill.name || "";
         document.getElementById("skillDesc").value = skill.description || "";
         document.getElementById("skillContent").value = skill.content || "";
+        document.getElementById("skillCategory").value =
+          skill.category || "general";
+        document.getElementById("skillActivation").value =
+          skill.activation_hint || "";
+        document.getElementById("skillRequiresWeb").checked =
+          !!skill.requires_web;
         document.getElementById("skillFormHead").innerHTML =
           '<span class="skill-form-title">Edit skill</span>';
         document.getElementById("skillSaveBtn").textContent = "Save Changes";
@@ -1249,6 +1630,54 @@
         if (el && c) c.textContent = `${el.value.length} / 1200`;
       }
 
+      const SKILL_TEMPLATES = {
+        research: {
+          name: "Web Researcher",
+          description: "Research current topics and synthesize cited evidence.",
+          category: "research",
+          activation:
+            "The task needs current facts, comparisons, sources, or verification.",
+          requiresWeb: true,
+          content:
+            "Create a concise research plan before answering. Compare multiple credible sources. Separate verified facts from inference. Cite evidence near each important claim.",
+        },
+        reviewer: {
+          name: "Code Reviewer",
+          description:
+            "Review code for correctness, security, and maintainability.",
+          category: "coding",
+          activation:
+            "The user asks to review, debug, refactor, or secure code.",
+          requiresWeb: false,
+          content:
+            "Lead with concrete defects ordered by severity. Reference the affected code precisely. Explain impact and propose the smallest safe fix. Include verification steps.",
+        },
+        writer: {
+          name: "Technical Writer",
+          description: "Produce clear documentation for technical audiences.",
+          category: "writing",
+          activation:
+            "The user requests documentation, guides, reports, or technical explanations.",
+          requiresWeb: false,
+          content:
+            "Identify the target reader and desired outcome. Use plain language, concrete examples, and consistent terminology. Organize long material with descriptive headings.",
+        },
+      };
+
+      function useSkillTemplate(key) {
+        const template = SKILL_TEMPLATES[key];
+        if (!template) return;
+        document.getElementById("skillName").value = template.name;
+        document.getElementById("skillDesc").value = template.description;
+        document.getElementById("skillCategory").value = template.category;
+        document.getElementById("skillActivation").value = template.activation;
+        document.getElementById("skillRequiresWeb").checked =
+          template.requiresWeb;
+        document.getElementById("skillContent").value = template.content;
+        updateSkillCount();
+        document.getElementById("skillContent").focus();
+      }
+
       document
         .getElementById("skillContent")
         .addEventListener("input", updateSkillCount);
@@ -1259,6 +1688,9 @@
           name: document.getElementById("skillName").value,
           description: document.getElementById("skillDesc").value,
           content: document.getElementById("skillContent").value,
+          category: document.getElementById("skillCategory").value,
+          activationHint: document.getElementById("skillActivation").value,
+          requiresWeb: document.getElementById("skillRequiresWeb").checked,
         };
         if (!payload.name.trim() || !payload.content.trim()) {
           return showSkillsMsg("Name and instructions are required.", "error");
@@ -1317,6 +1749,47 @@
         episode: "Episode",
         web: "Web",
       };
+
+      async function loadMemorySettings() {
+        try {
+          const res = await apiMemories("/settings");
+          if (!res.ok) return;
+          const { settings = {} } = await res.json();
+          const memoryToggle = document.getElementById("memoryEnabledToggle");
+          const episodeToggle = document.getElementById("episodicMemoryToggle");
+          memoryToggle.checked = settings.memoryEnabled !== false;
+          episodeToggle.checked = settings.episodicMemoryEnabled !== false;
+          episodeToggle.disabled = !memoryToggle.checked;
+        } catch (_) {
+          // Keep safe UI defaults if the preference endpoint is unavailable.
+        }
+      }
+
+      async function saveMemorySettings() {
+        const memoryToggle = document.getElementById("memoryEnabledToggle");
+        const episodeToggle = document.getElementById("episodicMemoryToggle");
+        episodeToggle.disabled = !memoryToggle.checked;
+        if (!memoryToggle.checked) episodeToggle.checked = false;
+        try {
+          const res = await apiMemories("/settings", {
+            method: "PUT",
+            body: JSON.stringify({
+              memoryEnabled: memoryToggle.checked,
+              episodicMemoryEnabled: episodeToggle.checked,
+            }),
+          });
+          if (!res.ok) throw new Error("update failed");
+          showMemoryMsg(
+            memoryToggle.checked
+              ? "Memory preferences updated."
+              : "Automatic memory is now disabled.",
+            "success",
+          );
+        } catch (_) {
+          showMemoryMsg("Failed to update memory preferences.", "error");
+          loadMemorySettings();
+        }
+      }
 
       async function loadMemories() {
         try {
@@ -1461,24 +1934,7 @@
       }
 
       loadMemories();
-
-      if (window.location.hash === "#memory") {
-        const card = document.getElementById("memoryCard");
-        if (card) {
-          card.scrollIntoView({ behavior: "smooth", block: "start" });
-          card.style.borderColor = "var(--accent)";
-          setTimeout(() => (card.style.borderColor = ""), 2500);
-        }
-      }
-
-      if (window.location.hash === "#skills") {
-        const card = document.getElementById("skillsCard");
-        if (card) {
-          card.scrollIntoView({ behavior: "smooth", block: "start" });
-          card.style.borderColor = "var(--accent)";
-          setTimeout(() => (card.style.borderColor = ""), 2500);
-        }
-      }
+      loadMemorySettings();
 
       function showToast(msg) {
         const toast = document.getElementById("toast");
