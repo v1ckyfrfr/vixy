@@ -77,6 +77,76 @@ body::before {
   z-index: 0;
 }
 
+/* ─── Verified → Chat transition ───────────────────── */
+.auth-transition {
+  position: fixed;
+  inset: 0;
+  z-index: 1000;
+  display: grid;
+  place-items: center;
+  padding: 20px;
+  background: var(--bg);
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+  transition: opacity 160ms ease, visibility 160ms ease;
+}
+
+.auth-transition.active {
+  opacity: 1;
+  visibility: visible;
+  pointer-events: auto;
+}
+
+.auth-transition-card {
+  width: min(360px, 100%);
+  display: grid;
+  grid-template-columns: 42px minmax(0, 1fr) 18px;
+  align-items: center;
+  gap: 13px;
+  padding: 16px;
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  background: var(--surface);
+  box-shadow: var(--shadow);
+}
+
+.auth-transition-logo {
+  width: 42px;
+  height: 42px;
+  border-radius: 12px;
+  object-fit: cover;
+}
+
+.auth-transition-copy {
+  display: flex;
+  min-width: 0;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.auth-transition-copy strong {
+  font-size: 0.9rem;
+  font-weight: 600;
+}
+
+.auth-transition-copy span {
+  overflow: hidden;
+  color: var(--text-dim);
+  font-size: 0.75rem;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.auth-transition-spinner {
+  width: 16px;
+  height: 16px;
+  border: 2px solid rgba(168, 164, 158, 0.25);
+  border-top-color: var(--accent);
+  border-radius: 50%;
+  animation: spin 0.8s linear infinite;
+}
+
 /* ─── Container ─────────────────────────────────────── */
 .auth-container {
   position: relative;
@@ -529,5 +599,14 @@ input:focus + * /* sibling icon color update via JS, but let's style the wrapper
   .otp-input {
     font-size: 1.2rem;
     letter-spacing: 8px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .auth-transition,
+  .auth-transition-spinner,
+  .spinner {
+    animation: none;
+    transition: none;
   }
 }
