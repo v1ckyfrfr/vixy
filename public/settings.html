@@ -13,7 +13,7 @@
     />
     <meta
       name="theme-color"
-      content="#ffffff"
+      content="#f5f3ee"
       media="(prefers-color-scheme: light)"
     />
     <meta name="description" content="Vixy-AI — Account settings" />
@@ -969,6 +969,13 @@
                   <button
                     type="button"
                     class="btn btn-ghost"
+                    onclick="useSkillTemplate('webdev')"
+                  >
+                    Web Development
+                  </button>
+                  <button
+                    type="button"
+                    class="btn btn-ghost"
                     onclick="useSkillTemplate('reviewer')"
                   >
                     Code Reviewer
@@ -1066,11 +1073,11 @@
                   <textarea
                     id="skillContent"
                     class="input skill-textarea"
-                    maxlength="1200"
-                    rows="4"
+                    maxlength="8000"
+                    rows="7"
                     placeholder="e.g. Always answer in under five sentences, lead with the conclusion, and skip pleasantries."
                   ></textarea>
-                  <span class="skill-count" id="skillCount">0 / 1200</span>
+                  <span class="skill-count" id="skillCount">0 / 8,000</span>
                 </div>
                 <div class="skill-form-actions">
                   <button
@@ -1480,6 +1487,7 @@
       // toggleTheme() is now defined in js/theme.js — no duplicate needed here
 
       // ─── AI Skills ──────────────────────────────────────
+      const SKILL_CONTENT_MAX = 8000;
       let _editingSkillId = null;
       let _skills = [];
 
@@ -1627,7 +1635,9 @@
       function updateSkillCount() {
         const el = document.getElementById("skillContent");
         const c = document.getElementById("skillCount");
-        if (el && c) c.textContent = `${el.value.length} / 1200`;
+        if (el && c) {
+          c.textContent = `${el.value.length.toLocaleString()} / ${SKILL_CONTENT_MAX.toLocaleString()}`;
+        }
       }
 
       const SKILL_TEMPLATES = {
@@ -1640,6 +1650,17 @@
           requiresWeb: true,
           content:
             "Create a concise research plan before answering. Compare multiple credible sources. Separate verified facts from inference. Cite evidence near each important claim.",
+        },
+        webdev: {
+          name: "Web Development",
+          description:
+            "Create distinctive, responsive, accessible, and interactive web experiences.",
+          category: "coding",
+          activation:
+            "The user asks to design or build a website, landing page, dashboard, web app, or frontend interface.",
+          requiresWeb: false,
+          content:
+            "Infer the product, audience, main journey, and desired tone before coding. Choose one coherent art direction with consistent color, typography, spacing, and motion. Avoid generic gradients, decorative blobs, excessive glass effects, and interchangeable card layouts. Build complete responsive code with realistic copy. Make navigation, forms, menus, tabs, filters, dialogs, and calls to action work whenever they appear. Include accessible labels, keyboard focus, useful loading, empty, success, and error states, touch-friendly controls, and reduced-motion support. Check every selector, handler, import, and responsive state before answering.",
         },
         reviewer: {
           name: "Code Reviewer",
