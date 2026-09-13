@@ -53,33 +53,35 @@
 
 /* ─── Light mode Theme ───────────────────────────────────────────── */
 .light {
-  --accent: #4a8c6a;
-  --accent-hover: #3d7a5a;
-  --accent-faint: rgba(74, 140, 106, 0.08);
-  --accent-subtle: rgba(74, 140, 106, 0.1);
-  --accent-border: rgba(74, 140, 106, 0.22);
+  /* Warm neutrals reduce glare without making the interface look yellow. */
+  --accent: #3f7658;
+  --accent-hover: #315f46;
+  --accent-faint: rgba(63, 118, 88, 0.07);
+  --accent-subtle: rgba(63, 118, 88, 0.1);
+  --accent-border: rgba(63, 118, 88, 0.24);
 
-  --bg: #e8e8e8;
-  --bg-sidebar: #dedede;
-  --surface: #ffffff;
-  --surface-2: #f0efed;
-  --surface-3: #e4e3e0;
-  --surface-card: #ffffff;
-  --surface-hover: rgba(0, 0, 0, 0.035);
+  --bg: #f5f3ee;
+  --bg-sidebar: #ebe8e1;
+  --surface: #faf9f6;
+  --surface-2: #f0ede7;
+  --surface-3: #e5e1d8;
+  --surface-card: #faf9f6;
+  --surface-hover: rgba(48, 45, 39, 0.055);
 
-  --text: #1a1916;
-  --text-main: #1a1916;
-  --text-dim: #4a4845;
-  --text-muted: #2b2b2a;
+  /* Every text tier keeps at least readable contrast on the main canvas. */
+  --text: #25241f;
+  --text-main: #25241f;
+  --text-dim: #5f5c54;
+  --text-muted: #6f6b62;
 
-  --border: rgba(0, 0, 0, 0.08);
-  --border-color: rgba(0, 0, 0, 0.08);
-  --border-focus: rgba(0, 0, 0, 0.16);
-  --border-subtle: rgba(0, 0, 0, 0.04);
+  --border: rgba(45, 42, 36, 0.11);
+  --border-color: rgba(45, 42, 36, 0.11);
+  --border-focus: rgba(45, 42, 36, 0.24);
+  --border-subtle: rgba(45, 42, 36, 0.065);
 
-  --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.08);
-  --shadow: 0 4px 16px rgba(0, 0, 0, 0.1);
-  --shadow-lg: 0 12px 40px rgba(0, 0, 0, 0.12);
+  --shadow-sm: 0 1px 2px rgba(43, 39, 32, 0.055);
+  --shadow: 0 8px 24px rgba(43, 39, 32, 0.075);
+  --shadow-lg: 0 18px 48px rgba(43, 39, 32, 0.11);
 }
 
 /* ─── Reset ──── */
@@ -1761,8 +1763,10 @@ a {
 .doc-action-btn {
   display: inline-flex;
   align-items: center;
-  gap: 6px;
-  padding: 8px 14px;
+  justify-content: center;
+  width: 34px;
+  height: 34px;
+  padding: 0;
   border-radius: 8px;
   font-size: 12.5px;
   font-weight: 500;
@@ -1876,4 +1880,119 @@ a {
   font-size: 12px;
   color: rgba(76, 175, 80, 0.85);
   font-weight: 500;
+}
+
+/* ─── Comfortable light surfaces shared by Dashboard & Settings ─── */
+html.light body {
+  background: var(--bg);
+}
+
+html.light ::selection {
+  background: rgba(63, 118, 88, 0.2);
+  color: var(--text);
+}
+
+html.light .sidebar {
+  box-shadow: inset -1px 0 var(--border-subtle);
+}
+
+html.light .sidebar .nav-link,
+html.light .sidebar .chat-history-item,
+html.light .sidebar .user-name {
+  color: #494740;
+}
+
+html.light .sidebar .nav-link svg,
+html.light .sidebar .chat-history-chat-icon,
+html.light .sidebar .user-menu-chevron {
+  color: #5f5c54;
+  opacity: 0.82;
+}
+
+html.light .sidebar .nav-link:hover,
+html.light .sidebar .nav-link.active,
+html.light .sidebar .chat-history-item:hover,
+html.light .sidebar .chat-history-item.active {
+  color: var(--text);
+}
+
+html.light .sidebar .nav-section-label,
+html.light .sidebar .sidebar-history-group-label,
+html.light .sidebar .user-email {
+  color: #5f5c54;
+  opacity: 0.9;
+}
+
+html.light .card,
+html.light .settings-card,
+html.light .user-popover-menu,
+html.light .auth-transition-card {
+  background: var(--surface);
+  border-color: var(--border);
+  box-shadow: var(--shadow-sm);
+}
+
+html.light .nav-link.active,
+html.light .chat-history-item.active,
+html.light .user-menu[aria-expanded="true"] {
+  background: rgba(45, 42, 36, 0.07);
+}
+
+html.light .input {
+  background: var(--surface);
+  border-color: var(--border);
+}
+
+html.light .input:focus {
+  background: var(--surface);
+  border-color: var(--accent-border);
+  box-shadow: 0 0 0 3px var(--accent-faint);
+}
+
+html.light .toast {
+  background: #e8e4dc;
+  border-color: var(--border);
+  box-shadow: var(--shadow);
+}
+
+html.light ::-webkit-scrollbar-thumb {
+  background: #d4cfc5;
+}
+
+html.light ::-webkit-scrollbar-thumb:hover {
+  background: #c1bbb0;
+}
+
+html.light .doc-card-result {
+  background: var(--surface);
+  border-color: var(--border);
+  box-shadow: var(--shadow-sm);
+}
+
+html.light .doc-file-icon-badge {
+  background: #e6edf4;
+  border-color: #c5d3e1;
+  color: #345e82;
+  box-shadow: none;
+}
+
+html.light .doc-file-ext {
+  color: #345e82;
+}
+
+html.light .doc-action-btn.docx-btn {
+  background: #e6edf4;
+  border-color: #c5d3e1;
+  color: #2d587c;
+}
+
+html.light .doc-action-btn.pdf-btn {
+  background: #f3e6e4;
+  border-color: #dfc2bd;
+  color: #934d43;
+}
+
+html.light .doc-action-btn.secondary:hover {
+  background: var(--surface-3);
+  color: var(--text);
 }
