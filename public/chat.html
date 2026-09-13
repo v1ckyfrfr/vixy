@@ -13,7 +13,7 @@
     />
     <meta
       name="theme-color"
-      content="#ffffff"
+      content="#f5f3ee"
       media="(prefers-color-scheme: light)"
     />
     <meta name="description" content="Vixy-AI - Chat with your AI assistant" />
@@ -24,55 +24,22 @@
       rel="stylesheet"
     />
     <link rel="stylesheet" href="styles/style.css" />
-    <link
-      id="hljs-theme"
-      rel="stylesheet"
-      href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github-dark.min.css"
-      crossorigin="anonymous"
-    />
-    <link
-      rel="stylesheet"
-      href="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.css"
-      crossorigin="anonymous"
-    />
-    <script
-      src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"
-      crossorigin="anonymous"
-    ></script>
-    <script
-      src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/languages/sql.min.js"
-      crossorigin="anonymous"
-    ></script>
-    <script
-      src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/languages/pgsql.min.js"
-      crossorigin="anonymous"
-    ></script>
-    <script
-      src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/languages/bash.min.js"
-      crossorigin="anonymous"
-    ></script>
-
-    <script
-      src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.js"
-      crossorigin="anonymous"
-    ></script>
-    <script
-      src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/contrib/auto-render.min.js"
-      crossorigin="anonymous"
-    ></script>
-    <script
-      src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"
-      crossorigin="anonymous"
-    ></script>
-    <script
-      src="https://cdnjs.cloudflare.com/ajax/libs/dompurify/3.2.4/purify.min.js"
-      crossorigin="anonymous"
-    ></script>
-    <script src="https://unpkg.com/lucide@latest"></script>
+    <!-- Rich Markdown, sanitizing, code, and math runtimes are loaded only
+         after the authenticated chat shell becomes interactive. -->
     <script src="js/theme.js"></script>
     <link rel="stylesheet" href="styles/chat.css" />
   </head>
   <body>
+    <div class="chat-boot-loader" id="chatBootLoader" role="status" aria-live="polite">
+      <div class="chat-boot-card">
+        <img src="/img/vixy-logo.png" alt="" class="chat-boot-logo" />
+        <div class="chat-boot-copy">
+          <strong>Opening Vixy</strong>
+          <span id="chatBootStatus">Restoring your secure session…</span>
+        </div>
+        <span class="chat-boot-spinner" aria-hidden="true"></span>
+      </div>
+    </div>
     <aside class="sidebar">
       <div class="sidebar-header">
         <div class="sidebar-logo">
@@ -82,16 +49,6 @@
           <h3 class="logo-text">VixyAI</h3>
         </div>
         <div class="sidebar-header-actions">
-          <button
-            class="new-chat-btn"
-            onclick="newChat()"
-            title="New chat"
-            id="newChatBtn"
-          >
-            <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path stroke-width="2" d="M12 5v14M5 12h14" />
-            </svg>
-          </button>
           <button
             class="mobile-close-sidebar-btn"
             onclick="toggleSidebar()"
@@ -119,8 +76,23 @@
         </div>
       </div>
 
+      <div class="sidebar-primary-actions">
+        <button
+          class="new-chat-btn"
+          onclick="newChat()"
+          title="Start a new chat"
+          aria-label="Start a new chat"
+          id="newChatBtn"
+        >
+          <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-width="2" stroke-linecap="round" d="M12 5v14M5 12h14" />
+          </svg>
+          <span>New chat</span>
+          <kbd>Ctrl N</kbd>
+        </button>
+      </div>
+
       <div class="sidebar-nav-section">
-        <div class="nav-section-label">Navigation</div>
         <a href="/dashboard.html" class="nav-link">
           <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <rect x="3" y="3" width="7" height="7" rx="1" stroke-width="2" />
@@ -129,15 +101,6 @@
             <rect x="14" y="14" width="7" height="7" rx="1" stroke-width="2" />
           </svg>
           Dashboard
-        </a>
-        <a href="/chat.html" class="nav-link active">
-          <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path
-              stroke-width="2"
-              d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2z"
-            />
-          </svg>
-          New Chat
         </a>
         <a href="/settings.html" class="nav-link">
           <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -150,9 +113,7 @@
           Settings
         </a>
 
-        <div class="nav-section-label" style="margin-top: 16px">
-          Recent Chats
-        </div>
+        <div class="nav-section-label sidebar-chats-label">Chats</div>
         <div class="chat-search-row">
           <svg
             class="chat-search-icon"
@@ -1241,7 +1202,7 @@
         </div>
       </div>
 
-      <div class="chat-input-wrapper">
+      <div class="chat-input-wrapper" id="chatInputWrapper">
         <div class="file-preview-bar" id="filePreviewBar">
           <div id="filePreviewThumb"></div>
           <div class="file-preview-info">
@@ -1288,6 +1249,7 @@
               id="toolsMenuBtn"
               onclick="toggleToolsMenu()"
               title="Add attachment, web search, or AI image generator"
+              aria-label="Open tools and attachments"
               aria-haspopup="true"
               aria-expanded="false"
             >
@@ -1440,7 +1402,7 @@
                 <div class="tools-item-info">
                   <span class="tools-item-title">Generate AI Image</span>
                   <span class="tools-item-desc"
-                    >Create AI images with OpenRouter &amp; SDXL</span
+                    >Create high-quality images with Hugging Face</span
                   >
                 </div>
               </button>
@@ -1463,7 +1425,8 @@
           <textarea
             id="msgInput"
             rows="1"
-            placeholder="Ask Vixy..."
+            placeholder="Ask Anything..."
+            aria-label="Ask Anything..."
             autocomplete="off"
             autocorrect="on"
             autocapitalize="sentences"
@@ -1471,12 +1434,19 @@
             onkeydown="handleKey(event)"
             oninput="autoResize(this)"
           ></textarea>
+          <div
+            class="composer-selectors"
+            id="composerSelectors"
+            role="group"
+            aria-label="Model and response controls"
+          ></div>
           <div class="input-actions">
             <button
               class="mic-btn"
               id="voiceBtn"
               onclick="toggleVoiceInput()"
               title="Voice input (Speech-to-Text)"
+              aria-label="Voice input"
             >
               <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path
@@ -1512,6 +1482,7 @@
               id="stopBtn"
               onclick="stopGeneration()"
               title="Stop generating"
+              aria-label="Stop generating"
             >
               <svg fill="currentColor" viewBox="0 0 24 24">
                 <rect x="6" y="6" width="12" height="12" rx="2" />
@@ -1522,6 +1493,7 @@
               id="sendBtn"
               onclick="send()"
               title="Send message"
+              aria-label="Send message"
               disabled
             >
               <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -1996,6 +1968,10 @@
           <button class="aspect-chip" onclick="selectDocType('technical_report', this)">Technical</button>
           <button class="aspect-chip" onclick="selectDocType('research_report', this)">Research</button>
           <button class="aspect-chip" onclick="selectDocType('essay', this)">Essay</button>
+          <button class="aspect-chip" onclick="selectDocType('cv_resume', this)">CV / Resume</button>
+          <button class="aspect-chip" onclick="selectDocType('formal_letter', this)">Formal Letter</button>
+          <button class="aspect-chip" onclick="selectDocType('meeting_report', this)">Meeting Minutes</button>
+          <button class="aspect-chip" onclick="selectDocType('sop', this)">SOP</button>
         </div>
 
         <div class="doc-form-grid">
@@ -2065,15 +2041,12 @@
         <label style="margin-top: 14px; display: block"
           >Image Model / Style</label
         >
-        <div
-          class="img-aspect-options"
-          id="imgModelOptions"
-          style="grid-template-columns: repeat(2, 1fr); gap: 8px"
-        >
+        <div class="img-aspect-options img-model-options" id="imgModelOptions">
           <button
             class="aspect-chip active"
-            data-img-model="openrouter-flash"
+            data-img-model="hf-qwen-image"
             onclick="selectImgModel(this)"
+            title="Best overall quality and prompt fidelity"
           >
             <svg
               class="chip-icon"
@@ -2086,12 +2059,13 @@
                 d="M12 3l1.9 5.8L20 10l-6.1 1.2L12 17l-1.9-5.8L4 10l6.1-1.2L12 3z"
               />
             </svg>
-            OpenRouter Flash HD
+            Qwen Quality
           </button>
           <button
             class="aspect-chip"
-            data-img-model="turbo"
+            data-img-model="hf-qwen-lightning"
             onclick="selectImgModel(this)"
+            title="Faster Qwen generation"
           >
             <svg
               class="chip-icon"
@@ -2101,12 +2075,13 @@
             >
               <path stroke-width="2" d="M13 2L3 14h9l-1 8 10-12h-9l1-8z" />
             </svg>
-            SDXL Turbo (High Detail)
+            Qwen Fast
           </button>
           <button
             class="aspect-chip"
-            data-img-model="midjourney"
+            data-img-model="hf-z-image-turbo"
             onclick="selectImgModel(this)"
+            title="Fast, natural-looking image generation"
           >
             <svg
               class="chip-icon"
@@ -2123,26 +2098,7 @@
                 d="M7.07 14.94c-1.66 0-3 1.35-3 3.02 0 1.33-2.5 1.52-2 2.02 1.08 1.1 2.49 2.02 4 2.02 2.2 0 4-1.8 4-4.04a3.01 3.01 0 00-3-3.02z"
               />
             </svg>
-            Midjourney Style
-          </button>
-          <button
-            class="aspect-chip"
-            data-img-model="flux"
-            onclick="selectImgModel(this)"
-          >
-            <svg
-              class="chip-icon"
-              fill="none"
-              stroke="currentColor"
-              viewBox="0 0 24 24"
-            >
-              <path
-                stroke-width="2"
-                d="M23 19a2 2 0 01-2 2H3a2 2 0 01-2-2V8a2 2 0 012-2h4l2-3h6l2 3h4a2 2 0 012 2z"
-              />
-              <circle cx="12" cy="13" r="4" stroke-width="2" />
-            </svg>
-            FLUX.1 Schnell
+            Z-Image
           </button>
         </div>
 
@@ -2376,7 +2332,13 @@
     <div class="img-lightbox" id="imgLightbox" onclick="closeLightbox()">
       <button class="img-lightbox-close" onclick="closeLightbox()">✕</button>
       <img id="lightboxImg" src="" alt="Generated Image" />
-      <a class="img-lightbox-dl" id="lightboxDl" download="vixy-generated.png">
+      <a
+        class="img-lightbox-dl"
+        id="lightboxDl"
+        download="vixy-generated.png"
+        title="Download image"
+        aria-label="Download image"
+      >
         <svg
           fill="none"
           stroke="currentColor"
@@ -2387,7 +2349,6 @@
           <polyline stroke-width="2" points="7 10 12 15 17 10" />
           <line x1="12" y1="15" x2="12" y2="3" stroke-width="2" />
         </svg>
-        Download
       </a>
     </div>
 
