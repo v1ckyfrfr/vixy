@@ -113,6 +113,14 @@
           Settings
         </a>
 
+        <div class="sidebar-projects-head">
+          <button class="sidebar-projects-label" type="button" onclick="selectProject(null)">Projects</button>
+          <button class="sidebar-project-add" type="button" onclick="openProjectsDialog('create')" title="New project" aria-label="New project">
+            <svg width="13" height="13" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-width="2" stroke-linecap="round" d="M12 5v14M5 12h14"/></svg>
+          </button>
+        </div>
+        <div id="sidebarProjectList" class="sidebar-project-list" aria-label="Projects"></div>
+
         <div class="nav-section-label sidebar-chats-label">Chats</div>
         <div class="chat-search-row">
           <svg
@@ -1438,8 +1446,13 @@
             class="composer-selectors"
             id="composerSelectors"
             role="group"
-            aria-label="Model and response controls"
-          ></div>
+            aria-label="Project, model, and response controls"
+          >
+            <button class="active-project-chip" id="activeProjectChip" type="button" onclick="openProjectsDialog()" title="Choose project">
+              <svg width="13" height="13" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-width="2" stroke-linejoin="round" d="M3 7a2 2 0 012-2h4l2 2h8a2 2 0 012 2v9a2 2 0 01-2 2H5a2 2 0 01-2-2V7z"/></svg>
+              <span id="activeProjectName">No project</span>
+            </button>
+          </div>
           <div class="input-actions">
             <button
               class="mic-btn"
@@ -1614,6 +1627,52 @@
           Vixy may make mistakes. Always verify important info.
         </div>
       </div>
+    </div>
+
+    <div class="project-modal-backdrop" id="projectModalBackdrop" onclick="closeProjectsDialog(event)">
+      <section class="project-modal" role="dialog" aria-modal="true" aria-labelledby="projectModalTitle">
+        <header class="project-modal-header">
+          <div>
+            <span class="project-modal-eyebrow">Workspace</span>
+            <h2 id="projectModalTitle">Projects</h2>
+          </div>
+          <button class="art-btn" type="button" onclick="closeProjectsDialog()" title="Close" aria-label="Close projects">
+            <svg width="15" height="15" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-width="2" stroke-linecap="round" d="M6 6l12 12M18 6L6 18"/></svg>
+          </button>
+        </header>
+        <div class="project-modal-layout">
+          <nav class="project-modal-list" id="projectModalList" aria-label="Your projects"></nav>
+          <div class="project-editor">
+            <div class="project-empty-panel" id="projectEmptyPanel">
+              <div class="project-empty-icon"><svg width="24" height="24" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-width="1.7" d="M3 7a2 2 0 012-2h4l2 2h8a2 2 0 012 2v9a2 2 0 01-2 2H5a2 2 0 01-2-2V7z"/></svg></div>
+              <h3>Keep work in context</h3>
+              <p>Group chats, documents, instructions, and reusable knowledge in one focused workspace.</p>
+              <button class="project-primary-btn" type="button" onclick="startProjectCreate()">Create project</button>
+            </div>
+            <form id="projectForm" class="project-form" onsubmit="saveProject(event)" hidden>
+              <input type="hidden" id="projectIdInput" />
+              <label>Project name<input id="projectNameInput" maxlength="100" required placeholder="e.g. Product launch" /></label>
+              <label>Description<textarea id="projectDescriptionInput" maxlength="2000" rows="2" placeholder="What is this project about?"></textarea></label>
+              <label>Project instructions<textarea id="projectInstructionsInput" maxlength="12000" rows="5" placeholder="Goals, tone, constraints, preferred output…"></textarea></label>
+              <div class="project-form-actions">
+                <button class="project-danger-btn" id="deleteProjectBtn" type="button" onclick="deleteActiveProject()" hidden>Delete</button>
+                <span class="project-form-error" id="projectFormError" role="alert"></span>
+                <button class="project-secondary-btn" type="button" onclick="useActiveProject()" id="useProjectBtn">Use project</button>
+                <button class="project-primary-btn" type="submit" id="saveProjectBtn">Save</button>
+              </div>
+              <div class="project-knowledge" id="projectKnowledgePanel" hidden>
+                <div class="project-knowledge-head"><div><h3>Knowledge</h3><p>Vixy retrieves only relevant entries for each request.</p></div></div>
+                <div id="projectKnowledgeList" class="project-knowledge-list"></div>
+                <div class="project-knowledge-add">
+                  <input id="knowledgeTitleInput" maxlength="180" placeholder="Knowledge title" />
+                  <textarea id="knowledgeContentInput" maxlength="50000" rows="4" placeholder="Paste verified notes, requirements, or source material…"></textarea>
+                  <button class="project-secondary-btn" type="button" onclick="addProjectKnowledge()">Add knowledge</button>
+                </div>
+              </div>
+            </form>
+          </div>
+        </div>
+      </section>
     </div>
 
     <!-- Artifact Panel  -->
@@ -1815,6 +1874,9 @@
               <line x1="12" y1="15" x2="12" y2="3" stroke-width="2" />
             </svg>
           </button>
+          <button class="art-btn" id="artWorkspaceBtn" type="button" title="Edit document" aria-label="Open document workspace" onclick="toggleDocumentWorkspace()" style="display:none">
+            <svg width="14" height="14" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-width="2" stroke-linecap="round" stroke-linejoin="round" d="M12 20h9M16.5 3.5a2.12 2.12 0 013 3L8 18l-4 1 1-4L16.5 3.5z"/></svg>
+          </button>
           <div class="art-divider"></div>
           <button
             class="art-btn art-close-btn"
@@ -1939,6 +2001,16 @@
           ><code id="artifactCodeBlock" class="language-html"></code></pre>
         </div>
       </div>
+      <aside class="document-workspace" id="documentWorkspace" aria-label="Document workspace">
+        <header><div><span>Document workspace</span><strong id="documentVersionLabel">Version 1</strong></div><button type="button" onclick="toggleDocumentWorkspace(false)" aria-label="Close editor">×</button></header>
+        <div class="document-workspace-body">
+          <label>Section<select id="documentSectionSelect"><option value="">Whole document</option></select></label>
+          <label>Revision instruction<textarea id="documentRevisionInput" rows="5" maxlength="6000" placeholder="Make this section clearer, add a comparison table, shorten the conclusion…"></textarea></label>
+          <div class="document-workspace-actions"><span id="documentWorkspaceStatus" role="status"></span><button type="button" id="documentReviseBtn" onclick="submitDocumentRevision()">Revise</button></div>
+          <div class="document-versions-head"><strong>Version history</strong><button type="button" onclick="loadDocumentVersions()" title="Refresh">↻</button></div>
+          <div class="document-version-list" id="documentVersionList"></div>
+        </div>
+      </aside>
     </aside>
 
     <div
