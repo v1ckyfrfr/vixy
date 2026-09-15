@@ -5792,49 +5792,85 @@ html.light .input-container:focus-within {
   z-index: 1400;
   display: none;
   place-items: center;
-  padding: 20px;
-  background: rgba(4, 8, 14, 0.62);
-  backdrop-filter: blur(8px);
+  padding: 16px;
+  background: rgba(5, 9, 15, 0.46);
 }
 .project-modal-backdrop.open {
   display: grid;
 }
 .project-modal {
-  width: min(900px, 96vw);
-  height: min(680px, 88vh);
+  width: min(760px, 94vw);
+  height: min(600px, 88dvh);
   overflow: hidden;
   border: 1px solid var(--border-color);
-  border-radius: 18px;
-  background: var(--bg-primary);
-  box-shadow: 0 26px 80px rgba(0, 0, 0, 0.38);
+  border-radius: 16px;
+  background: var(--surface);
+  box-shadow: 0 18px 52px rgba(0, 0, 0, 0.26);
+}
+.project-modal-backdrop.create-mode .project-modal {
+  width: min(520px, 94vw);
+  height: auto;
+  max-height: min(620px, 88dvh);
+}
+.project-modal-backdrop.create-mode .project-modal-layout {
+  height: auto;
+  display: block;
+}
+.project-modal-backdrop.create-mode .project-modal-list {
+  display: none;
+}
+.project-modal-backdrop.create-mode .project-editor {
+  max-height: calc(min(620px, 88dvh) - 58px);
+  padding: 20px 22px 22px;
+}
+.project-modal-backdrop.create-mode .project-editor-head {
+  display: none;
+}
+.project-modal-backdrop.create-mode .project-modal-icon {
+  display: none;
+}
+.project-modal-backdrop.create-mode .project-pane {
+  padding-top: 0;
+}
+.project-modal [hidden] {
+  display: none !important;
 }
 .project-modal-header {
-  height: 76px;
+  height: 58px;
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 0 22px;
+  padding: 0 16px 0 18px;
   border-bottom: 1px solid var(--border-color);
+  background: var(--surface);
 }
 .project-modal-header h2 {
-  margin: 2px 0 0;
-  font-size: 1.15rem;
-}
-.project-modal-eyebrow {
-  color: var(--text-muted);
-  font-size: 0.68rem;
+  margin: 0;
+  font-size: 0.94rem;
   font-weight: 650;
-  letter-spacing: 0.1em;
-  text-transform: uppercase;
+}
+.project-modal-title-wrap {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+}
+.project-modal-icon {
+  width: 28px;
+  height: 28px;
+  display: grid;
+  place-items: center;
+  border-radius: 8px;
+  color: var(--text-secondary);
+  background: var(--surface-hover);
 }
 .project-modal-layout {
-  height: calc(100% - 76px);
+  height: calc(100% - 58px);
   display: grid;
-  grid-template-columns: 240px 1fr;
+  grid-template-columns: 208px 1fr;
 }
 .project-modal-list {
   overflow-y: auto;
-  padding: 14px 10px;
+  padding: 10px 8px;
   border-right: 1px solid var(--border-color);
   background: var(--bg-sidebar);
 }
@@ -5845,15 +5881,16 @@ html.light .input-container:focus-within {
   align-items: center;
   gap: 10px;
   border: 0;
-  border-radius: 10px;
-  padding: 10px;
+  min-height: 38px;
+  border-radius: 8px;
+  padding: 8px 9px;
   color: var(--text-secondary);
   background: transparent;
   text-align: left;
   cursor: pointer;
 }
 .project-list-create {
-  margin-bottom: 8px;
+  margin-bottom: 6px;
   color: var(--text-primary);
   font-weight: 600;
 }
@@ -5886,42 +5923,161 @@ html.light .input-container:focus-within {
 }
 .project-editor {
   overflow-y: auto;
-  padding: 24px;
+  padding: 20px 22px 24px;
+  background: var(--surface);
 }
 .project-empty-panel {
-  max-width: 410px;
-  margin: 80px auto 0;
+  max-width: 330px;
+  margin: 72px auto 0;
   text-align: center;
   color: var(--text-secondary);
 }
 .project-empty-panel h3 {
-  margin: 14px 0 7px;
+  margin: 12px 0 6px;
+  font-size: 0.94rem;
   color: var(--text-primary);
 }
 .project-empty-panel p {
-  margin: 0 0 20px;
+  margin: 0 0 16px;
+  font-size: 0.78rem;
   line-height: 1.55;
 }
 .project-empty-icon {
-  width: 52px;
-  height: 52px;
+  width: 44px;
+  height: 44px;
   display: grid;
   place-items: center;
   margin: auto;
-  border-radius: 15px;
+  border-radius: 12px;
   color: var(--accent);
   background: color-mix(in srgb, var(--accent) 12%, transparent);
 }
 .project-form {
   display: grid;
-  gap: 16px;
+  gap: 0;
+}
+.project-editor-head {
+  min-height: 42px;
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 12px;
+}
+.project-editor-head h3 {
+  margin: 0 0 3px;
+  color: var(--text-primary);
+  font-size: 1rem;
+}
+.project-editor-head span {
+  color: var(--text-muted);
+  font-size: 0.7rem;
+}
+.project-use-btn {
+  min-width: 54px;
+  height: 29px;
+  border: 1px solid var(--border-color);
+  border-radius: 8px;
+  color: var(--text-primary);
+  background: transparent;
+  font: 600 0.72rem/1 inherit;
+  cursor: pointer;
+}
+.project-use-btn:hover:not(:disabled) {
+  background: var(--surface-hover);
+}
+.project-use-btn:disabled {
+  color: var(--text-muted);
+  cursor: default;
+}
+.project-tabs {
+  display: flex;
+  gap: 18px;
+  margin-top: 12px;
+  border-bottom: 1px solid var(--border-color);
+}
+.project-tabs button {
+  position: relative;
+  border: 0;
+  padding: 9px 1px 8px;
+  color: var(--text-muted);
+  background: none;
+  font: 600 0.72rem/1 inherit;
+  cursor: pointer;
+}
+.project-tabs button.active {
+  color: var(--text-primary);
+}
+.project-tabs button.active::after {
+  position: absolute;
+  right: 0;
+  bottom: -1px;
+  left: 0;
+  height: 2px;
+  border-radius: 2px;
+  background: var(--accent);
+  content: "";
+}
+.project-pane {
+  display: grid;
+  gap: 14px;
+  padding-top: 18px;
 }
 .project-form label {
+  position: relative;
   display: grid;
   gap: 7px;
   color: var(--text-secondary);
   font-size: 0.76rem;
   font-weight: 600;
+}
+.project-form label small {
+  position: absolute;
+  top: 0;
+  right: 0;
+  color: var(--text-muted);
+  font-size: 0.67rem;
+  font-weight: 450;
+}
+.project-optional-fields {
+  border-top: 1px solid var(--border-color);
+  border-bottom: 1px solid var(--border-color);
+}
+.project-optional-fields summary {
+  min-height: 38px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  color: var(--text-secondary);
+  font-size: 0.74rem;
+  font-weight: 600;
+  cursor: pointer;
+  list-style: none;
+}
+.project-optional-fields summary::-webkit-details-marker {
+  display: none;
+}
+.project-optional-fields summary::before {
+  order: 3;
+  color: var(--text-muted);
+  content: "+";
+  font-size: 1rem;
+  font-weight: 400;
+}
+.project-optional-fields[open] summary::before {
+  content: "−";
+}
+.project-optional-fields summary small {
+  flex: 1;
+  color: var(--text-muted);
+  font-size: 0.67rem;
+  font-weight: 450;
+  text-align: right;
+}
+.project-optional-fields > div {
+  display: grid;
+  gap: 14px;
+  padding: 4px 0 14px;
 }
 .project-form input,
 .project-form textarea,
@@ -5930,22 +6086,42 @@ html.light .input-container:focus-within {
   width: 100%;
   box-sizing: border-box;
   border: 1px solid var(--border-color);
-  border-radius: 10px;
+  border-radius: 9px;
   padding: 10px 12px;
   color: var(--text-primary);
-  background: var(--bg-secondary);
+  background: var(--surface-2);
   font: 400 0.84rem/1.45 inherit;
   resize: vertical;
   outline: none;
 }
 .project-form input:focus,
-.project-form textarea:focus {
+.project-form textarea:focus,
+.project-knowledge-add input:focus,
+.project-knowledge-add textarea:focus {
   border-color: color-mix(in srgb, var(--accent) 55%, var(--border-color));
+  box-shadow: 0 0 0 3px color-mix(in srgb, var(--accent) 9%, transparent);
 }
 .project-form-actions {
   display: flex;
   align-items: center;
   gap: 8px;
+}
+.project-delete-icon {
+  width: 32px;
+  height: 32px;
+  display: grid;
+  flex: 0 0 auto;
+  place-items: center;
+  border: 1px solid transparent;
+  border-radius: 8px;
+  color: var(--text-muted);
+  background: transparent;
+  cursor: pointer;
+}
+.project-delete-icon:hover {
+  border-color: rgba(251, 113, 133, 0.2);
+  color: #fb7185;
+  background: rgba(251, 113, 133, 0.07);
 }
 .project-form-error {
   flex: 1;
@@ -5955,8 +6131,8 @@ html.light .input-container:focus-within {
 .project-primary-btn,
 .project-secondary-btn,
 .project-danger-btn {
-  border-radius: 9px;
-  padding: 9px 13px;
+  border-radius: 8px;
+  padding: 8px 12px;
   font: 600 0.76rem/1 inherit;
   cursor: pointer;
 }
@@ -5976,23 +6152,22 @@ html.light .input-container:focus-within {
   background: transparent;
 }
 .project-knowledge {
-  margin-top: 8px;
-  padding-top: 20px;
-  border-top: 1px solid var(--border-color);
+  margin: 0;
+  border: 0;
 }
 .project-knowledge-head h3 {
   margin: 0;
   font-size: 0.9rem;
 }
 .project-knowledge-head p {
-  margin: 4px 0 12px;
+  margin: 4px 0 0;
   color: var(--text-muted);
   font-size: 0.72rem;
 }
 .project-knowledge-list {
   display: grid;
   gap: 7px;
-  margin-bottom: 12px;
+  margin: 2px 0 0;
 }
 .project-knowledge-item {
   display: flex;
@@ -6000,7 +6175,7 @@ html.light .input-container:focus-within {
   padding: 10px 12px;
   border: 1px solid var(--border-color);
   border-radius: 10px;
-  background: var(--bg-secondary);
+  background: var(--surface-2);
 }
 .project-knowledge-item div {
   min-width: 0;
@@ -6029,7 +6204,15 @@ html.light .input-container:focus-within {
 }
 .project-knowledge-add {
   display: grid;
+  grid-template-columns: 1fr auto;
   gap: 8px;
+}
+.project-knowledge-add textarea {
+  grid-column: 1 / -1;
+}
+.project-knowledge-add .project-secondary-btn {
+  grid-column: 2;
+  grid-row: 1;
 }
 @media (max-width: 680px) {
   .project-modal-backdrop {
@@ -6038,8 +6221,17 @@ html.light .input-container:focus-within {
   }
   .project-modal {
     width: 100%;
-    height: 92dvh;
+    height: 94dvh;
     border-radius: 18px 18px 0 0;
+  }
+  .project-modal-backdrop.create-mode .project-modal {
+    width: 100%;
+    height: auto;
+    max-height: 88dvh;
+  }
+  .project-modal-backdrop.create-mode .project-editor {
+    max-height: calc(88dvh - 58px);
+    padding: 18px 16px 24px;
   }
   .project-modal-layout {
     grid-template-columns: 1fr;
@@ -6047,23 +6239,45 @@ html.light .input-container:focus-within {
   }
   .project-modal-list {
     display: flex;
+    min-height: 58px;
     overflow-x: auto;
+    padding: 8px;
     border-right: 0;
     border-bottom: 1px solid var(--border-color);
   }
   .project-list-create,
   .project-list-item {
     width: auto;
-    min-width: 145px;
+    min-width: 138px;
   }
   .project-editor {
-    padding: 18px;
+    padding: 18px 16px 28px;
   }
   .project-empty-panel {
     margin-top: 35px;
   }
   .active-project-chip {
     max-width: 108px;
+  }
+}
+@media (max-width: 420px) {
+  .project-modal-header {
+    padding-inline: 14px 10px;
+  }
+  .project-list-copy small {
+    display: none;
+  }
+  .project-list-create,
+  .project-list-item {
+    min-width: 122px;
+  }
+  .project-knowledge-add {
+    grid-template-columns: 1fr;
+  }
+  .project-knowledge-add .project-secondary-btn,
+  .project-knowledge-add textarea {
+    grid-column: 1;
+    grid-row: auto;
   }
 }
 
