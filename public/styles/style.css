@@ -18,6 +18,14 @@
   --surface-card: #1c1c1c;
   --surface-hover: rgba(255, 255, 255, 0.04);
 
+  /* Compatibility aliases used by feature-level components. Keep these
+     mapped to opaque surfaces so dialogs never become transparent when a
+     legacy token name is referenced. */
+  --bg-primary: var(--surface);
+  --bg-secondary: var(--surface-2);
+  --text-primary: var(--text);
+  --text-secondary: var(--text-dim);
+
   /* Text — warm ivory hierarchy */
   --text: #f0ede8;
   --text-main: #f0ede8;
