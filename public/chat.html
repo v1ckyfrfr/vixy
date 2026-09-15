@@ -1069,7 +1069,7 @@
                 </svg>
               </button>
 
-              <div class="model-group-label">Google Gemini - Free</div>
+              <div class="model-group-label">Google Gemini</div>
 
               <button
                 class="mode-option"
@@ -1077,7 +1077,7 @@
                 onclick="setModel('gemini-2.5-flash')"
                 role="menuitem"
               >
-                <span class="model-tier-badge tier-free">Free</span>
+                <span class="model-tier-badge tier-pro">1 credit</span>
                 <div class="mode-opt-info">
                   <span class="mode-opt-label">Gemini 2.5 Flash</span>
                   <span class="mode-opt-desc"
@@ -1101,20 +1101,20 @@
 
               <button
                 class="mode-option"
-                data-model="gemini-2.0-flash"
-                onclick="setModel('gemini-2.0-flash')"
+                data-model="gemini-3.6-flash"
+                onclick="setModel('gemini-3.6-flash')"
                 role="menuitem"
               >
                 <span class="model-tier-badge tier-free">Free</span>
                 <div class="mode-opt-info">
-                  <span class="mode-opt-label">Gemini 2.0 Flash</span>
+                  <span class="mode-opt-label">Gemini 3.6 Flash</span>
                   <span class="mode-opt-desc"
-                    >⚡ Very fast · Good for coding &amp; analysis</span
+                    >⚡ Current Flash · Fast and capable</span
                   >
                 </div>
                 <svg
                   class="mode-check"
-                  id="check-model-gemini-2.0-flash"
+                  id="check-model-gemini-3.6-flash"
                   fill="none"
                   stroke="currentColor"
                   viewBox="0 0 24 24"
@@ -1632,8 +1632,8 @@
     <div class="project-modal-backdrop" id="projectModalBackdrop" onclick="closeProjectsDialog(event)">
       <section class="project-modal" role="dialog" aria-modal="true" aria-labelledby="projectModalTitle">
         <header class="project-modal-header">
-          <div>
-            <span class="project-modal-eyebrow">Workspace</span>
+          <div class="project-modal-title-wrap">
+            <span class="project-modal-icon"><svg width="15" height="15" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-width="1.8" stroke-linejoin="round" d="M3 7a2 2 0 012-2h4l2 2h8a2 2 0 012 2v9a2 2 0 01-2 2H5a2 2 0 01-2-2V7z"/></svg></span>
             <h2 id="projectModalTitle">Projects</h2>
           </div>
           <button class="art-btn" type="button" onclick="closeProjectsDialog()" title="Close" aria-label="Close projects">
@@ -1645,29 +1645,43 @@
           <div class="project-editor">
             <div class="project-empty-panel" id="projectEmptyPanel">
               <div class="project-empty-icon"><svg width="24" height="24" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-width="1.7" d="M3 7a2 2 0 012-2h4l2 2h8a2 2 0 012 2v9a2 2 0 01-2 2H5a2 2 0 01-2-2V7z"/></svg></div>
-              <h3>Keep work in context</h3>
-              <p>Group chats, documents, instructions, and reusable knowledge in one focused workspace.</p>
+              <h3>No project selected</h3>
+              <p>Create a focused space for related chats and knowledge.</p>
               <button class="project-primary-btn" type="button" onclick="startProjectCreate()">Create project</button>
             </div>
             <form id="projectForm" class="project-form" onsubmit="saveProject(event)" hidden>
               <input type="hidden" id="projectIdInput" />
-              <label>Project name<input id="projectNameInput" maxlength="100" required placeholder="e.g. Product launch" /></label>
-              <label>Description<textarea id="projectDescriptionInput" maxlength="2000" rows="2" placeholder="What is this project about?"></textarea></label>
-              <label>Project instructions<textarea id="projectInstructionsInput" maxlength="12000" rows="5" placeholder="Goals, tone, constraints, preferred output…"></textarea></label>
-              <div class="project-form-actions">
-                <button class="project-danger-btn" id="deleteProjectBtn" type="button" onclick="deleteActiveProject()" hidden>Delete</button>
-                <span class="project-form-error" id="projectFormError" role="alert"></span>
-                <button class="project-secondary-btn" type="button" onclick="useActiveProject()" id="useProjectBtn">Use project</button>
-                <button class="project-primary-btn" type="submit" id="saveProjectBtn">Save</button>
+              <div class="project-editor-head">
+                <div><h3 id="projectEditorTitle">New project</h3><span id="projectEditorMeta">Set up a focused workspace</span></div>
+                <button class="project-use-btn" type="button" onclick="useActiveProject()" id="useProjectBtn">Use</button>
               </div>
-              <div class="project-knowledge" id="projectKnowledgePanel" hidden>
-                <div class="project-knowledge-head"><div><h3>Knowledge</h3><p>Vixy retrieves only relevant entries for each request.</p></div></div>
-                <div id="projectKnowledgeList" class="project-knowledge-list"></div>
-                <div class="project-knowledge-add">
-                  <input id="knowledgeTitleInput" maxlength="180" placeholder="Knowledge title" />
-                  <textarea id="knowledgeContentInput" maxlength="50000" rows="4" placeholder="Paste verified notes, requirements, or source material…"></textarea>
-                  <button class="project-secondary-btn" type="button" onclick="addProjectKnowledge()">Add knowledge</button>
+              <div class="project-tabs" id="projectTabs" role="tablist" hidden>
+                <button class="active" id="projectGeneralTab" type="button" role="tab" onclick="switchProjectPane('general')">General</button>
+                <button id="projectKnowledgeTab" type="button" role="tab" onclick="switchProjectPane('knowledge')">Knowledge</button>
+              </div>
+              <div class="project-pane" id="projectGeneralPane">
+                <label>Name<input id="projectNameInput" maxlength="100" required placeholder="Project name" /></label>
+                <details class="project-optional-fields" id="projectOptionalFields">
+                  <summary><span>Add details</span><small>Optional</small></summary>
+                  <div>
+                    <label>Description<textarea id="projectDescriptionInput" maxlength="2000" rows="2" placeholder="A short description"></textarea></label>
+                    <label>Instructions<textarea id="projectInstructionsInput" maxlength="12000" rows="4" placeholder="Goals, constraints, tone, or preferred output"></textarea></label>
+                  </div>
+                </details>
+                <div class="project-form-actions">
+                  <button class="project-delete-icon" id="deleteProjectBtn" type="button" onclick="deleteActiveProject()" title="Delete project" aria-label="Delete project" hidden><svg width="14" height="14" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-width="1.8" d="M4 7h16M9 7V4h6v3m-9 0 1 13h10l1-13M10 11v5m4-5v5"/></svg></button>
+                  <span class="project-form-error" id="projectFormError" role="alert"></span>
+                  <button class="project-primary-btn" type="submit" id="saveProjectBtn">Save</button>
                 </div>
+              </div>
+              <div class="project-pane project-knowledge" id="projectKnowledgePanel" hidden>
+                <div class="project-knowledge-head"><div><h3>Project knowledge</h3><p>Only relevant entries are added to AI context.</p></div></div>
+                <div class="project-knowledge-add">
+                  <input id="knowledgeTitleInput" maxlength="180" placeholder="Title" />
+                  <textarea id="knowledgeContentInput" maxlength="50000" rows="3" placeholder="Paste verified notes or source material"></textarea>
+                  <button class="project-secondary-btn" type="button" onclick="addProjectKnowledge()">Add</button>
+                </div>
+                <div id="projectKnowledgeList" class="project-knowledge-list"></div>
               </div>
             </form>
           </div>
