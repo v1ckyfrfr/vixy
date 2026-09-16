@@ -13,7 +13,7 @@
     />
     <meta
       name="theme-color"
-      content="#fafaf9"
+      content="#f5f3ee"
       media="(prefers-color-scheme: light)"
     />
     <meta name="description" content="Vixy-AI - Sign In & Sign Up" />
@@ -25,8 +25,30 @@
       rel="stylesheet"
     />
     <link rel="stylesheet" href="styles/auth.css" />
+    <!-- Warm the authenticated shell at low priority while the user enters OTP. -->
+    <link rel="prefetch" href="/chat.html" as="document" />
+    <link rel="prefetch" href="/styles/style.css" as="style" />
+    <link rel="prefetch" href="/styles/chat.css" as="style" />
+    <link rel="prefetch" href="/js/chat.js" as="script" />
+    <link rel="prefetch" href="/js/auth-guard.js" as="script" />
   </head>
   <body>
+    <div
+      class="auth-transition"
+      id="authTransition"
+      role="status"
+      aria-live="polite"
+      aria-hidden="true"
+    >
+      <div class="auth-transition-card">
+        <img src="/img/vixy-logo.png" alt="" class="auth-transition-logo" />
+        <div class="auth-transition-copy">
+          <strong>Verified</strong>
+          <span id="authTransitionText">Preparing your workspace…</span>
+        </div>
+        <span class="auth-transition-spinner" aria-hidden="true"></span>
+      </div>
+    </div>
     <div class="auth-container">
       <div class="auth-logo">
         <div class="logo-icon">
