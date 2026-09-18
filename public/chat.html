@@ -16,8 +16,31 @@
       content="#f5f3ee"
       media="(prefers-color-scheme: light)"
     />
-    <meta name="description" content="Vixy-AI - Chat with your AI assistant" />
-    <title>Vixy-AI - Chat</title>
+    <meta name="description" content="Vixy-AI - Multi-provider AI workspace with intelligent models, specialized skills, live web search, and document generation." />
+    <title>Vixy-AI - AI Workspace</title>
+
+    <!-- Favicon & Icons -->
+    <link rel="icon" type="image/png" href="/img/vixy-logo.png" />
+    <link rel="apple-touch-icon" href="/img/vixy-logo.png" />
+
+    <!-- OpenGraph / Facebook / LinkedIn / WhatsApp -->
+    <meta property="og:type" content="website" />
+    <meta property="og:site_name" content="Vixy AI" />
+    <meta property="og:title" content="Vixy-AI - Multi-Provider AI Workspace" />
+    <meta property="og:description" content="Access multiple AI providers, models, specialized skills, live web search, and document generation from one unified workspace." />
+    <meta property="og:image" content="/img/vixy-logo.png" />
+    <meta property="og:image:width" content="1489" />
+    <meta property="og:image:height" content="1056" />
+    <meta property="og:image:type" content="image/png" />
+    <meta property="og:image:alt" content="Vixy AI Workspace Logo" />
+
+    <!-- Twitter Card -->
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="Vixy-AI - Multi-Provider AI Workspace" />
+    <meta name="twitter:description" content="Access multiple AI providers, models, specialized skills, live web search, and document generation from one unified workspace." />
+    <meta name="twitter:image" content="/img/vixy-logo.png" />
+    <meta name="twitter:image:alt" content="Vixy AI Workspace Logo" />
+
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link
       href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap"
@@ -1519,7 +1542,8 @@
 
         <div class="cap-row" id="emptyCapRow">
           <button
-            class="cap-pill"
+            class="cap-pill cap-pill-scraper"
+            data-cap="scraper"
             onclick="openScrapeModal()"
             title="Extract and analyze any webpage"
           >
@@ -1542,7 +1566,8 @@
           </button>
 
           <button
-            class="cap-pill"
+            class="cap-pill cap-pill-coding"
+            data-cap="coding"
             onclick="
               useSuggestion(
                 'Write a Python function to sort a list of dictionaries',
@@ -1566,7 +1591,8 @@
           </button>
 
           <button
-            class="cap-pill"
+            class="cap-pill cap-pill-writing"
+            data-cap="writing"
             onclick="
               useSuggestion('Help me write a professional email to my team')
             "
@@ -1593,7 +1619,8 @@
           </button>
 
           <button
-            class="cap-pill"
+            class="cap-pill cap-pill-images"
+            data-cap="images"
             onclick="openImageModalFromMenu()"
             title="Create an image with provider fallback"
           >
@@ -1608,7 +1635,8 @@
           </button>
 
           <button
-            class="cap-pill"
+            class="cap-pill cap-pill-documents"
+            data-cap="documents"
             onclick="openDocModalFromMenu()"
             title="Generate a structured, downloadable document"
           >
