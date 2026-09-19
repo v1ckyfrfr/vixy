@@ -16,7 +16,10 @@
       content="#f5f3ee"
       media="(prefers-color-scheme: light)"
     />
-    <meta name="description" content="Vixy-AI - Configure AI models, reasoning preferences, memory retention, and security." />
+    <meta
+      name="description"
+      content="Vixy-AI - Configure AI models, reasoning preferences, memory retention, and security."
+    />
     <title>Settings - Vixy-AI</title>
 
     <!-- Favicon & Icons -->
@@ -27,7 +30,10 @@
     <meta property="og:type" content="website" />
     <meta property="og:site_name" content="Vixy AI" />
     <meta property="og:title" content="Settings - Vixy-AI Workspace" />
-    <meta property="og:description" content="Configure AI models, reasoning preferences, memory retention, and security." />
+    <meta
+      property="og:description"
+      content="Configure AI models, reasoning preferences, memory retention, and security."
+    />
     <meta property="og:image" content="/img/vixy-logo.png" />
     <meta property="og:image:width" content="1489" />
     <meta property="og:image:height" content="1056" />
@@ -37,7 +43,10 @@
     <!-- Twitter Card -->
     <meta name="twitter:card" content="summary_large_image" />
     <meta name="twitter:title" content="Settings - Vixy-AI Workspace" />
-    <meta name="twitter:description" content="Configure AI models, reasoning preferences, memory retention, and security." />
+    <meta
+      name="twitter:description"
+      content="Configure AI models, reasoning preferences, memory retention, and security."
+    />
     <meta name="twitter:image" content="/img/vixy-logo.png" />
     <meta name="twitter:image:alt" content="Vixy AI Workspace Logo" />
 
@@ -412,6 +421,7 @@
       }
     </style>
     <link rel="stylesheet" href="styles/settings.css" />
+    <script src="/js/session-fetch.js"></script>
   </head>
   <body>
     <aside class="sidebar">
@@ -630,15 +640,17 @@
         class="page-header"
         style="display: flex; align-items: flex-start; gap: 12px"
       >
-        <button class="mobile-toggle" onclick="toggleSidebar()">
+        <button
+          class="mobile-toggle"
+          onclick="toggleSidebar()"
+          aria-label="Open sidebar menu"
+        >
           <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <rect x="3" y="3" width="18" height="18" rx="2" stroke-width="2" />
-            <path d="M9 3v18" stroke-width="2" />
             <path
-              d="m14 9-3 3 3 3"
-              stroke-width="2"
               stroke-linecap="round"
               stroke-linejoin="round"
+              stroke-width="2"
+              d="M4 6h16M4 12h16M4 18h16"
             />
           </svg>
         </button>
@@ -721,6 +733,17 @@
             tabindex="-1"
             >Memory &amp; privacy</a
           >
+          <a
+            href="#reports"
+            id="settingsTabReports"
+            class="settings-tab"
+            role="tab"
+            aria-selected="false"
+            aria-controls="reportsCard"
+            data-settings-tab="reports"
+            tabindex="-1"
+            >Bugs &amp; Report</a
+          >
         </nav>
         <div class="settings-stack">
           <div
@@ -761,6 +784,44 @@
                   </div>
                 </div>
               </div>
+              <form
+                class="settings-form account-username-form"
+                id="usernameForm"
+                onsubmit="submitUsernameChange(event)"
+              >
+                <div>
+                  <div class="settings-form-title">Change username</div>
+                  <p class="settings-form-hint">
+                    This name appears across Vixy and can be changed again
+                    later.
+                  </p>
+                </div>
+                <div id="usernameMsg" class="form-msg" aria-live="polite"></div>
+                <div class="field">
+                  <label class="input-label" for="usernameInput"
+                    >Username</label
+                  >
+                  <input
+                    type="text"
+                    id="usernameInput"
+                    class="input"
+                    minlength="2"
+                    maxlength="30"
+                    autocomplete="nickname"
+                    placeholder="Enter your username"
+                    required
+                  />
+                </div>
+                <div class="settings-form-actions">
+                  <button
+                    type="submit"
+                    class="btn btn-primary"
+                    id="usernameSaveBtn"
+                  >
+                    Save username
+                  </button>
+                </div>
+              </form>
             </div>
           </div>
 
@@ -1280,12 +1341,148 @@
               </form>
             </div>
           </div>
+
+          <div
+            class="settings-card settings-tab-panel"
+            id="reportsCard"
+            role="tabpanel"
+            aria-labelledby="settingsTabReports"
+            data-settings-panel="reports"
+            hidden
+          >
+            <div class="settings-card-header">
+              <div class="settings-icon">
+                <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path
+                    stroke-width="2"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    d="M12 9v4m0 4h.01M10.3 3.8L2.5 17.3A2 2 0 004.2 20h15.6a2 2 0 001.7-2.7L13.7 3.8a2 2 0 00-3.4 0z"
+                  />
+                </svg>
+              </div>
+              <div>
+                <div class="settings-title">Bugs &amp; Report</div>
+                <div class="settings-desc">
+                  Report a problem directly to the Vixy team
+                </div>
+              </div>
+            </div>
+            <div class="settings-body">
+              <div class="report-notice">
+                <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <circle cx="12" cy="12" r="9" stroke-width="2" />
+                  <path d="M12 11v5m0-8h.01" stroke-width="2" />
+                </svg>
+                <span>
+                  Include what happened and how to reproduce it. Your account
+                  email, current page, app version, and browser information are
+                  attached automatically for diagnosis. Never include passwords,
+                  API keys, or other secrets.
+                </span>
+              </div>
+
+              <form
+                class="settings-form report-form"
+                id="bugReportForm"
+                onsubmit="submitBugReport(event)"
+              >
+                <div
+                  id="bugReportMsg"
+                  class="form-msg"
+                  aria-live="polite"
+                ></div>
+                <div class="input-grid">
+                  <div class="field">
+                    <label class="input-label" for="bugCategory"
+                      >Category</label
+                    >
+                    <select id="bugCategory" class="input" required>
+                      <option value="ai-response">AI response</option>
+                      <option value="ui">UI / UX</option>
+                      <option value="performance">Performance</option>
+                      <option value="web-tools">Web tools</option>
+                      <option value="documents">Documents</option>
+                      <option value="account">Account</option>
+                      <option value="other">Other</option>
+                    </select>
+                  </div>
+                  <div class="field">
+                    <label class="input-label" for="bugSeverity"
+                      >Severity</label
+                    >
+                    <select id="bugSeverity" class="input" required>
+                      <option value="low">Low - minor issue</option>
+                      <option value="medium" selected>
+                        Medium - feature affected
+                      </option>
+                      <option value="high">High - feature unusable</option>
+                      <option value="critical">
+                        Critical - security or data loss
+                      </option>
+                    </select>
+                  </div>
+                </div>
+
+                <div class="field">
+                  <label class="input-label" for="bugTitle">Report title</label>
+                  <input
+                    type="text"
+                    id="bugTitle"
+                    class="input"
+                    minlength="5"
+                    maxlength="120"
+                    placeholder="Short summary of the problem"
+                    required
+                  />
+                </div>
+
+                <div class="field">
+                  <label class="input-label" for="bugDescription"
+                    >What happened?</label
+                  >
+                  <textarea
+                    id="bugDescription"
+                    class="input report-textarea"
+                    minlength="20"
+                    maxlength="4000"
+                    rows="6"
+                    placeholder="Describe the behavior you saw and what you expected instead."
+                    required
+                  ></textarea>
+                </div>
+
+                <div class="field">
+                  <label class="input-label" for="bugSteps">
+                    Steps to reproduce
+                    <span class="optional-label">Optional</span>
+                  </label>
+                  <textarea
+                    id="bugSteps"
+                    class="input report-textarea report-steps"
+                    maxlength="4000"
+                    rows="4"
+                    placeholder="1. Open…&#10;2. Select…&#10;3. The issue appears…"
+                  ></textarea>
+                </div>
+
+                <div class="settings-form-actions">
+                  <button
+                    type="submit"
+                    class="btn btn-primary"
+                    id="bugReportSubmitBtn"
+                  >
+                    Submit report
+                  </button>
+                </div>
+              </form>
+            </div>
+          </div>
         </div>
       </div>
     </main>
 
     <script type="module" src="/js/auth-guard.js"></script>
-    <script type="module" src="/js/signout.js"></script>
     <script>
       const SETTINGS_TAB_ORDER = [
         "account",
@@ -1294,6 +1491,7 @@
         "security",
         "skills",
         "memory",
+        "reports",
       ];
       const SETTINGS_TAB_ALIASES = {
         profilecard: "account",
@@ -1302,6 +1500,7 @@
         securitycard: "security",
         skillscard: "skills",
         memorycard: "memory",
+        reportscard: "reports",
       };
 
       function getSettingsTabFromHash() {
@@ -1452,14 +1651,8 @@
       };
 
       async function fetchUserCredits() {
-        const token = localStorage.getItem("token");
-        if (!token) return;
         try {
-          const res = await fetch("/api/auth/credits", {
-            headers: {
-              Authorization: `Bearer ${token}`,
-            },
-          });
+          const res = await fetch("/api/auth/credits");
           if (res.ok) {
             const data = await res.json();
             const el = document.getElementById("sidebarCreditBalance");
@@ -1482,7 +1675,10 @@
         }
       });
 
-      window.__onAuthReady = function (user, token, profile) {
+      let currentSettingsProfile = null;
+
+      function renderAccountProfile(profile) {
+        currentSettingsProfile = profile;
         const name = profile.username || "User";
         const initial = name.charAt(0).toUpperCase();
 
@@ -1504,8 +1700,140 @@
         const popoverEmail = document.getElementById("popoverEmail");
         if (popoverEmail) popoverEmail.textContent = profile.email || "—";
 
+        const usernameInput = document.getElementById("usernameInput");
+        if (usernameInput && document.activeElement !== usernameInput) {
+          usernameInput.value = name;
+        }
+      }
+
+      window.__onAuthReady = function (user, token, profile) {
+        renderAccountProfile(profile);
+
         fetchUserCredits();
       };
+
+      function showSettingsFormMsg(id, text, type = "") {
+        const element = document.getElementById(id);
+        if (!element) return;
+        element.className = `form-msg ${type}`.trim();
+        element.textContent = text || "";
+      }
+
+      async function submitUsernameChange(event) {
+        event.preventDefault();
+        const input = document.getElementById("usernameInput");
+        const button = document.getElementById("usernameSaveBtn");
+        const username = input.value.trim();
+
+        if (username.length < 2 || username.length > 30) {
+          return showSettingsFormMsg(
+            "usernameMsg",
+            "Username must be 2–30 characters.",
+            "error",
+          );
+        }
+
+        button.disabled = true;
+        button.textContent = "Saving…";
+        showSettingsFormMsg("usernameMsg", "");
+        try {
+          const response = await fetch("/api/auth/set-username", {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify({ username }),
+          });
+          const data = await response.json().catch(() => ({}));
+          if (!response.ok) {
+            if (response.status === 401 || response.status === 403) logout();
+            throw new Error(data.message || "Could not update username.");
+          }
+
+          let refreshedProfile = {
+            ...(currentSettingsProfile || {}),
+            username: data.username,
+          };
+          if (typeof window.__refreshAuthProfile === "function") {
+            try {
+              const refreshed = await window.__refreshAuthProfile();
+              refreshedProfile = refreshed.profile;
+            } catch (refreshError) {
+              console.warn(
+                "[settings] Profile token refresh failed:",
+                refreshError,
+              );
+              renderAccountProfile(refreshedProfile);
+            }
+          } else {
+            renderAccountProfile(refreshedProfile);
+          }
+          showSettingsFormMsg(
+            "usernameMsg",
+            "Username updated successfully.",
+            "success",
+          );
+        } catch (error) {
+          showSettingsFormMsg(
+            "usernameMsg",
+            error.message || "Could not update username.",
+            "error",
+          );
+        } finally {
+          button.disabled = false;
+          button.textContent = "Save username";
+        }
+      }
+
+      async function submitBugReport(event) {
+        event.preventDefault();
+        const form = document.getElementById("bugReportForm");
+        const button = document.getElementById("bugReportSubmitBtn");
+        const payload = {
+          category: document.getElementById("bugCategory").value,
+          severity: document.getElementById("bugSeverity").value,
+          title: document.getElementById("bugTitle").value,
+          description: document.getElementById("bugDescription").value,
+          reproductionSteps: document.getElementById("bugSteps").value,
+          pagePath: `${window.location.pathname}${window.location.hash}`,
+          userAgent: navigator.userAgent,
+        };
+
+        button.disabled = true;
+        button.textContent = "Submitting…";
+        showSettingsFormMsg("bugReportMsg", "");
+        try {
+          const response = await fetch("/api/bug-reports", {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify(payload),
+          });
+          const data = await response.json().catch(() => ({}));
+          if (!response.ok) {
+            if (response.status === 401 || response.status === 403) logout();
+            throw new Error(data.message || "Could not submit the report.");
+          }
+
+          form.reset();
+          document.getElementById("bugSeverity").value = "medium";
+          showSettingsFormMsg(
+            "bugReportMsg",
+            `Report submitted. Reference: ${data.report.id}`,
+            "success",
+          );
+        } catch (error) {
+          showSettingsFormMsg(
+            "bugReportMsg",
+            error.message || "Could not submit the report.",
+            "error",
+          );
+        } finally {
+          button.disabled = false;
+          button.textContent = "Submit report";
+        }
+      }
 
       // toggleTheme() is now defined in js/theme.js — no duplicate needed here
 
@@ -1518,7 +1846,6 @@
         const res = await fetch(`/api/skills${path}`, {
           headers: {
             "Content-Type": "application/json",
-            Authorization: `Bearer ${localStorage.getItem("token") || ""}`,
           },
           ...options,
         });
@@ -1769,7 +2096,6 @@
         return fetch(`/api/memories${path}`, {
           headers: {
             "Content-Type": "application/json",
-            Authorization: `Bearer ${localStorage.getItem("token") || ""}`,
           },
           ...options,
         });
@@ -2028,7 +2354,6 @@
         if (typeof window.__firebaseSignOut === "function") {
           window.__firebaseSignOut();
         } else {
-          localStorage.removeItem("token");
           window.location.replace("/");
         }
       }
