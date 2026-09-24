@@ -51,6 +51,7 @@
          after the authenticated chat shell becomes interactive. -->
     <script src="js/theme.js"></script>
     <link rel="stylesheet" href="styles/chat.css" />
+    <script src="/js/session-fetch.js"></script>
   </head>
   <body>
     <div class="chat-boot-loader" id="chatBootLoader" role="status" aria-live="polite">
@@ -64,6 +65,20 @@
       </div>
     </div>
     <aside class="sidebar">
+      <div class="sidebar-rail" aria-label="Collapsed sidebar shortcuts">
+        <button class="sidebar-rail-btn sidebar-rail-brand" type="button" onclick="toggleSidebar()" title="Expand sidebar" aria-label="Expand sidebar">
+          <img src="/img/vixy-logo.png" alt="" aria-hidden="true" />
+        </button>
+        <button class="sidebar-rail-btn" type="button" onclick="newChat()" title="New chat" aria-label="Start a new chat">
+          <svg fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" d="M12 20h9M16.5 3.5a2.12 2.12 0 013 3L8 18l-4 1 1-4L16.5 3.5z"/></svg>
+        </button>
+        <button class="sidebar-rail-btn" type="button" onclick="openSidebarFromRail('search')" title="Search chats" aria-label="Search chats">
+          <svg fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true"><circle cx="11" cy="11" r="7" stroke-width="1.9"/><path stroke-width="1.9" stroke-linecap="round" d="M20 20l-4-4"/></svg>
+        </button>
+        <button class="sidebar-rail-btn" type="button" onclick="openSidebarFromRail('chats')" title="Chats" aria-label="Open chats">
+          <svg fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" d="M21 12a8 8 0 01-8 8H6l-4 2 1.4-4.2A8 8 0 1112 4a8 8 0 019 8z"/></svg>
+        </button>
+      </div>
       <div class="sidebar-header">
         <div class="sidebar-logo">
           <div class="logo-icon">
@@ -205,7 +220,23 @@
           accept=".json,application/json"
           onchange="handleImportFile(this)"
         />
-        <div id="chatHistoryList"></div>
+        <div id="chatHistoryList" aria-live="polite">
+          <div
+            class="sidebar-history-state"
+            data-state="loading"
+            role="status"
+          >
+            <span class="sidebar-history-loader" aria-hidden="true"
+              ><span></span><span></span><span></span
+            ></span>
+            <div class="sidebar-history-state-title">
+              Loading conversations
+            </div>
+            <div class="sidebar-history-state-detail">
+              Connecting to your saved chat history…
+            </div>
+          </div>
+        </div>
       </div>
 
       <div class="sidebar-footer" id="sidebarFooter">
@@ -351,6 +382,18 @@
           </svg>
         </div>
       </div>
+      <div
+        class="sidebar-resize-handle"
+        id="sidebarResizeHandle"
+        role="separator"
+        aria-label="Resize sidebar"
+        aria-orientation="vertical"
+        aria-valuemin="52"
+        aria-valuemax="420"
+        aria-valuenow="284"
+        tabindex="0"
+        title="Drag to resize · Double-click to reset"
+      ></div>
     </aside>
 
     <div class="sidebar-overlay" onclick="toggleSidebar()"></div>
@@ -363,20 +406,11 @@
             aria-label="Open sidebar menu"
           >
             <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <rect
-                x="3"
-                y="3"
-                width="18"
-                height="18"
-                rx="2"
-                stroke-width="2"
-              />
-              <path d="M9 3v18" stroke-width="2" />
               <path
-                d="m14 9-3 3 3 3"
-                stroke-width="2"
                 stroke-linecap="round"
                 stroke-linejoin="round"
+                stroke-width="2"
+                d="M4 6h16M4 12h16M4 18h16"
               />
             </svg>
           </button>
@@ -390,8 +424,8 @@
               aria-expanded="false"
               title="Response Mode"
             >
-              <span class="mode-dot" id="modeDot" data-mode="auto"></span>
-              <span id="modeLabelText">Auto</span>
+              <span class="mode-dot" id="modeDot" data-mode="medium"></span>
+              <span id="modeLabelText">Medium</span>
               <svg
                 fill="none"
                 stroke="currentColor"
@@ -417,33 +451,6 @@
               </div>
               <button
                 class="mode-option"
-                data-mode="auto"
-                onclick="setMode('auto')"
-                role="menuitem"
-              >
-                <span class="mode-opt-dot" data-mode="auto"></span>
-                <div class="mode-opt-info">
-                  <span class="mode-opt-label">Auto</span>
-                  <span class="mode-opt-desc"
-                    >Model decides - balanced for most tasks</span
-                  >
-                </div>
-                <svg
-                  class="mode-check"
-                  id="check-auto"
-                  fill="none"
-                  stroke="currentColor"
-                  viewBox="0 0 24 24"
-                >
-                  <polyline
-                    stroke-width="2.5"
-                    stroke-linecap="round"
-                    points="20 6 9 17 4 12"
-                  />
-                </svg>
-              </button>
-              <button
-                class="mode-option"
                 data-mode="fast"
                 onclick="setMode('fast')"
                 role="menuitem"
@@ -452,7 +459,7 @@
                 <div class="mode-opt-info">
                   <span class="mode-opt-label">Fast</span>
                   <span class="mode-opt-desc"
-                    >Instant replies - best for casual chat</span
+                    >Quick replies with minimal reasoning</span
                   >
                 </div>
                 <svg
@@ -471,21 +478,20 @@
               </button>
               <button
                 class="mode-option"
-                data-mode="think"
-                onclick="setMode('think')"
+                data-mode="low"
+                onclick="setMode('low')"
                 role="menuitem"
               >
-                <span class="mode-opt-dot" data-mode="think"></span>
+                <span class="mode-opt-dot" data-mode="low"></span>
                 <div class="mode-opt-info">
-                  <span class="mode-opt-label">Think</span>
+                  <span class="mode-opt-label">Low</span>
                   <span class="mode-opt-desc"
-                    >Deep reasoning - for code, math &amp; complex
-                    problems</span
+                    >Light reasoning for simple tasks</span
                   >
                 </div>
                 <svg
                   class="mode-check"
-                  id="check-think"
+                  id="check-low"
                   fill="none"
                   stroke="currentColor"
                   viewBox="0 0 24 24"
@@ -495,6 +501,66 @@
                     stroke-linecap="round"
                     points="20 6 9 17 4 12"
                   />
+                </svg>
+              </button>
+              <button
+                class="mode-option"
+                data-mode="medium"
+                onclick="setMode('medium')"
+                role="menuitem"
+              >
+                <span class="mode-opt-dot" data-mode="medium"></span>
+                <div class="mode-opt-info">
+                  <span class="mode-opt-label">Medium</span>
+                  <span class="mode-opt-desc"
+                    >Balanced quality and response time</span
+                  >
+                </div>
+                <svg
+                  class="mode-check"
+                  id="check-medium"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                >
+                  <polyline
+                    stroke-width="2.5"
+                    stroke-linecap="round"
+                    points="20 6 9 17 4 12"
+                  />
+                </svg>
+              </button>
+              <button
+                class="mode-option"
+                data-mode="high"
+                onclick="setMode('high')"
+                role="menuitem"
+              >
+                <span class="mode-opt-dot" data-mode="high"></span>
+                <div class="mode-opt-info">
+                  <span class="mode-opt-label">High</span>
+                  <span class="mode-opt-desc">Deeper reasoning for complex work</span>
+                </div>
+                <svg class="mode-check" id="check-high" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <polyline stroke-width="2.5" stroke-linecap="round" points="20 6 9 17 4 12" />
+                </svg>
+              </button>
+              <button
+                class="mode-option"
+                data-mode="max"
+                onclick="setMode('max')"
+                role="menuitem"
+                aria-disabled="true"
+                disabled
+                title="Max is not supported by the selected model"
+              >
+                <span class="mode-opt-dot" data-mode="max"></span>
+                <div class="mode-opt-info">
+                  <span class="mode-opt-label">Max</span>
+                  <span class="mode-opt-desc">Maximum effort on supported models only</span>
+                </div>
+                <svg class="mode-check" id="check-max" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <polyline stroke-width="2.5" stroke-linecap="round" points="20 6 9 17 4 12" />
                 </svg>
               </button>
             </div>
@@ -1337,6 +1403,25 @@
 
               <button
                 class="tools-menu-item"
+                id="toolsThinkItem"
+                onclick="toggleThinkInMenu()"
+                aria-pressed="false"
+              >
+                <span class="tools-item-icon">
+                  <svg fill="none" stroke="currentColor" viewBox="0 0 24 24" width="16" height="16">
+                    <path stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" d="M9.5 18.5h5M10 21h4M8.2 15.5c-1.4-1.1-2.2-2.8-2.2-4.6A6 6 0 0112 5a6 6 0 016 5.9c0 1.8-.8 3.5-2.2 4.6-.8.6-1.3 1.2-1.5 2H9.7c-.2-.8-.7-1.4-1.5-2z"/>
+                    <path stroke-width="1.8" stroke-linecap="round" d="M12 2v1M4.9 4.2l.7.7M19.1 4.2l-.7.7M2 11h1M21 11h1"/>
+                  </svg>
+                </span>
+                <div class="tools-item-info">
+                  <span class="tools-item-title">Think</span>
+                  <span class="tools-item-desc">Use deeper reasoning without changing the selected mode</span>
+                </div>
+                <span class="tools-item-badge" id="toolsThinkBadge">Off</span>
+              </button>
+
+              <button
+                class="tools-menu-item"
                 id="toolsWebSearchItem"
                 onclick="toggleWebSearchInMenu()"
               >
@@ -1465,6 +1550,17 @@
             onkeydown="handleKey(event)"
             oninput="autoResize(this)"
           ></textarea>
+          <div
+            class="voice-capture-status"
+            id="voiceCaptureStatus"
+            role="status"
+            aria-live="polite"
+          >
+            <span class="voice-capture-bars" aria-hidden="true">
+              <span></span><span></span><span></span>
+            </span>
+            <span id="voiceCaptureLabel"></span>
+          </div>
           <div
             class="composer-selectors"
             id="composerSelectors"
@@ -2044,12 +2140,21 @@
         </div>
       </div>
       <aside class="document-workspace" id="documentWorkspace" aria-label="Document workspace">
-        <header><div><span>Document workspace</span><strong id="documentVersionLabel">Version 1</strong></div><button type="button" onclick="toggleDocumentWorkspace(false)" aria-label="Close editor">×</button></header>
+        <header>
+          <div class="document-workspace-heading">
+            <span>Revise document</span>
+            <strong id="documentVersionLabel">Version 1</strong>
+          </div>
+          <button class="document-workspace-close" type="button" onclick="toggleDocumentWorkspace(false)" aria-label="Close editor" title="Close editor">
+            <svg width="16" height="16" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path stroke-width="2" stroke-linecap="round" d="M6 6l12 12M18 6L6 18"/></svg>
+          </button>
+        </header>
         <div class="document-workspace-body">
+          <p class="document-workspace-intro">Choose a section and describe the change. Everything else stays intact.</p>
           <label>Section<select id="documentSectionSelect"><option value="">Whole document</option></select></label>
-          <label>Revision instruction<textarea id="documentRevisionInput" rows="5" maxlength="6000" placeholder="Make this section clearer, add a comparison table, shorten the conclusion…"></textarea></label>
-          <div class="document-workspace-actions"><span id="documentWorkspaceStatus" role="status"></span><button type="button" id="documentReviseBtn" onclick="submitDocumentRevision()">Revise</button></div>
-          <div class="document-versions-head"><strong>Version history</strong><button type="button" onclick="loadDocumentVersions()" title="Refresh">↻</button></div>
+          <label>What should change?<textarea id="documentRevisionInput" rows="5" maxlength="6000" placeholder="Make the introduction clearer, add a comparison table, or shorten the conclusion…"></textarea></label>
+          <div class="document-workspace-actions"><span id="documentWorkspaceStatus" role="status"></span><button type="button" id="documentReviseBtn" onclick="submitDocumentRevision()"><svg width="14" height="14" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path stroke-width="2" stroke-linecap="round" stroke-linejoin="round" d="M12 20h9M16.5 3.5a2.12 2.12 0 013 3L8 18l-4 1 1-4L16.5 3.5z"/></svg><span>Revise</span></button></div>
+          <div class="document-versions-head"><strong>Version history</strong><button type="button" onclick="loadDocumentVersions()" title="Refresh versions" aria-label="Refresh versions"><svg width="15" height="15" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path stroke-width="2" stroke-linecap="round" stroke-linejoin="round" d="M4 4v5h5M20 20v-5h-5M5.6 15a7 7 0 0011.8 2M18.4 9A7 7 0 006.6 7"/></svg></button></div>
           <div class="document-version-list" id="documentVersionList"></div>
         </div>
       </aside>
@@ -2062,65 +2167,94 @@
     >
       <div class="img-modal doc-generator-modal" role="dialog" aria-modal="true" aria-labelledby="docModalTitle">
         <div class="sheet-drag-handle"></div>
-        <div class="img-modal-title" id="docModalTitle">
-          <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path stroke-width="2" d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/>
-            <polyline stroke-width="2" points="14 2 14 8 20 8"/>
-          </svg>
-          Document Generator
-        </div>
-        <p class="img-modal-sub">Generate a structured, editable document and export it securely.</p>
-
-        <label for="docPromptInput">Topic and requirements</label>
-        <textarea id="docPromptInput" rows="5" maxlength="12000" placeholder="Describe the topic, audience, facts that must be included, and expected outcome..."></textarea>
-
-        <label class="doc-field-label">Document type</label>
-        <div class="doc-type-grid" id="docTypeChips">
-          <button class="aspect-chip active" onclick="selectDocType('observation_report', this)">Observation</button>
-          <button class="aspect-chip" onclick="selectDocType('business_report', this)">Business</button>
-          <button class="aspect-chip" onclick="selectDocType('proposal', this)">Proposal</button>
-          <button class="aspect-chip" onclick="selectDocType('technical_report', this)">Technical</button>
-          <button class="aspect-chip" onclick="selectDocType('research_report', this)">Research</button>
-          <button class="aspect-chip" onclick="selectDocType('essay', this)">Essay</button>
-          <button class="aspect-chip" onclick="selectDocType('cv_resume', this)">CV / Resume</button>
-          <button class="aspect-chip" onclick="selectDocType('formal_letter', this)">Formal Letter</button>
-          <button class="aspect-chip" onclick="selectDocType('meeting_report', this)">Meeting Minutes</button>
-          <button class="aspect-chip" onclick="selectDocType('sop', this)">SOP</button>
-        </div>
-
-        <div class="doc-form-grid">
-          <div>
-            <label for="docToneSelect">Tone</label>
-            <select id="docToneSelect" class="doc-select">
-              <option value="formal">Formal</option>
-              <option value="academic">Academic</option>
-              <option value="executive">Executive</option>
-              <option value="technical">Technical</option>
-              <option value="persuasive">Persuasive</option>
-            </select>
+        <div class="doc-modal-header">
+          <div class="doc-modal-heading">
+            <span class="doc-modal-icon" aria-hidden="true">
+              <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-width="1.8" d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/>
+                <polyline stroke-width="1.8" points="14 2 14 8 20 8"/>
+                <path stroke-width="1.8" stroke-linecap="round" d="M8 13h8M8 17h6"/>
+              </svg>
+            </span>
+            <div>
+              <div class="img-modal-title" id="docModalTitle">Create a document</div>
+              <p class="img-modal-sub">Turn a brief into a polished, editable document.</p>
+            </div>
           </div>
-          <div>
-            <label for="docLangSelect">Language</label>
-            <select id="docLangSelect" class="doc-select">
-              <option value="id-ID">Bahasa Indonesia</option>
-              <option value="en-US">English</option>
-            </select>
-          </div>
+          <button class="doc-modal-close" type="button" onclick="closeDocModal()" title="Close" aria-label="Close document generator">
+            <svg width="16" height="16" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path stroke-width="2" stroke-linecap="round" d="M6 6l12 12M18 6L6 18"/></svg>
+          </button>
         </div>
+        <div class="doc-modal-body">
+          <section class="doc-modal-section">
+            <div class="doc-field-heading">
+              <label for="docPromptInput">Brief</label>
+              <span>Include the audience, purpose, and facts to preserve.</span>
+            </div>
+            <textarea id="docPromptInput" rows="5" maxlength="12000" placeholder="Example: Create an observation report for school leadership about waste management. Use the attached findings, keep claims factual, and end with practical recommendations."></textarea>
+          </section>
 
-        <label class="doc-field-label">Length</label>
-        <div class="img-aspect-options" id="docLengthChips">
-          <button class="aspect-chip" onclick="selectDocLength('short', this)">Short</button>
-          <button class="aspect-chip active" onclick="selectDocLength('medium', this)">Medium</button>
-          <button class="aspect-chip" onclick="selectDocLength('long', this)">Long</button>
+          <section class="doc-modal-section">
+            <div class="doc-field-heading">
+              <label class="doc-field-label">Document type</label>
+              <span>Choose the structure that best fits the brief.</span>
+            </div>
+            <div class="doc-type-grid" id="docTypeChips">
+              <button type="button" class="aspect-chip active" onclick="selectDocType('observation_report', this)">Observation</button>
+              <button type="button" class="aspect-chip" onclick="selectDocType('business_report', this)">Business</button>
+              <button type="button" class="aspect-chip" onclick="selectDocType('proposal', this)">Proposal</button>
+              <button type="button" class="aspect-chip" onclick="selectDocType('technical_report', this)">Technical</button>
+              <button type="button" class="aspect-chip" onclick="selectDocType('research_report', this)">Research</button>
+              <button type="button" class="aspect-chip" onclick="selectDocType('essay', this)">Essay</button>
+              <button type="button" class="aspect-chip" onclick="selectDocType('cv_resume', this)">CV / Resume</button>
+              <button type="button" class="aspect-chip" onclick="selectDocType('formal_letter', this)">Formal Letter</button>
+              <button type="button" class="aspect-chip" onclick="selectDocType('meeting_report', this)">Meeting Minutes</button>
+              <button type="button" class="aspect-chip" onclick="selectDocType('sop', this)">SOP</button>
+            </div>
+          </section>
+
+          <section class="doc-modal-section doc-preferences-section">
+            <div class="doc-field-heading">
+              <label>Preferences</label>
+              <span>Fine-tune the writing style.</span>
+            </div>
+            <div class="doc-form-grid">
+              <div>
+                <label for="docToneSelect">Tone</label>
+                <select id="docToneSelect" class="doc-select">
+                  <option value="formal">Formal</option>
+                  <option value="academic">Academic</option>
+                  <option value="executive">Executive</option>
+                  <option value="technical">Technical</option>
+                  <option value="persuasive">Persuasive</option>
+                </select>
+              </div>
+              <div>
+                <label for="docLangSelect">Language</label>
+                <select id="docLangSelect" class="doc-select">
+                  <option value="en-US" selected>English</option>
+                  <option value="id-ID">Indonesian</option>
+                </select>
+              </div>
+              <div>
+                <label>Length</label>
+                <div class="doc-length-options" id="docLengthChips">
+                  <button type="button" class="aspect-chip" onclick="selectDocLength('short', this)">Short</button>
+                  <button type="button" class="aspect-chip active" onclick="selectDocLength('medium', this)">Medium</button>
+                  <button type="button" class="aspect-chip" onclick="selectDocLength('long', this)">Long</button>
+                </div>
+              </div>
+            </div>
+          </section>
+
+          <div class="img-modal-error" id="docModalError" role="alert" style="display:none"></div>
         </div>
-
-        <div class="img-modal-error" id="docModalError" role="alert" style="display:none"></div>
-        <div class="img-modal-actions">
-          <button class="img-cancel-btn" onclick="closeDocModal()">Cancel</button>
-          <button class="img-generate-btn" id="docGenerateBtn" onclick="startGeneratingDocument()">
+        <div class="img-modal-actions doc-modal-actions">
+          <button class="img-cancel-btn" type="button" onclick="closeDocModal()">Cancel</button>
+          <button class="img-generate-btn" type="button" id="docGenerateBtn" onclick="startGeneratingDocument()">
             <div class="img-spinner" id="docSpinner"></div>
-            <span id="docBtnText">Generate Document</span>
+            <svg class="btn-icon" width="14" height="14" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path stroke-width="2" stroke-linecap="round" stroke-linejoin="round" d="M12 3v3m0 12v3M3 12h3m12 0h3M5.64 5.64l2.12 2.12m8.48 8.48 2.12 2.12m0-12.72-2.12 2.12M7.76 16.24l-2.12 2.12"/></svg>
+            <span id="docBtnText">Generate document</span>
           </button>
         </div>
       </div>
@@ -2279,7 +2413,7 @@
       </div>
     </div>
 
-    <!-- ── Vixy Pro Subscription & Credit Store Modal ── -->
+    <!-- ── Vixy one-time credit store modal ── -->
     <div
       class="pro-modal-backdrop"
       id="proModalBackdrop"
@@ -2301,8 +2435,8 @@
           </div>
           <h2>Top Up Vixy Credits</h2>
           <p id="proModalMsg">
-            GPT-OSS 120B is 100% FREE. Get credits for DeepSeek V3, DeepSeek R1,
-            Image Gen &amp; Web Search!
+            Free models remain available. Premium models use credits based on
+            the tokens and tools actually consumed.
           </p>
         </div>
 
@@ -2313,27 +2447,27 @@
             id="pkg-pro-starter"
             onclick="selectPackageCard('pro-starter')"
           >
-            <div class="pkg-card-title">Starter</div>
-            <div class="pkg-card-credits">1,000 Cr</div>
-            <div class="pkg-card-price" id="price-pro-starter">$1.00 USD</div>
+            <div class="pkg-card-title">Starter Pack</div>
+            <div class="pkg-card-credits">5,000 Cr</div>
+            <div class="pkg-card-price" id="price-pro-starter">$5.00 USD</div>
           </div>
           <div
             class="pkg-card selected"
             id="pkg-pro-monthly"
             onclick="selectPackageCard('pro-monthly')"
           >
-            <div class="pkg-card-title">Monthly</div>
-            <div class="pkg-card-credits">5,000 Cr</div>
-            <div class="pkg-card-price" id="price-pro-monthly">$3.29 USD</div>
+            <div class="pkg-card-title">Growth Pack</div>
+            <div class="pkg-card-credits">11,000 Cr</div>
+            <div class="pkg-card-price" id="price-pro-monthly">$10.00 USD</div>
           </div>
           <div
             class="pkg-card"
             id="pkg-pro-unlimited"
             onclick="selectPackageCard('pro-unlimited')"
           >
-            <div class="pkg-card-title">Ultimate</div>
-            <div class="pkg-card-credits">20,000 Cr</div>
-            <div class="pkg-card-price" id="price-pro-unlimited">$9.99 USD</div>
+            <div class="pkg-card-title">Power Pack</div>
+            <div class="pkg-card-credits">23,000 Cr</div>
+            <div class="pkg-card-price" id="price-pro-unlimited">$20.00 USD</div>
           </div>
         </div>
 
