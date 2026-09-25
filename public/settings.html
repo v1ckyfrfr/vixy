@@ -701,6 +701,17 @@
             >Language</a
           >
           <a
+            href="#voice"
+            id="settingsTabVoice"
+            class="settings-tab"
+            role="tab"
+            aria-selected="false"
+            aria-controls="voiceCard"
+            data-settings-tab="voice"
+            tabindex="-1"
+            >Voice</a
+          >
+          <a
             href="#security"
             id="settingsTabSecurity"
             class="settings-tab"
@@ -827,6 +838,136 @@
 
           <div
             class="settings-card settings-tab-panel"
+            id="voiceCard"
+            role="tabpanel"
+            aria-labelledby="settingsTabVoice"
+            data-settings-panel="voice"
+            hidden
+          >
+            <div class="settings-card-header">
+              <div class="settings-icon">
+                <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <polygon
+                    stroke-width="2"
+                    stroke-linejoin="round"
+                    points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"
+                  />
+                  <path
+                    stroke-width="2"
+                    stroke-linecap="round"
+                    d="M15.5 8.5a5 5 0 010 7M19 5a10 10 0 010 14"
+                  />
+                </svg>
+              </div>
+              <div>
+                <div class="settings-title">Change Voices</div>
+                <div class="settings-desc">
+                  Choose a natural text-to-speech voice for each language
+                </div>
+              </div>
+            </div>
+            <div class="settings-body voice-settings-body">
+              <div id="ttsVoiceMsg" class="form-msg" aria-live="polite"></div>
+
+              <div class="input-grid voice-input-grid">
+                <div class="field">
+                  <label class="input-label" for="ttsVoiceLanguage"
+                    >Voice language</label
+                  >
+                  <select
+                    id="ttsVoiceLanguage"
+                    class="input"
+                    onchange="changeVoiceLanguage()"
+                  ></select>
+                </div>
+                <div class="field">
+                  <label class="input-label" for="ttsVoiceSelect"
+                    >Preferred voice</label
+                  >
+                  <select
+                    id="ttsVoiceSelect"
+                    class="input"
+                    onchange="saveVoicePreference()"
+                  >
+                    <option value="">Loading available voices…</option>
+                  </select>
+                </div>
+              </div>
+
+              <div class="voice-rate-row">
+                <div>
+                  <label class="input-label" for="ttsRate">Speaking pace</label>
+                  <p class="voice-setting-hint">
+                    A slightly relaxed pace usually sounds more natural.
+                  </p>
+                </div>
+                <div class="voice-rate-control">
+                  <input
+                    id="ttsRate"
+                    class="voice-rate-slider"
+                    type="range"
+                    min="0.80"
+                    max="1.15"
+                    step="0.05"
+                    value="0.95"
+                    oninput="updateTtsRate()"
+                    aria-label="Text-to-speech speaking pace"
+                  />
+                  <output id="ttsRateValue" for="ttsRate">0.95×</output>
+                </div>
+              </div>
+
+              <div class="voice-settings-footer">
+                <div>
+                  <div id="ttsVoiceAvailability" class="voice-availability">
+                    Checking voices available on this device…
+                  </div>
+                  <p class="voice-setting-hint">
+                    Natural and neural voices are prioritized automatically.
+                    Available voices depend on the browser, operating system,
+                    and installed language packs.
+                  </p>
+                </div>
+                <button
+                  type="button"
+                  class="btn btn-secondary voice-preview-btn"
+                  id="ttsPreviewBtn"
+                  onclick="previewSelectedVoice()"
+                >
+                  Preview voice
+                </button>
+              </div>
+
+              <div class="voice-input-settings">
+                <div class="voice-input-settings-copy">
+                  <div class="settings-form-title">Voice input</div>
+                  <p class="voice-setting-hint">
+                    Select the language Vixy should expect when you dictate a
+                    message. Live interim transcription remains editable before
+                    sending.
+                  </p>
+                </div>
+                <div class="field voice-input-language-field">
+                  <label class="input-label" for="sttLanguageSelect"
+                    >Dictation language</label
+                  >
+                  <select
+                    id="sttLanguageSelect"
+                    class="input"
+                    onchange="saveVoiceInputLanguage()"
+                  ></select>
+                </div>
+                <div
+                  id="sttAvailability"
+                  class="voice-availability"
+                  aria-live="polite"
+                ></div>
+              </div>
+            </div>
+          </div>
+
+          <div
+            class="settings-card settings-tab-panel"
             id="appearanceCard"
             role="tabpanel"
             aria-labelledby="settingsTabAppearance"
@@ -930,8 +1071,8 @@
                   >Response Language</label
                 >
                 <select id="langSelect" class="input" onchange="saveLanguage()">
-                  <option value="auto">Auto (match my language)</option>
-                  <option value="en">English</option>
+                  <option value="en" selected>English (default)</option>
+                  <option value="auto">Auto (detect current message)</option>
                   <option value="id">Indonesian (Bahasa Indonesia)</option>
                   <option value="ms">Malay (Bahasa Melayu)</option>
                   <option value="zh">Chinese (简体中文)</option>
@@ -943,6 +1084,25 @@
                   <option value="ko">Korean (한국어)</option>
                   <option value="hi">Hindi (हिन्दी)</option>
                   <option value="pt">Portuguese (Português)</option>
+                  <option value="it">Italian (Italiano)</option>
+                  <option value="nl">Dutch (Nederlands)</option>
+                  <option value="pl">Polish (Polski)</option>
+                  <option value="ru">Russian (Русский)</option>
+                  <option value="tr">Turkish (Türkçe)</option>
+                  <option value="uk">Ukrainian (Українська)</option>
+                  <option value="vi">Vietnamese (Tiếng Việt)</option>
+                  <option value="th">Thai (ไทย)</option>
+                  <option value="fil">Filipino</option>
+                  <option value="fa">Persian (فارسی)</option>
+                  <option value="he">Hebrew (עברית)</option>
+                  <option value="bn">Bengali (বাংলা)</option>
+                  <option value="ur">Urdu (اردو)</option>
+                  <option value="ta">Tamil (தமிழ்)</option>
+                  <option value="te">Telugu (తెలుగు)</option>
+                  <option value="sw">Swahili (Kiswahili)</option>
+                  <option value="cs">Czech (Čeština)</option>
+                  <option value="ro">Romanian (Română)</option>
+                  <option value="el">Greek (Ελληνικά)</option>
                 </select>
               </div>
               <p
@@ -952,10 +1112,10 @@
                   margin-top: 10px;
                 "
               >
-                Vixy will reply in the language you choose, or match the
-                language you write in when set to "Auto" (the default). Code and
-                technical terms stay unchanged. You can still ask Vixy to switch
-                languages in any single message.
+                English is the default. Choose another language, or select Auto
+                to detect only the current message. Conversation history,
+                memory, sources, and location never choose the response
+                language. Code and technical terms stay unchanged.
               </p>
             </div>
           </div>
@@ -984,10 +1144,21 @@
             </div>
             <div class="settings-body">
               <p style="font-size: 0.84rem; color: var(--text-muted)">
-                Your Firebase session refreshes securely while you are signed
-                in. Sign out when using a shared device. Sensitive actions
-                always require a current verified identity token.
+                Vixy uses an encrypted, HttpOnly server session that browser
+                scripts cannot read. You can revoke every signed-in device if
+                an account or device may have been compromised.
               </p>
+              <div id="sessionSecurityMsg" class="form-msg" aria-live="polite"></div>
+              <div class="settings-form-actions">
+                <button
+                  type="button"
+                  class="btn btn-secondary"
+                  id="revokeSessionsBtn"
+                  onclick="revokeAllSessions()"
+                >
+                  Log out all devices
+                </button>
+              </div>
             </div>
           </div>
 
@@ -1301,7 +1472,7 @@
                       id="memoryKey"
                       class="input"
                       maxlength="120"
-                      placeholder="e.g. preferred language"
+                      placeholder="e.g. preferred framework"
                     />
                   </div>
                   <div class="field">
@@ -1311,7 +1482,7 @@
                       id="memoryValue"
                       class="input"
                       maxlength="500"
-                      placeholder="e.g. Indonesian"
+                      placeholder="e.g. React"
                     />
                   </div>
                 </div>
@@ -1483,11 +1654,13 @@
     </main>
 
     <script type="module" src="/js/auth-guard.js"></script>
+    <script src="/js/settings-voice.js"></script>
     <script>
       const SETTINGS_TAB_ORDER = [
         "account",
         "appearance",
         "language",
+        "voice",
         "security",
         "skills",
         "memory",
@@ -1497,6 +1670,7 @@
         profilecard: "account",
         appearancecard: "appearance",
         languagecard: "language",
+        voicecard: "voice",
         securitycard: "security",
         skillscard: "skills",
         memorycard: "memory",
@@ -1835,6 +2009,45 @@
         }
       }
 
+      async function revokeAllSessions() {
+        if (!confirm("Log out every device connected to this Vixy account?")) {
+          return;
+        }
+        const button = document.getElementById("revokeSessionsBtn");
+        button.disabled = true;
+        button.textContent = "Revoking…";
+        showSettingsFormMsg("sessionSecurityMsg", "");
+        try {
+          const response = await fetch("/api/auth/sessions/revoke-all", {
+            method: "POST",
+          });
+          if (!response.ok) {
+            const data = await response.json().catch(() => ({}));
+            throw new Error(data.message || "Could not revoke sessions.");
+          }
+          showSettingsFormMsg(
+            "sessionSecurityMsg",
+            "All sessions were revoked. Redirecting to sign in…",
+            "success",
+          );
+          setTimeout(() => {
+            if (typeof window.__forceFirebaseSignOut === "function") {
+              window.__forceFirebaseSignOut();
+            } else {
+              window.location.replace("/");
+            }
+          }, 500);
+        } catch (error) {
+          showSettingsFormMsg(
+            "sessionSecurityMsg",
+            error.message || "Could not revoke sessions.",
+            "error",
+          );
+          button.disabled = false;
+          button.textContent = "Log out all devices";
+        }
+      }
+
       // toggleTheme() is now defined in js/theme.js — no duplicate needed here
 
       // ─── AI Skills ──────────────────────────────────────
@@ -1884,7 +2097,7 @@
         const list = document.getElementById("skillsList");
         if (!skills.length) {
           list.innerHTML =
-            '<p class="skill-empty">No skills yet. Add one below — e.g. "always answer in Indonesian" or "explain like I am a beginner".</p>';
+            '<p class="skill-empty">No skills yet. Add one below — e.g. "use concise bullet points" or "explain like I am a beginner".</p>';
           return;
         }
         list.innerHTML = skills
@@ -2315,15 +2528,30 @@
 
       // ─── Language ──────────────────────────────────────
       function initLanguage() {
-        const saved = localStorage.getItem("vx_lang") || "auto";
-        document.getElementById("langSelect").value = saved;
+        const select = document.getElementById("langSelect");
+        const policyVersion = "english-default-v1";
+        let stored = localStorage.getItem("vx_lang");
+        if (localStorage.getItem("vx_lang_policy_version") !== policyVersion) {
+          if (!stored || stored === "auto") {
+            stored = "en";
+            localStorage.setItem("vx_lang", stored);
+          }
+          localStorage.setItem("vx_lang_policy_version", policyVersion);
+        }
+        stored ||= "en";
+        const saved = Array.from(select.options).some(
+          (option) => option.value === stored,
+        )
+          ? stored
+          : "en";
+        select.value = saved;
         document.documentElement.lang = saved === "auto" ? "en" : saved;
       }
 
       function saveLanguage() {
         const val = document.getElementById("langSelect").value;
         localStorage.setItem("vx_lang", val);
-        document.documentElement.lang = val;
+        document.documentElement.lang = val === "auto" ? "en" : val;
         const el = document.getElementById("langMsg");
         el.className = "form-msg success";
         el.innerHTML =
