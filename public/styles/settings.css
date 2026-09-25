@@ -361,6 +361,184 @@
   line-height: 1.5;
 }
 
+/* ─── Account & report forms ───────────────────────────────── */
+.settings-form {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.account-username-form {
+  padding-top: 18px;
+  border-top: 1px solid var(--border-subtle);
+}
+
+.settings-form-title {
+  color: var(--text);
+  font-size: 0.86rem;
+  font-weight: 600;
+}
+
+.settings-form-hint {
+  margin-top: 3px;
+  color: var(--text-muted);
+  font-size: 0.76rem;
+  line-height: 1.45;
+}
+
+.settings-form-actions {
+  display: flex;
+  justify-content: flex-start;
+}
+
+.settings-form-actions .btn {
+  min-width: 132px;
+}
+
+.settings-form .form-msg {
+  margin-bottom: 0;
+}
+
+.report-notice {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  margin-bottom: 18px;
+  padding: 11px 12px;
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-sm);
+  background: var(--surface-2);
+  color: var(--text-muted);
+  font-size: 0.76rem;
+  line-height: 1.5;
+}
+
+.report-notice svg {
+  width: 15px;
+  height: 15px;
+  flex: 0 0 auto;
+  margin-top: 2px;
+  color: var(--accent);
+}
+
+.report-form .field + .field {
+  margin-top: 0;
+}
+
+.report-textarea {
+  min-height: 130px;
+  resize: vertical;
+  line-height: 1.55;
+}
+
+.report-textarea.report-steps {
+  min-height: 96px;
+}
+
+.optional-label {
+  color: var(--text-muted);
+  font-size: 0.68rem;
+  font-weight: 400;
+}
+
+.btn:disabled {
+  cursor: not-allowed;
+  opacity: 0.58;
+  transform: none;
+}
+
+/* ─── Text-to-speech voices ────────────────────────────────── */
+.voice-settings-body {
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+}
+
+.voice-settings-body .voice-input-grid,
+.voice-settings-body .form-msg {
+  margin-bottom: 0;
+}
+
+.voice-rate-row {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(220px, 0.8fr);
+  align-items: center;
+  gap: 24px;
+  padding: 16px 0;
+  border-block: 1px solid var(--border-subtle);
+}
+
+.voice-setting-hint {
+  margin: 4px 0 0;
+  color: var(--text-muted);
+  font-size: 0.75rem;
+  line-height: 1.45;
+}
+
+.voice-rate-control {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 48px;
+  align-items: center;
+  gap: 12px;
+}
+
+.voice-rate-slider {
+  width: 100%;
+  accent-color: var(--accent);
+  cursor: pointer;
+}
+
+#ttsRateValue {
+  color: var(--text);
+  font-size: 0.78rem;
+  font-variant-numeric: tabular-nums;
+  text-align: right;
+}
+
+.voice-settings-footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 22px;
+}
+
+.voice-settings-footer > div {
+  min-width: 0;
+}
+
+.voice-availability {
+  color: var(--text);
+  font-size: 0.8rem;
+  font-weight: 500;
+  line-height: 1.45;
+}
+
+.voice-preview-btn {
+  flex: 0 0 auto;
+  min-width: 126px;
+}
+
+.voice-input-settings {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(220px, 0.8fr);
+  align-items: end;
+  gap: 12px 24px;
+  padding-top: 18px;
+  border-top: 1px solid var(--border-subtle);
+}
+
+.voice-input-settings-copy {
+  align-self: center;
+}
+
+.voice-input-language-field {
+  min-width: 0;
+}
+
+.voice-input-settings > .voice-availability {
+  grid-column: 1 / -1;
+}
+
 /* ─── Responsive ────────────────────────────────────────────── */
 @media (max-width: 768px) {
   .settings-layout {
@@ -497,6 +675,37 @@
     font-size: 0.88rem;
     touch-action: manipulation;
   }
+
+  .settings-form-actions .btn {
+    width: 100%;
+  }
+
+  .report-textarea {
+    min-height: 120px;
+  }
+
+  .voice-rate-row {
+    grid-template-columns: 1fr;
+    gap: 12px;
+  }
+
+  .voice-settings-footer {
+    align-items: stretch;
+    flex-direction: column;
+    gap: 14px;
+  }
+
+  .voice-preview-btn {
+    width: 100%;
+  }
+
+  .voice-input-settings {
+    grid-template-columns: 1fr;
+  }
+
+  .voice-input-settings > .voice-availability {
+    grid-column: auto;
+  }
 }
 
 @media (max-width: 480px) {
@@ -543,7 +752,8 @@ html.light .settings-card-header {
 html.light .skill-item,
 html.light .skill-form,
 html.light .skill-notice,
-html.light .skill-starters {
+html.light .skill-starters,
+html.light .report-notice {
   background: var(--surface-2);
   border-color: var(--border);
 }
