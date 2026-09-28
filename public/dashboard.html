@@ -141,7 +141,7 @@
             <div class="user-popover-avatar" id="popoverAvatar">U</div>
             <div class="user-popover-details">
               <div class="user-popover-name" id="popoverName">User</div>
-              <div class="user-popover-email" id="popoverEmail">—</div>
+              <div class="user-popover-email" id="popoverEmail">-</div>
             </div>
           </div>
 
@@ -251,7 +251,7 @@
           <div class="user-avatar" id="sidebarAvatar">U</div>
           <div class="user-info">
             <div class="user-name" id="sidebarName">Loading...</div>
-            <div class="user-email" id="sidebarEmail">—</div>
+            <div class="user-email" id="sidebarEmail">-</div>
           </div>
           <svg
             class="user-menu-chevron"
@@ -370,7 +370,7 @@
             </svg>
           </div>
           <div class="stat-label">Credit Balance</div>
-          <div class="stat-value mono" id="creditBalance">—</div>
+          <div class="stat-value mono" id="creditBalance">-</div>
           <div class="stat-hint">
             Available credits ·
             <a href="/chat.html#topup" class="inline-link">Top up</a>
@@ -387,7 +387,7 @@
             </svg>
           </div>
           <div class="stat-label">Total Spent</div>
-          <div class="stat-value mono" id="totalSpent">—</div>
+          <div class="stat-value mono" id="totalSpent">-</div>
           <div class="stat-hint" id="totalSpentHint">Lifetime usage</div>
         </div>
 
@@ -399,7 +399,7 @@
             </svg>
           </div>
           <div class="stat-label">Spent Today</div>
-          <div class="stat-value mono" id="spentToday">—</div>
+          <div class="stat-value mono" id="spentToday">-</div>
           <div class="stat-hint" id="spentTodayHint">
             This week · this month
           </div>
@@ -411,15 +411,15 @@
           <div class="info-card-header">Account Info</div>
           <div class="info-row">
             <span class="info-key">Username</span>
-            <span class="info-val" id="profileUsername">—</span>
+            <span class="info-val" id="profileUsername">-</span>
           </div>
           <div class="info-row">
             <span class="info-key">Email</span>
-            <span class="info-val" id="profileEmail">—</span>
+            <span class="info-val" id="profileEmail">-</span>
           </div>
           <div class="info-row">
             <span class="info-key">User ID</span>
-            <span class="info-val" id="profileId">—</span>
+            <span class="info-val" id="profileId">-</span>
           </div>
           <div class="info-row">
             <span class="info-key">Status</span>
@@ -432,11 +432,11 @@
           <div class="usage-summary">
             <div class="usage-summary-row">
               <span>Used this month</span>
-              <span class="usage-summary-val" id="spentMonth">—</span>
+              <span class="usage-summary-val" id="spentMonth">-</span>
             </div>
             <div class="usage-summary-row">
               <span>Total requests</span>
-              <span class="usage-summary-val" id="requestCount">—</span>
+              <span class="usage-summary-val" id="requestCount">-</span>
             </div>
             <div class="credit-bar-track">
               <div
@@ -456,6 +456,33 @@
 
     <script type="module" src="/js/auth-guard.js"></script>
     <script>
+      function closeUserPopover() {
+        document.getElementById("userPopoverMenu")?.classList.remove("open");
+        document
+          .getElementById("userMenuBtn")
+          ?.setAttribute("aria-expanded", "false");
+      }
+
+      function toggleUserPopover(event) {
+        event?.stopPropagation();
+        const menu = document.getElementById("userPopoverMenu");
+        const open = menu?.classList.toggle("open") || false;
+        document
+          .getElementById("userMenuBtn")
+          ?.setAttribute("aria-expanded", String(open));
+      }
+
+      function openPlanModal() {
+        window.location.href = "/chat.html#topup";
+      }
+
+      document.addEventListener("click", (event) => {
+        if (!event.target.closest(".sidebar-footer")) closeUserPopover();
+      });
+      document.addEventListener("keydown", (event) => {
+        if (event.key === "Escape") closeUserPopover();
+      });
+
       // profile is passed directly from auth-guard.js (Firebase user data)
       window.__onAuthReady = function (user, token, profile) {
         const name = profile.username || "there";
@@ -466,11 +493,11 @@
           .toUpperCase();
         document.getElementById("sidebarName").textContent = name;
         document.getElementById("sidebarEmail").textContent =
-          profile.email || "—";
+          profile.email || "-";
         document.getElementById("profileId").textContent = profile.id;
         document.getElementById("profileUsername").textContent = name;
         document.getElementById("profileEmail").textContent =
-          profile.email || "—";
+          profile.email || "-";
 
         loadCreditData();
       };
