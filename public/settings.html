@@ -285,6 +285,75 @@
         margin-top: 2px;
       }
 
+      .skill-upload-panel {
+        display: grid;
+        grid-template-columns: 38px minmax(0, 1fr) auto;
+        align-items: center;
+        gap: 14px;
+        margin: 14px 0 18px;
+        padding: 16px;
+        border: 1px dashed var(--border);
+        border-radius: var(--radius-md);
+        background: var(--surface-2);
+        transition:
+          border-color 0.16s ease,
+          background 0.16s ease;
+      }
+
+      .skill-upload-panel.is-dragging {
+        border-color: var(--accent);
+        background: var(--accent-subtle);
+      }
+
+      .skill-upload-panel.is-busy {
+        opacity: 0.68;
+        pointer-events: none;
+      }
+
+      .skill-upload-icon {
+        width: 38px;
+        height: 38px;
+        display: grid;
+        place-items: center;
+        border-radius: var(--radius-sm);
+        color: var(--accent);
+        background: var(--accent-subtle);
+        border: 1px solid var(--accent-border);
+      }
+
+      .skill-upload-icon svg {
+        width: 18px;
+        height: 18px;
+      }
+
+      .skill-upload-copy {
+        min-width: 0;
+      }
+
+      .skill-upload-title {
+        color: var(--text);
+        font-size: 0.86rem;
+        font-weight: 650;
+      }
+
+      .skill-upload-hint,
+      .skill-upload-state {
+        margin: 3px 0 0;
+        color: var(--text-muted);
+        font-size: 0.74rem;
+        line-height: 1.45;
+      }
+
+      .skill-upload-state {
+        grid-column: 2 / -1;
+        margin-top: -7px;
+      }
+
+      .skill-list-label {
+        display: block;
+        margin-bottom: 9px;
+      }
+
       .skill-list {
         display: flex;
         flex-direction: column;
@@ -317,6 +386,21 @@
         font-size: 0.88rem;
         font-weight: 600;
         color: var(--text);
+      }
+
+      .skill-file-badge {
+        display: inline-flex;
+        margin-left: 5px;
+        border: 1px solid var(--border-subtle);
+        border-radius: 5px;
+        padding: 2px 5px;
+        color: var(--accent);
+        font:
+          650 0.61rem/1.1 ui-monospace,
+          SFMono-Regular,
+          Menlo,
+          monospace;
+        vertical-align: 1px;
       }
 
       .skill-item-desc {
@@ -418,6 +502,21 @@
         .input-grid {
           grid-template-columns: 1fr;
         }
+
+        .skill-upload-panel {
+          grid-template-columns: 34px minmax(0, 1fr);
+          padding: 14px;
+        }
+
+        .skill-upload-panel .btn {
+          grid-column: 1 / -1;
+          width: 100%;
+        }
+
+        .skill-upload-state {
+          grid-column: 1 / -1;
+          margin-top: 0;
+        }
       }
     </style>
     <link rel="stylesheet" href="styles/settings.css" />
@@ -503,7 +602,7 @@
             <div class="user-popover-avatar" id="popoverAvatar">U</div>
             <div class="user-popover-details">
               <div class="user-popover-name" id="popoverName">User</div>
-              <div class="user-popover-email" id="popoverEmail">—</div>
+              <div class="user-popover-email" id="popoverEmail">-</div>
             </div>
           </div>
 
@@ -613,7 +712,7 @@
           <div class="user-avatar" id="sidebarAvatar">U</div>
           <div class="user-info">
             <div class="user-name" id="sidebarName">Loading...</div>
-            <div class="user-email" id="sidebarEmail">—</div>
+            <div class="user-email" id="sidebarEmail">-</div>
           </div>
           <svg
             class="user-menu-chevron"
@@ -787,11 +886,11 @@
                     style="font-weight: 500; font-size: 0.9rem"
                     id="profileName"
                   >
-                    —
+                    -
                   </div>
-                  <div class="avatar-info" id="profileEmailDisplay">—</div>
+                  <div class="avatar-info" id="profileEmailDisplay">-</div>
                   <div class="avatar-info">
-                    ID: <span id="profileIdDisplay">—</span>
+                    ID: <span id="profileIdDisplay">-</span>
                   </div>
                 </div>
               </div>
@@ -1036,6 +1135,31 @@
                   <span class="toggle-track"></span>
                 </label>
               </div>
+              <div class="field" style="margin-top: 20px">
+                <label class="input-label" for="responseAnimationSelect"
+                  >Response Animation</label
+                >
+                <select
+                  id="responseAnimationSelect"
+                  class="input"
+                  onchange="saveResponseAnimation()"
+                >
+                  <option value="smooth">Smooth reveal (recommended)</option>
+                  <option value="instant">Instant</option>
+                </select>
+                <p
+                  style="
+                    font-size: 0.78rem;
+                    color: var(--text-muted);
+                    margin: 9px 0 0;
+                    line-height: 1.5;
+                  "
+                >
+                  Smoothly reveals new responses while keeping Markdown, code,
+                  tables, and formulas stable. Reduced-motion preferences are
+                  always respected.
+                </p>
+              </div>
             </div>
           </div>
 
@@ -1145,10 +1269,14 @@
             <div class="settings-body">
               <p style="font-size: 0.84rem; color: var(--text-muted)">
                 Vixy uses an encrypted, HttpOnly server session that browser
-                scripts cannot read. You can revoke every signed-in device if
-                an account or device may have been compromised.
+                scripts cannot read. You can revoke every signed-in device if an
+                account or device may have been compromised.
               </p>
-              <div id="sessionSecurityMsg" class="form-msg" aria-live="polite"></div>
+              <div
+                id="sessionSecurityMsg"
+                class="form-msg"
+                aria-live="polite"
+              ></div>
               <div class="settings-form-actions">
                 <button
                   type="button"
@@ -1184,7 +1312,7 @@
               <div>
                 <div class="settings-title">AI Skills</div>
                 <div class="settings-desc">
-                  Reusable task profiles and approved capabilities
+                  Reusable Markdown workflows for specialized tasks
                 </div>
               </div>
             </div>
@@ -1203,48 +1331,70 @@
                   />
                 </svg>
                 <span>
-                  Skills combine task instructions, activation criteria, and
-                  approved capabilities. They remain below Vixy's safety rules,
-                  and a skill can only activate capabilities shown here.
+                  Each skill is a real <code>SKILL.md</code> workflow with
+                  metadata, activation criteria, procedures, examples, and
+                  approved capabilities. Skill files remain below Vixy's safety
+                  rules.
                 </span>
               </div>
 
               <div id="skillsMsg" class="form-msg"></div>
 
-              <div class="skill-starters" aria-label="Starter skill templates">
-                <span class="skill-form-title">Start from a template</span>
-                <div class="skill-starter-actions">
-                  <button
-                    type="button"
-                    class="btn btn-ghost"
-                    onclick="useSkillTemplate('research')"
-                  >
-                    Web Researcher
-                  </button>
-                  <button
-                    type="button"
-                    class="btn btn-ghost"
-                    onclick="useSkillTemplate('webdev')"
-                  >
-                    Web Development
-                  </button>
-                  <button
-                    type="button"
-                    class="btn btn-ghost"
-                    onclick="useSkillTemplate('reviewer')"
-                  >
-                    Code Reviewer
-                  </button>
-                  <button
-                    type="button"
-                    class="btn btn-ghost"
-                    onclick="useSkillTemplate('writer')"
-                  >
-                    Technical Writer
-                  </button>
+              <div
+                class="skill-upload-panel"
+                id="skillDropzone"
+                aria-labelledby="skillUploadTitle"
+              >
+                <div class="skill-upload-icon" aria-hidden="true">
+                  <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path
+                      stroke-width="1.8"
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                      d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"
+                    />
+                    <path
+                      stroke-width="1.8"
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                      d="M14 2v6h6M12 18v-6m0 0l-2.5 2.5M12 12l2.5 2.5"
+                    />
+                  </svg>
                 </div>
+                <div class="skill-upload-copy">
+                  <div class="skill-upload-title" id="skillUploadTitle">
+                    Upload a Skill file
+                  </div>
+                  <p class="skill-upload-hint">
+                    Drop a UTF-8 <code>.md</code> file here or choose one from
+                    your device. Maximum 64 KB.
+                  </p>
+                </div>
+                <button
+                  type="button"
+                  class="btn btn-primary"
+                  id="skillChooseFileBtn"
+                  onclick="document.getElementById('skillFileInput').click()"
+                >
+                  Choose .md file
+                </button>
+                <input
+                  id="skillFileInput"
+                  type="file"
+                  accept=".md,text/markdown,text/plain"
+                  onchange="importSkillFile(event)"
+                  hidden
+                />
+                <p
+                  class="skill-upload-state"
+                  id="skillUploadState"
+                  role="status"
+                  aria-live="polite"
+                  hidden
+                ></p>
               </div>
 
+              <span class="skill-form-title skill-list-label">Your Skills</span>
               <div id="skillsList" class="skill-list">
                 <p class="skill-empty">Loading your skills…</p>
               </div>
@@ -1253,9 +1403,10 @@
                 class="skill-form"
                 id="skillForm"
                 onsubmit="submitSkillForm(event)"
+                hidden
               >
                 <div class="skill-form-head" id="skillFormHead">
-                  <span class="skill-form-title">Add a new skill</span>
+                  <span class="skill-form-title">Edit imported Skill</span>
                 </div>
                 <div class="input-grid">
                   <div class="field">
@@ -1323,16 +1474,16 @@
                 </div>
                 <div class="field" style="margin-bottom: 12px">
                   <label class="input-label" for="skillContent"
-                    >Instructions (plain text)</label
+                    >SKILL.md content (Markdown)</label
                   >
                   <textarea
                     id="skillContent"
                     class="input skill-textarea"
-                    maxlength="8000"
-                    rows="7"
-                    placeholder="e.g. Always answer in under five sentences, lead with the conclusion, and skip pleasantries."
+                    maxlength="65536"
+                    rows="10"
+                    placeholder="# Workflow&#10;&#10;## Steps&#10;1. Clarify the goal.&#10;2. Complete the task.&#10;3. Run the quality checklist."
                   ></textarea>
-                  <span class="skill-count" id="skillCount">0 / 8,000</span>
+                  <span class="skill-count" id="skillCount">0 / 65,536</span>
                 </div>
                 <div class="skill-form-actions">
                   <button
@@ -1340,7 +1491,7 @@
                     class="btn btn-primary"
                     id="skillSaveBtn"
                   >
-                    Add Skill
+                    Save Changes
                   </button>
                   <button
                     type="button"
@@ -1859,20 +2010,20 @@
         document.getElementById("avatarPreview").textContent = initial;
         document.getElementById("profileName").textContent = name;
         document.getElementById("profileEmailDisplay").textContent =
-          profile.email || "—";
+          profile.email || "-";
         document.getElementById("profileIdDisplay").textContent =
-          profile.id || "—";
+          profile.id || "-";
         document.getElementById("sidebarAvatar").textContent = initial;
         document.getElementById("sidebarName").textContent = name;
         document.getElementById("sidebarEmail").textContent =
-          profile.email || "—";
+          profile.email || "-";
 
         const popoverAvatar = document.getElementById("popoverAvatar");
         if (popoverAvatar) popoverAvatar.textContent = initial;
         const popoverName = document.getElementById("popoverName");
         if (popoverName) popoverName.textContent = name;
         const popoverEmail = document.getElementById("popoverEmail");
-        if (popoverEmail) popoverEmail.textContent = profile.email || "—";
+        if (popoverEmail) popoverEmail.textContent = profile.email || "-";
 
         const usernameInput = document.getElementById("usernameInput");
         if (usernameInput && document.activeElement !== usernameInput) {
@@ -2048,18 +2199,18 @@
         }
       }
 
-      // toggleTheme() is now defined in js/theme.js — no duplicate needed here
+      // toggleTheme() is now defined in js/theme.js - no duplicate needed here
 
       // ─── AI Skills ──────────────────────────────────────
-      const SKILL_CONTENT_MAX = 8000;
+      const SKILL_CONTENT_MAX = 64 * 1024;
       let _editingSkillId = null;
       let _skills = [];
+      let _skillImporting = false;
 
       async function apiSkills(path, options = {}) {
+        const isFormData = options.body instanceof FormData;
         const res = await fetch(`/api/skills${path}`, {
-          headers: {
-            "Content-Type": "application/json",
-          },
+          headers: isFormData ? {} : { "Content-Type": "application/json" },
           ...options,
         });
         if (res.status === 401 || res.status === 403) {
@@ -2072,11 +2223,24 @@
       function showSkillsMsg(text, type) {
         const el = document.getElementById("skillsMsg");
         el.className = `form-msg ${type || ""}`;
-        el.innerHTML = text
-          ? type === "error"
-            ? `<svg width="14" height="14" fill="none" stroke="currentColor" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10" stroke-width="2"/><line x1="12" y1="8" x2="12" y2="12" stroke-width="2"/><line x1="12" y1="16" x2="12.01" y2="16" stroke-width="2"/></svg><span>${text}</span>`
-            : `<svg width="14" height="14" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-width="2" d="M22 11.08V12a10 10 0 11-5.93-9.14"/><polyline stroke-width="2" points="22 4 12 14.01 9 11.01"/></svg><span>${text}</span>`
-          : "";
+        el.replaceChildren();
+        if (!text) return;
+        const icon = document.createElementNS(
+          "http://www.w3.org/2000/svg",
+          "svg",
+        );
+        icon.setAttribute("width", "14");
+        icon.setAttribute("height", "14");
+        icon.setAttribute("fill", "none");
+        icon.setAttribute("stroke", "currentColor");
+        icon.setAttribute("viewBox", "0 0 24 24");
+        icon.innerHTML =
+          type === "error"
+            ? '<circle cx="12" cy="12" r="10" stroke-width="2"/><line x1="12" y1="8" x2="12" y2="12" stroke-width="2"/><line x1="12" y1="16" x2="12.01" y2="16" stroke-width="2"/>'
+            : '<path stroke-width="2" d="M22 11.08V12a10 10 0 11-5.93-9.14"/><polyline stroke-width="2" points="22 4 12 14.01 9 11.01"/>';
+        const label = document.createElement("span");
+        label.textContent = text;
+        el.append(icon, label);
       }
 
       async function loadSkills() {
@@ -2097,7 +2261,7 @@
         const list = document.getElementById("skillsList");
         if (!skills.length) {
           list.innerHTML =
-            '<p class="skill-empty">No skills yet. Add one below — e.g. "use concise bullet points" or "explain like I am a beginner".</p>';
+            '<p class="skill-empty">No Skill files yet. Upload a .md file to add your first reusable workflow.</p>';
           return;
         }
         list.innerHTML = skills
@@ -2113,10 +2277,13 @@
               <span class="toggle-track"></span>
             </label>
             <div class="skill-item-info">
-              <div class="skill-item-name">${esc(s.name)} <span class="skill-category-badge">${esc(s.category || "general")}</span></div>
+              <div class="skill-item-name">${esc(s.name)} <span class="skill-category-badge">${esc(s.category || "general")}</span> <span class="skill-file-badge">SKILL.md</span></div>
               <div class="skill-item-desc">${esc(s.description) || "No description"}${s.requires_web ? " · Web enabled" : ""}</div>
             </div>
             <div class="skill-item-actions">
+              <button class="skill-btn" title="Download SKILL.md" onclick="downloadSkillFile(${s.id})">
+                <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-width="2" stroke-linecap="round" stroke-linejoin="round" d="M12 3v12m0 0l-4-4m4 4l4-4M5 21h14"/></svg>
+              </button>
               <button class="skill-btn" title="Edit" onclick="editSkill(${s.id})">
                 <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-width="2" stroke-linecap="round" d="M17 3a2.83 2.83 0 114 4L7.5 20.5 2 22l1.5-5.5z"/></svg>
               </button>
@@ -2154,6 +2321,7 @@
         const skill = _skills.find((s) => s.id === id);
         if (!skill) return;
         _editingSkillId = id;
+        document.getElementById("skillForm").hidden = false;
         document.getElementById("skillName").value = skill.name || "";
         document.getElementById("skillDesc").value = skill.description || "";
         document.getElementById("skillContent").value = skill.content || "";
@@ -2164,12 +2332,16 @@
         document.getElementById("skillRequiresWeb").checked =
           !!skill.requires_web;
         document.getElementById("skillFormHead").innerHTML =
-          '<span class="skill-form-title">Edit skill</span>';
+          '<span class="skill-form-title">Edit imported Skill</span>';
         document.getElementById("skillSaveBtn").textContent = "Save Changes";
         document.getElementById("skillCancelBtn").style.display =
           "inline-block";
         updateSkillCount();
-        document.getElementById("skillName").focus();
+        document.getElementById("skillForm").scrollIntoView({
+          behavior: "smooth",
+          block: "nearest",
+        });
+        document.getElementById("skillName").focus({ preventScroll: true });
       }
 
       async function deleteSkill(id) {
@@ -2185,13 +2357,121 @@
         }
       }
 
+      function setSkillUploadState(text = "", busy = false) {
+        const dropzone = document.getElementById("skillDropzone");
+        const state = document.getElementById("skillUploadState");
+        const button = document.getElementById("skillChooseFileBtn");
+        _skillImporting = busy;
+        dropzone?.classList.toggle("is-busy", busy);
+        if (button) {
+          button.disabled = busy;
+          button.textContent = busy ? "Importing..." : "Choose .md file";
+        }
+        if (state) {
+          state.textContent = text;
+          state.hidden = !text;
+        }
+      }
+
+      function validateSkillUpload(file) {
+        if (!file) return "Choose a Markdown file.";
+        if (!/\.md$/i.test(file.name)) {
+          return "Choose a Markdown file with the .md extension.";
+        }
+        if (file.size > SKILL_CONTENT_MAX) {
+          return "The Skill file must be 64 KB or smaller.";
+        }
+        if (file.size === 0) return "The Skill file is empty.";
+        return "";
+      }
+
+      async function uploadSkillFile(file) {
+        if (_skillImporting) return;
+        const validationError = validateSkillUpload(file);
+        if (validationError) {
+          showSkillsMsg(validationError, "error");
+          setSkillUploadState("");
+          return;
+        }
+        const body = new FormData();
+        body.append("skill", file, file.name);
+        try {
+          showSkillsMsg("", "");
+          setSkillUploadState(`Importing ${file.name}...`, true);
+          const res = await apiSkills("/import", { method: "POST", body });
+          const data = await res.json().catch(() => ({}));
+          if (!res.ok) {
+            return showSkillsMsg(
+              data.message || "The skill file could not be imported.",
+              "error",
+            );
+          }
+          showSkillsMsg(`${file.name} imported and enabled.`, "success");
+          await loadSkills();
+        } catch (error) {
+          if (error.message !== "unauthorized") {
+            showSkillsMsg("The skill file could not be imported.", "error");
+          }
+        } finally {
+          setSkillUploadState("");
+        }
+      }
+
+      async function importSkillFile(event) {
+        const input = event.currentTarget;
+        try {
+          await uploadSkillFile(input.files?.[0]);
+        } finally {
+          input.value = "";
+        }
+      }
+
+      const skillDropzone = document.getElementById("skillDropzone");
+      if (skillDropzone) {
+        ["dragenter", "dragover"].forEach((eventName) => {
+          skillDropzone.addEventListener(eventName, (event) => {
+            event.preventDefault();
+            if (!_skillImporting) skillDropzone.classList.add("is-dragging");
+          });
+        });
+        ["dragleave", "drop"].forEach((eventName) => {
+          skillDropzone.addEventListener(eventName, (event) => {
+            event.preventDefault();
+            skillDropzone.classList.remove("is-dragging");
+          });
+        });
+        skillDropzone.addEventListener("drop", (event) => {
+          uploadSkillFile(event.dataTransfer?.files?.[0]);
+        });
+      }
+
+      async function downloadSkillFile(id) {
+        try {
+          const res = await apiSkills(`/${id}/file`);
+          if (!res.ok)
+            return showSkillsMsg("Failed to export SKILL.md.", "error");
+          const blob = await res.blob();
+          const url = URL.createObjectURL(blob);
+          const link = document.createElement("a");
+          link.href = url;
+          link.download = "SKILL.md";
+          link.click();
+          setTimeout(() => URL.revokeObjectURL(url), 1000);
+        } catch (error) {
+          if (error.message !== "unauthorized") {
+            showSkillsMsg("Failed to export SKILL.md.", "error");
+          }
+        }
+      }
+
       function resetSkillForm() {
         _editingSkillId = null;
         document.getElementById("skillForm").reset();
         document.getElementById("skillFormHead").innerHTML =
-          '<span class="skill-form-title">Add a new skill</span>';
-        document.getElementById("skillSaveBtn").textContent = "Add Skill";
+          '<span class="skill-form-title">Edit imported Skill</span>';
+        document.getElementById("skillSaveBtn").textContent = "Save Changes";
         document.getElementById("skillCancelBtn").style.display = "none";
+        document.getElementById("skillForm").hidden = true;
         updateSkillCount();
       }
 
@@ -2203,71 +2483,18 @@
         }
       }
 
-      const SKILL_TEMPLATES = {
-        research: {
-          name: "Web Researcher",
-          description: "Research current topics and synthesize cited evidence.",
-          category: "research",
-          activation:
-            "The task needs current facts, comparisons, sources, or verification.",
-          requiresWeb: true,
-          content:
-            "Create a concise research plan before answering. Compare multiple credible sources. Separate verified facts from inference. Cite evidence near each important claim.",
-        },
-        webdev: {
-          name: "Web Development",
-          description:
-            "Create distinctive, responsive, accessible, and interactive web experiences.",
-          category: "coding",
-          activation:
-            "The user asks to design or build a website, landing page, dashboard, web app, or frontend interface.",
-          requiresWeb: false,
-          content:
-            "Infer the product, audience, main journey, and desired tone before coding. Choose one coherent art direction with consistent color, typography, spacing, and motion. Avoid generic gradients, decorative blobs, excessive glass effects, and interchangeable card layouts. Build complete responsive code with realistic copy. Make navigation, forms, menus, tabs, filters, dialogs, and calls to action work whenever they appear. Include accessible labels, keyboard focus, useful loading, empty, success, and error states, touch-friendly controls, and reduced-motion support. Check every selector, handler, import, and responsive state before answering.",
-        },
-        reviewer: {
-          name: "Code Reviewer",
-          description:
-            "Review code for correctness, security, and maintainability.",
-          category: "coding",
-          activation:
-            "The user asks to review, debug, refactor, or secure code.",
-          requiresWeb: false,
-          content:
-            "Lead with concrete defects ordered by severity. Reference the affected code precisely. Explain impact and propose the smallest safe fix. Include verification steps.",
-        },
-        writer: {
-          name: "Technical Writer",
-          description: "Produce clear documentation for technical audiences.",
-          category: "writing",
-          activation:
-            "The user requests documentation, guides, reports, or technical explanations.",
-          requiresWeb: false,
-          content:
-            "Identify the target reader and desired outcome. Use plain language, concrete examples, and consistent terminology. Organize long material with descriptive headings.",
-        },
-      };
-
-      function useSkillTemplate(key) {
-        const template = SKILL_TEMPLATES[key];
-        if (!template) return;
-        document.getElementById("skillName").value = template.name;
-        document.getElementById("skillDesc").value = template.description;
-        document.getElementById("skillCategory").value = template.category;
-        document.getElementById("skillActivation").value = template.activation;
-        document.getElementById("skillRequiresWeb").checked =
-          template.requiresWeb;
-        document.getElementById("skillContent").value = template.content;
-        updateSkillCount();
-        document.getElementById("skillContent").focus();
-      }
-
       document
         .getElementById("skillContent")
         .addEventListener("input", updateSkillCount);
 
       async function submitSkillForm(event) {
         event.preventDefault();
+        if (_editingSkillId === null) {
+          return showSkillsMsg(
+            "Upload a .md file before editing a Skill.",
+            "error",
+          );
+        }
         const payload = {
           name: document.getElementById("skillName").value,
           description: document.getElementById("skillDesc").value,
@@ -2280,19 +2507,18 @@
           return showSkillsMsg("Name and instructions are required.", "error");
         }
         try {
-          const editing = _editingSkillId !== null;
-          const res = await apiSkills(editing ? `/${_editingSkillId}` : "", {
-            method: editing ? "PUT" : "POST",
+          const res = await apiSkills(`/${_editingSkillId}`, {
+            method: "PUT",
             body: JSON.stringify(payload),
           });
           const data = await res.json().catch(() => ({}));
           if (!res.ok) {
             return showSkillsMsg(
-              data.message || "Skill rejected — check the format.",
+              data.message || "Skill rejected - check the format.",
               "error",
             );
           }
-          showSkillsMsg(editing ? "Skill updated." : "Skill added!", "success");
+          showSkillsMsg("Skill updated.", "success");
           resetSkillForm();
           loadSkills();
         } catch (e) {
@@ -2419,7 +2645,7 @@
         const list = document.getElementById("episodesList");
         if (!episodes.length) {
           list.innerHTML =
-            '<p class="skill-empty">No conversation memories yet. Turn on web search or chat about projects — Vixy stores key moments.</p>';
+            '<p class="skill-empty">No conversation memories yet. Turn on web search or chat about projects - Vixy stores key moments.</p>';
           return;
         }
         list.innerHTML =
@@ -2467,7 +2693,7 @@
               "error",
             );
           }
-          showMemoryMsg("Memory saved — Vixy will remember it.", "success");
+          showMemoryMsg("Memory saved - Vixy will remember it.", "success");
           document.getElementById("memoryForm").reset();
           loadMemories();
         } catch (e) {
@@ -2555,11 +2781,35 @@
         const el = document.getElementById("langMsg");
         el.className = "form-msg success";
         el.innerHTML =
-          '<svg width="14" height="14" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-width="2" d="M22 11.08V12a10 10 0 11-5.93-9.14"/><polyline stroke-width="2" points="22 4 12 14.01 9 11.01"/></svg><span>Language saved — applies to your next message in chat.</span>';
+          '<svg width="14" height="14" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-width="2" d="M22 11.08V12a10 10 0 11-5.93-9.14"/><polyline stroke-width="2" points="22 4 12 14.01 9 11.01"/></svg><span>Language saved - applies to your next message in chat.</span>';
         setTimeout(() => (el.className = "form-msg"), 3500);
       }
 
       initLanguage();
+
+      // ─── Response animation ────────────────────────────
+      const RESPONSE_ANIMATION_KEY = "vx_response_animation";
+
+      function initResponseAnimationSetting() {
+        const select = document.getElementById("responseAnimationSelect");
+        if (!select) return;
+        const saved = localStorage.getItem(RESPONSE_ANIMATION_KEY);
+        select.value = saved === "instant" ? "instant" : "smooth";
+      }
+
+      function saveResponseAnimation() {
+        const select = document.getElementById("responseAnimationSelect");
+        if (!select) return;
+        const value = select.value === "instant" ? "instant" : "smooth";
+        localStorage.setItem(RESPONSE_ANIMATION_KEY, value);
+        showToast(
+          value === "smooth"
+            ? "Smooth response animation enabled."
+            : "Responses will appear instantly.",
+        );
+      }
+
+      initResponseAnimationSetting();
 
       function toggleSidebar() {
         if (window.innerWidth <= 768) {
