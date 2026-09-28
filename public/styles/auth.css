@@ -89,7 +89,9 @@ body::before {
   opacity: 0;
   visibility: hidden;
   pointer-events: none;
-  transition: opacity 160ms ease, visibility 160ms ease;
+  transition:
+    opacity 160ms ease,
+    visibility 160ms ease;
 }
 
 .auth-transition.active {
@@ -279,7 +281,7 @@ input {
   border-radius: var(--radius-sm);
   color: var(--text);
   font-family: var(--font-sans);
-  font-size: 1rem; /* 16px — prevents iOS Safari auto-zoom */
+  font-size: 1rem; /* 16px - prevents iOS Safari auto-zoom */
   outline: none;
   transition:
     border-color 0.2s ease,
