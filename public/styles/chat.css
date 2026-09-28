@@ -328,7 +328,7 @@ html.light .sheet-drag-handle {
   line-height: 1.4;
 }
 
-/* Checkmark — hidden by default, shown for active mode */
+/* Checkmark - hidden by default, shown for active mode */
 .mode-check {
   width: 14px;
   height: 14px;
@@ -924,6 +924,79 @@ body.is-empty-chat .input-footer {
   word-break: break-word;
 }
 
+/* Fluid response motion: animate the message once, never every Markdown node. */
+.response-animation-smooth .msg-ai.response-message-enter {
+  animation: responseMessageEnter 380ms cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+
+.response-animation-smooth .ai-bubble.response-stream-active::after {
+  content: "";
+  display: inline-block;
+  width: 0.42rem;
+  height: 0.9rem;
+  margin-inline-start: 0.28rem;
+  border-radius: 999px;
+  vertical-align: -0.12rem;
+  background: var(--accent);
+  background: linear-gradient(
+    180deg,
+    var(--accent),
+    color-mix(in srgb, var(--accent) 55%, transparent)
+  );
+  transform-origin: center bottom;
+  animation: responseStreamCaret 900ms cubic-bezier(0.4, 0, 0.2, 1) infinite;
+}
+
+.response-animation-smooth .ai-bubble.response-stream-complete {
+  animation: responseStreamComplete 320ms cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+@keyframes responseMessageEnter {
+  from {
+    opacity: 0;
+    transform: translateY(7px);
+    filter: blur(2px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+    filter: blur(0);
+  }
+}
+
+@keyframes responseStreamCaret {
+  0%,
+  100% {
+    opacity: 0.35;
+    transform: scaleY(0.58);
+  }
+  50% {
+    opacity: 0.95;
+    transform: scaleY(1);
+  }
+}
+
+@keyframes responseStreamComplete {
+  from {
+    opacity: 0.88;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .response-animation-smooth .msg-ai.response-message-enter,
+  .response-animation-smooth .ai-bubble.response-stream-active::after,
+  .response-animation-smooth .ai-bubble.response-stream-complete {
+    animation: none;
+  }
+
+  .response-animation-smooth .ai-bubble.response-stream-active::after {
+    display: none;
+  }
+}
+
 /* ─── Code Blocks ───────────────────────────────────────────── */
 .ai-bubble code {
   font-family: var(--font-mono);
@@ -1457,7 +1530,7 @@ body.is-empty-chat .input-footer {
   }
 }
 
-/* Avatar — simple, no animated ring */
+/* Avatar - simple, no animated ring */
 .thinking-avatar {
   position: relative;
   width: 28px;
@@ -1527,7 +1600,7 @@ body.is-empty-chat .input-footer {
   color: var(--text-muted);
 }
 
-/* Processing badge — no glow, just clean pill */
+/* Processing badge - no glow, just clean pill */
 .thinking-badge {
   display: inline-flex;
   align-items: center;
@@ -1538,7 +1611,7 @@ body.is-empty-chat .input-footer {
   padding: 3px 10px 3px 8px;
 }
 
-/* Dot — simple pulsing opacity, no box-shadow glow */
+/* Dot - simple pulsing opacity, no box-shadow glow */
 .thinking-orb {
   width: 6px;
   height: 6px;
@@ -1569,7 +1642,7 @@ body.is-empty-chat .input-footer {
   white-space: nowrap;
 }
 
-/* Shimmer skeleton bars — clean, no color accent flash */
+/* Shimmer skeleton bars - clean, no color accent flash */
 .thinking-bars {
   display: flex;
   flex-direction: column;
@@ -1587,6 +1660,146 @@ body.is-empty-chat .input-footer {
   );
   background-size: 300% 100%;
   animation: shimmer 2.2s ease-in-out infinite;
+}
+
+/* Project File Editor progress. This appears only after the server confirms
+   that the active request is a direct Project file mutation. */
+.thinking-row.project-editing-mode .thinking-bars {
+  display: none;
+}
+
+.thinking-row.project-editing-mode .thinking-badge {
+  border-color: color-mix(in srgb, var(--accent) 30%, var(--border));
+  background: color-mix(in srgb, var(--accent) 7%, var(--surface-2));
+}
+
+.project-edit-progress {
+  position: relative;
+  width: min(430px, 100%);
+  padding: 12px 13px 11px;
+  overflow: hidden;
+  border: 1px solid color-mix(in srgb, var(--accent) 20%, var(--border-subtle));
+  border-radius: 11px;
+  background: color-mix(in srgb, var(--accent) 4%, var(--surface-2));
+}
+
+.project-edit-progress-head {
+  display: grid;
+  grid-template-columns: 27px minmax(0, 1fr) auto;
+  align-items: center;
+  gap: 9px;
+}
+
+.project-edit-icon {
+  width: 19px;
+  height: 19px;
+  color: var(--accent);
+}
+
+.project-edit-copy {
+  display: grid;
+  gap: 2px;
+  min-width: 0;
+}
+
+.project-edit-copy strong {
+  color: var(--text);
+  font-size: 0.77rem;
+  font-weight: 650;
+}
+
+.project-edit-stage,
+.project-edit-elapsed {
+  color: var(--text-muted);
+  font-size: 0.68rem;
+}
+
+.project-edit-elapsed {
+  font-variant-numeric: tabular-nums;
+}
+
+.project-edit-track {
+  position: relative;
+  display: block;
+  height: 2px;
+  margin-top: 10px;
+  overflow: hidden;
+  border-radius: 999px;
+  background: color-mix(in srgb, var(--accent) 13%, transparent);
+}
+
+.project-edit-track > span {
+  position: absolute;
+  inset: 0 auto 0 0;
+  width: 38%;
+  border-radius: inherit;
+  background: linear-gradient(90deg, transparent, var(--accent), transparent);
+}
+
+.project-edit-activity {
+  position: absolute;
+  inset: 9px 10px auto auto;
+  display: flex;
+  gap: 3px;
+  opacity: 0.28;
+}
+
+.project-edit-activity i {
+  width: 3px;
+  height: 3px;
+  border-radius: 50%;
+  background: var(--accent);
+}
+
+.response-animation-smooth .project-edit-track > span {
+  animation: project-edit-sweep 1.45s cubic-bezier(0.4, 0, 0.2, 1) infinite;
+}
+
+.response-animation-smooth .project-edit-activity i {
+  animation: project-edit-dot 1.1s ease-in-out infinite;
+}
+
+.response-animation-smooth .project-edit-activity i:nth-child(2) {
+  animation-delay: 0.14s;
+}
+
+.response-animation-smooth .project-edit-activity i:nth-child(3) {
+  animation-delay: 0.28s;
+}
+
+.project-edit-progress.is-complete .project-edit-track > span {
+  width: 100%;
+  transform: none;
+  animation: none;
+  background: var(--accent);
+}
+
+@keyframes project-edit-sweep {
+  from {
+    transform: translateX(-115%);
+  }
+  to {
+    transform: translateX(360%);
+  }
+}
+
+@keyframes project-edit-dot {
+  0%,
+  100% {
+    opacity: 0.3;
+    transform: translateY(0);
+  }
+  50% {
+    opacity: 1;
+    transform: translateY(-2px);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .project-edit-track > span,
+  .project-edit-activity i {
+    animation: none !important;
+  }
 }
 
 @keyframes shimmer {
@@ -2323,6 +2536,154 @@ html.light .thinking-badge.search-badge {
   padding: 0 22px;
   overflow-y: auto;
   overscroll-behavior: contain;
+}
+
+.doc-generation-progress {
+  position: relative;
+  margin: 14px 0 4px;
+  padding: 13px 14px 12px;
+  overflow: hidden;
+  color: var(--text);
+  background: color-mix(in srgb, var(--accent) 5%, var(--surface-2));
+  border: 1px solid color-mix(in srgb, var(--accent) 20%, var(--border-subtle));
+  border-radius: 12px;
+}
+.doc-generation-progress[hidden] {
+  display: none;
+}
+.doc-generation-progress-head {
+  display: grid;
+  grid-template-columns: 30px minmax(0, 1fr) auto;
+  align-items: center;
+  gap: 10px;
+}
+.doc-generation-glyph {
+  display: grid;
+  place-items: center;
+  width: 30px;
+  height: 30px;
+  color: var(--accent);
+}
+.doc-generation-glyph svg {
+  width: 19px;
+  height: 19px;
+}
+.doc-generation-copy {
+  display: grid;
+  min-width: 0;
+  gap: 2px;
+}
+.doc-generation-copy strong {
+  font-size: 0.78rem;
+  font-weight: 650;
+}
+.doc-generation-copy > span,
+.doc-generation-elapsed {
+  color: var(--text-muted);
+  font-size: 0.69rem;
+}
+.doc-generation-elapsed {
+  font-variant-numeric: tabular-nums;
+}
+.doc-generation-track,
+.doc-live-progress {
+  position: relative;
+  display: block;
+  height: 2px;
+  overflow: hidden;
+  background: color-mix(in srgb, var(--accent) 13%, transparent);
+  border-radius: 999px;
+}
+.doc-generation-track {
+  margin-top: 11px;
+}
+.doc-generation-track > span,
+.doc-live-progress > span {
+  position: absolute;
+  inset: 0 auto 0 0;
+  width: 42%;
+  background: linear-gradient(90deg, transparent, var(--accent), transparent);
+  border-radius: inherit;
+}
+.response-animation-smooth
+  .doc-generation-progress.is-active
+  .doc-generation-track
+  > span,
+.response-animation-smooth .response-document-active .doc-live-progress > span {
+  animation: document-progress-sweep 1.55s cubic-bezier(0.4, 0, 0.2, 1) infinite;
+}
+.doc-generation-pages {
+  position: absolute;
+  inset: 8px 10px auto auto;
+  display: flex;
+  gap: 3px;
+  opacity: 0.2;
+}
+.doc-generation-pages span {
+  width: 3px;
+  height: 3px;
+  background: currentColor;
+  border-radius: 50%;
+}
+.response-animation-smooth
+  .doc-generation-progress.is-active
+  .doc-generation-pages
+  span {
+  animation: document-page-dot 1.2s ease-in-out infinite;
+}
+.response-animation-smooth
+  .doc-generation-progress.is-active
+  .doc-generation-pages
+  span:nth-child(2) {
+  animation-delay: 0.16s;
+}
+.response-animation-smooth
+  .doc-generation-progress.is-active
+  .doc-generation-pages
+  span:nth-child(3) {
+  animation-delay: 0.32s;
+}
+.doc-generation-progress.is-complete {
+  border-color: color-mix(in srgb, var(--accent) 38%, var(--border-subtle));
+}
+.doc-generation-progress.is-complete .doc-generation-track > span {
+  width: 100%;
+  background: var(--accent);
+}
+.doc-generation-progress.is-error {
+  border-color: color-mix(in srgb, #d85b5b 34%, var(--border-subtle));
+}
+.doc-live-progress {
+  width: min(240px, 100%);
+  margin-top: 8px;
+}
+
+@keyframes document-progress-sweep {
+  from {
+    transform: translateX(-115%);
+  }
+  to {
+    transform: translateX(340%);
+  }
+}
+@keyframes document-page-dot {
+  0%,
+  100% {
+    opacity: 0.35;
+    transform: translateY(0);
+  }
+  50% {
+    opacity: 1;
+    transform: translateY(-2px);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .doc-generation-track > span,
+  .doc-live-progress > span,
+  .doc-generation-pages span {
+    animation: none !important;
+  }
 }
 .doc-modal-section {
   padding: 18px 0;
@@ -4341,7 +4702,7 @@ html.light .source-preview-popover {
   /* Keep the desktop-style anchored popovers, but size them so they always
      fit a phone/tablet and never overflow off-screen. Triggers sit on the
      left, so menus open to the right (left:0). The Tools (+) menu previously
-     used right:0 and was pushed off the left edge — now it opens rightward
+     used right:0 and was pushed off the left edge - now it opens rightward
      from the + button. The Skills menu is centered under its trigger so it
      stays on-screen on narrow phones. */
 
@@ -4592,7 +4953,7 @@ html.light .source-preview-popover {
     min-width: 0;
   }
 
-  /* Mode & Skills keep their labels — desktop look on mobile */
+  /* Mode & Skills keep their labels - desktop look on mobile */
   #modeSelectorBtn,
   #skillsSelectorBtn {
     width: auto;
@@ -5292,6 +5653,102 @@ html.light .math-display {
   background: #f8fafc;
   color: #1f2937;
   border-color: rgba(0, 0, 0, 0.1);
+}
+
+/* Dark mode syntax palette. Highlight.js was already adding token classes,
+   but without these colors the highlighted output looked like plain text. */
+html:not(.light) .ai-bubble pre code.hljs,
+html:not(.light) .hljs {
+  color: #e6edf3;
+  background: transparent;
+}
+
+html:not(.light) .hljs-doctag,
+html:not(.light) .hljs-keyword,
+html:not(.light) .hljs-meta .hljs-keyword,
+html:not(.light) .hljs-template-tag,
+html:not(.light) .hljs-template-variable,
+html:not(.light) .hljs-type,
+html:not(.light) .hljs-variable.language_ {
+  color: #ff7b72;
+  font-weight: 500;
+}
+
+html:not(.light) .hljs-title,
+html:not(.light) .hljs-title.class_,
+html:not(.light) .hljs-title.class_.inherited__,
+html:not(.light) .hljs-title.function_ {
+  color: #d2a8ff;
+  font-weight: 600;
+}
+
+html:not(.light) .hljs-attr,
+html:not(.light) .hljs-attribute,
+html:not(.light) .hljs-literal,
+html:not(.light) .hljs-meta,
+html:not(.light) .hljs-number,
+html:not(.light) .hljs-operator,
+html:not(.light) .hljs-variable,
+html:not(.light) .hljs-selector-attr,
+html:not(.light) .hljs-selector-class,
+html:not(.light) .hljs-selector-id {
+  color: #79c0ff;
+}
+
+html:not(.light) .hljs-string,
+html:not(.light) .hljs-meta .hljs-string,
+html:not(.light) .hljs-regexp {
+  color: #a5d6ff;
+}
+
+html:not(.light) .hljs-built_in,
+html:not(.light) .hljs-symbol {
+  color: #ffa657;
+}
+
+html:not(.light) .hljs-comment,
+html:not(.light) .hljs-code,
+html:not(.light) .hljs-formula {
+  color: #8b949e;
+  font-style: italic;
+}
+
+html:not(.light) .hljs-name,
+html:not(.light) .hljs-quote,
+html:not(.light) .hljs-selector-tag,
+html:not(.light) .hljs-selector-pseudo {
+  color: #7ee787;
+}
+
+html:not(.light) .hljs-subst {
+  color: #e6edf3;
+}
+
+html:not(.light) .hljs-section {
+  color: #1f6feb;
+  font-weight: 700;
+}
+
+html:not(.light) .hljs-bullet {
+  color: #f2cc60;
+}
+
+html:not(.light) .hljs-emphasis {
+  font-style: italic;
+}
+
+html:not(.light) .hljs-strong {
+  font-weight: 700;
+}
+
+html:not(.light) .hljs-addition {
+  color: #aff5b4;
+  background-color: rgba(46, 160, 67, 0.18);
+}
+
+html:not(.light) .hljs-deletion {
+  color: #ffdcd7;
+  background-color: rgba(248, 81, 73, 0.18);
 }
 
 /* Light mode Syntax Highlighting fallbacks */
@@ -6132,7 +6589,7 @@ html.light .artifact-chat-card:hover {
 }
 
 /* ═══════════════════════════════════════════════════════════════
-   MODERN CHAT SHELL — quiet sidebar + unified two-row composer
+   MODERN CHAT SHELL - quiet sidebar + unified two-row composer
    ═══════════════════════════════════════════════════════════════ */
 
 body {
@@ -8342,6 +8799,124 @@ html.light .input-container:focus-within {
   grid-column: 2;
   grid-row: 1;
 }
+.project-files {
+  margin: 0;
+  border: 0;
+}
+.project-files-head {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 14px;
+}
+.project-files-head h3 {
+  margin: 0;
+  font-size: 0.9rem;
+}
+.project-files-head p {
+  max-width: 390px;
+  margin: 4px 0 0;
+  color: var(--text-muted);
+  font-size: 0.72rem;
+  line-height: 1.5;
+}
+.project-file-actions {
+  display: flex;
+  flex: 0 0 auto;
+  gap: 6px;
+}
+.project-file-actions button {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+.project-file-status {
+  min-height: 17px;
+  color: var(--text-muted);
+  font-size: 0.7rem;
+}
+.project-file-status[data-tone="success"] {
+  color: var(--accent);
+}
+.project-file-status[data-tone="warning"] {
+  color: #d6a642;
+}
+.project-file-status[data-tone="error"] {
+  color: #fb7185;
+}
+.project-files-list {
+  display: grid;
+  gap: 6px;
+}
+.project-file-item {
+  display: grid;
+  grid-template-columns: 28px minmax(0, 1fr) 28px;
+  align-items: center;
+  gap: 9px;
+  min-height: 48px;
+  padding: 7px 9px;
+  border: 1px solid var(--border-color);
+  border-radius: 9px;
+  background: var(--surface-2);
+}
+.project-file-icon {
+  width: 28px;
+  height: 28px;
+  display: grid;
+  place-items: center;
+  border-radius: 7px;
+  color: var(--accent);
+  background: color-mix(in srgb, var(--accent) 9%, transparent);
+}
+.project-file-copy {
+  min-width: 0;
+  display: grid;
+  gap: 3px;
+}
+.project-file-copy strong,
+.project-file-copy span {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.project-file-copy strong {
+  color: var(--text-primary);
+  font:
+    550 0.75rem/1.3 ui-monospace,
+    SFMono-Regular,
+    Menlo,
+    monospace;
+}
+.project-file-copy span {
+  color: var(--text-muted);
+  font-size: 0.66rem;
+}
+.project-file-remove {
+  width: 28px;
+  height: 28px;
+  display: grid;
+  place-items: center;
+  border: 0;
+  border-radius: 7px;
+  color: var(--text-muted);
+  background: transparent;
+  cursor: pointer;
+}
+.project-file-remove:hover {
+  color: #fb7185;
+  background: rgba(251, 113, 133, 0.08);
+}
+.project-files-empty {
+  padding: 24px 12px;
+  border: 1px dashed var(--border-color);
+  border-radius: 10px;
+  color: var(--text-muted);
+  font-size: 0.74rem;
+  text-align: center;
+}
+.project-files-empty.is-error {
+  color: #fb7185;
+}
 @media (max-width: 680px) {
   .project-modal-backdrop {
     padding: 0;
@@ -8386,6 +8961,16 @@ html.light .input-container:focus-within {
   }
   .active-project-chip {
     max-width: 108px;
+  }
+  .project-files-head {
+    display: grid;
+  }
+  .project-file-actions {
+    width: 100%;
+  }
+  .project-file-actions button {
+    flex: 1;
+    justify-content: center;
   }
 }
 @media (max-width: 420px) {
@@ -9326,5 +9911,359 @@ html.light .artifact-tab.active {
     height: 28px;
     padding: 0 6px;
     border-radius: 8px;
+  }
+}
+
+/* --------------------------------------------------------------------------
+   iPhone compact layout
+
+   Keep this as the final mobile layer. Earlier rules support tablets and
+   generic touch devices, while these declarations make the chat predictable
+   on the 320px to 430px CSS viewports used by current iPhones.
+   -------------------------------------------------------------------------- */
+@media (max-width: 480px) {
+  :root {
+    --iphone-edge: clamp(6px, 2.4vw, 10px);
+    --iphone-header-row: 44px;
+  }
+
+  html,
+  body,
+  .chat-wrap {
+    width: 100%;
+    max-width: 100%;
+  }
+
+  .chat-wrap {
+    height: 100svh;
+    height: var(--app-height, 100dvh);
+  }
+
+  .chat-header,
+  .chat-wrap.is-empty .chat-header,
+  .chat-wrap:has(#emptyState) .chat-header,
+  body.is-empty-chat .chat-wrap .chat-header {
+    box-sizing: border-box;
+    width: 100%;
+    height: calc(var(--iphone-header-row) + env(safe-area-inset-top, 0px));
+    min-height: calc(var(--iphone-header-row) + env(safe-area-inset-top, 0px));
+    padding: env(safe-area-inset-top, 0px) var(--iphone-edge) 0;
+    align-items: center;
+    flex-wrap: nowrap;
+    gap: 0;
+  }
+
+  .chat-header .header-left {
+    width: 100%;
+    height: var(--iphone-header-row);
+    min-width: 0;
+    gap: 2px;
+    flex-wrap: nowrap;
+  }
+
+  /* Model and response controls belong in the composer, even if startup code
+     has not moved them yet. This prevents a wide, two-row mobile header. */
+  .chat-header #modeSelectorWrap,
+  .chat-header #modelSelectorWrap,
+  .chat-header .header-actions {
+    display: none !important;
+  }
+
+  .mobile-toggle {
+    width: 34px;
+    min-width: 34px;
+    height: 34px;
+    min-height: 34px;
+    margin: 0;
+    padding: 0;
+    border-radius: 9px;
+    background: transparent;
+  }
+
+  .mobile-toggle svg {
+    width: 18px;
+    height: 18px;
+  }
+
+  .chat-header #skillsSelectorWrap {
+    min-width: 0;
+  }
+
+  .chat-header #skillsSelectorBtn {
+    width: auto;
+    min-width: 0;
+    height: 34px;
+    min-height: 34px;
+    padding: 0 7px;
+    gap: 5px;
+    border: 0;
+    border-radius: 9px;
+    background: transparent;
+    font-size: 0.75rem;
+  }
+
+  .chat-header #skillsSelectorBtn #skillsLabelText {
+    display: inline;
+    font-size: 0.75rem;
+    font-weight: 550;
+  }
+
+  .chat-header #skillsSelectorBtn > svg {
+    width: 14px;
+    height: 14px;
+  }
+
+  .chat-header #skillsSelectorBtn > svg:last-child {
+    display: inline;
+    width: 10px;
+    height: 10px;
+  }
+
+  .chat-header .skills-dropdown {
+    position: fixed;
+    top: calc(var(--iphone-header-row) + env(safe-area-inset-top, 0px) + 4px);
+    right: var(--iphone-edge);
+    left: var(--iphone-edge);
+    width: auto;
+    max-width: none;
+    max-height: min(66dvh, 520px);
+    border-radius: 14px;
+  }
+
+  .chat-messages {
+    padding-right: var(--iphone-edge);
+    padding-left: var(--iphone-edge);
+    padding-bottom: 8px;
+    scroll-padding-bottom: 104px;
+  }
+
+  .msg-group {
+    padding: 12px 0;
+  }
+
+  .msg-ai,
+  .msg-user {
+    padding-right: 0;
+    padding-left: 0;
+  }
+
+  .msg-ai {
+    gap: 9px;
+  }
+
+  .ai-avatar {
+    width: 26px;
+    height: 26px;
+  }
+
+  .ai-name {
+    margin-bottom: 3px;
+    font-size: 0.75rem;
+  }
+
+  .ai-bubble,
+  .msg-user-bubble {
+    font-size: 0.875rem;
+    line-height: 1.58;
+  }
+
+  .msg-user-bubble {
+    max-width: 88%;
+    padding: 9px 12px;
+    border-radius: 16px 16px 4px 16px;
+  }
+
+  .chat-input-wrapper,
+  .chat-wrap.is-empty .chat-input-wrapper,
+  .chat-wrap:has(#emptyState) .chat-input-wrapper,
+  body.is-empty-chat .chat-input-wrapper {
+    width: 100%;
+    padding: 5px var(--iphone-edge)
+      max(6px, calc(env(safe-area-inset-bottom, 0px) + 4px));
+  }
+
+  .input-container,
+  .chat-wrap.is-empty .input-container,
+  .chat-wrap:has(#emptyState) .input-container,
+  body.is-empty-chat .input-container {
+    grid-template-columns: 30px minmax(0, 1fr) auto;
+    column-gap: 4px;
+    row-gap: 2px;
+    padding: 7px 8px;
+    border-radius: 20px;
+  }
+
+  #msgInput {
+    min-height: 25px;
+    max-height: min(28dvh, 132px);
+    padding: 1px 3px 4px;
+    font-size: 16px !important;
+    line-height: 1.4;
+  }
+
+  .tools-menu-btn,
+  .mic-btn,
+  .stop-btn,
+  .send-btn {
+    width: 30px;
+    min-width: 30px;
+    height: 30px;
+    min-height: 30px;
+    border-radius: 9px;
+  }
+
+  .input-actions {
+    gap: 2px;
+  }
+
+  .composer-selectors {
+    gap: 2px;
+    max-width: 100%;
+    overflow: hidden;
+  }
+
+  .active-project-chip {
+    height: 28px;
+    max-width: 70px;
+    padding: 0 5px;
+    gap: 3px;
+    border-radius: 8px;
+    font-size: 0.68rem;
+  }
+
+  .active-project-chip svg {
+    width: 12px;
+    height: 12px;
+    flex: 0 0 auto;
+  }
+
+  .composer-selectors #modelSelectorWrap {
+    flex: 1 1 72px;
+    width: auto;
+    max-width: 112px;
+  }
+
+  .composer-selectors #modelSelectorBtn,
+  .composer-selectors #modeSelectorBtn {
+    height: 28px;
+    min-height: 28px;
+    padding: 0 5px;
+    gap: 3px;
+    border-radius: 8px;
+    font-size: 0.69rem;
+  }
+
+  .composer-selectors #modelSelectorBtn {
+    width: 100%;
+    max-width: 112px;
+  }
+
+  .composer-selectors #modeSelectorBtn #modeLabelText {
+    font-size: 0.69rem;
+  }
+
+  .composer-selectors #modelSelectorBtn svg:last-child,
+  .composer-selectors #modeSelectorBtn svg:last-child {
+    width: 9px;
+    height: 9px;
+  }
+
+  .input-footer {
+    margin-top: 3px;
+    font-size: 0.58rem;
+    line-height: 1.25;
+  }
+
+  .chat-wrap.is-empty .chat-messages,
+  .chat-wrap:has(#emptyState) .chat-messages,
+  body.is-empty-chat .chat-messages {
+    max-height: calc(var(--app-height, 100dvh) - 170px);
+    padding: 4px var(--iphone-edge) 10px;
+  }
+
+  .empty-state {
+    padding: 0 10px;
+  }
+
+  .empty-logo {
+    width: 38px;
+    height: 38px;
+    margin-bottom: 9px;
+    border-radius: 11px;
+  }
+
+  .empty-logo-img {
+    border-radius: 11px;
+  }
+
+  .empty-title {
+    max-width: 92vw;
+    font-size: clamp(1.1rem, 5.8vw, 1.35rem);
+    line-height: 1.28;
+  }
+
+  .cap-row {
+    gap: 4px;
+    margin-top: 8px;
+    padding: 0 2px 3px;
+  }
+
+  .cap-pill {
+    min-height: 30px;
+    padding: 5px 8px;
+    gap: 5px;
+    font-size: 0.7rem;
+  }
+
+  .cap-pill-icon,
+  .cap-pill-icon svg {
+    width: 12px;
+    height: 12px;
+  }
+}
+
+@media (max-width: 360px) {
+  .chat-header #skillsSelectorBtn > svg:last-child {
+    display: none;
+  }
+
+  .active-project-chip {
+    max-width: 50px;
+  }
+
+  .composer-selectors #modelSelectorWrap,
+  .composer-selectors #modelSelectorBtn {
+    max-width: 96px;
+  }
+
+  .composer-selectors #modeSelectorBtn {
+    padding-right: 4px;
+    padding-left: 4px;
+  }
+
+  .cap-pill {
+    min-height: 28px;
+    padding: 4px 7px;
+    font-size: 0.67rem;
+  }
+}
+
+@media (max-width: 480px) and (max-height: 650px) {
+  .empty-logo {
+    width: 34px;
+    height: 34px;
+    margin-bottom: 6px;
+  }
+
+  .empty-title {
+    font-size: 1.08rem;
+  }
+
+  .cap-row {
+    margin-top: 6px;
+  }
+
+  .input-footer {
+    display: none;
   }
 }
