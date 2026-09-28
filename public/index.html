@@ -6,66 +6,15 @@
       name="viewport"
       content="width=device-width, initial-scale=1.0, viewport-fit=cover"
     />
-    <meta
-      name="theme-color"
-      content="#141414"
-      media="(prefers-color-scheme: dark)"
-    />
-    <meta
-      name="theme-color"
-      content="#f5f3ee"
-      media="(prefers-color-scheme: light)"
-    />
-    <meta
-      name="description"
-      content="Vixy-AI - Multi-provider AI workspace with intelligent models, specialized skills, live web search, and document generation."
-    />
-    <title>Vixy-AI - Sign In & Sign Up</title>
-
-    <!-- Favicon & Icons -->
+    <meta name="theme-color" content="#141414" />
+    <meta name="description" content="Sign in to your Vixy AI workspace." />
+    <title>Sign in - Vixy AI</title>
     <link rel="icon" type="image/png" href="/img/vixy-logo.png" />
     <link rel="apple-touch-icon" href="/img/vixy-logo.png" />
-
-    <!-- OpenGraph / Facebook / LinkedIn / WhatsApp -->
-    <meta property="og:type" content="website" />
-    <meta property="og:site_name" content="Vixy AI" />
-    <meta property="og:title" content="Vixy-AI - Multi-Provider AI Workspace" />
-    <meta
-      property="og:description"
-      content="Access multiple AI providers, models, specialized skills, live web search, and document generation from one unified workspace."
-    />
-    <meta property="og:image" content="/img/vixy-logo.png" />
-    <meta property="og:image:width" content="1489" />
-    <meta property="og:image:height" content="1056" />
-    <meta property="og:image:type" content="image/png" />
-    <meta property="og:image:alt" content="Vixy AI Workspace Logo" />
-
-    <!-- Twitter Card -->
-    <meta name="twitter:card" content="summary_large_image" />
-    <meta
-      name="twitter:title"
-      content="Vixy-AI - Multi-Provider AI Workspace"
-    />
-    <meta
-      name="twitter:description"
-      content="Access multiple AI providers, models, specialized skills, live web search, and document generation from one unified workspace."
-    />
-    <meta name="twitter:image" content="/img/vixy-logo.png" />
-    <meta name="twitter:image:alt" content="Vixy AI Workspace Logo" />
-
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link
-      href="https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,300;0,14..32,400;0,14..32,500;0,14..32,600;0,14..32,700;1,14..32,400&display=swap"
-      rel="stylesheet"
-    />
-    <link rel="stylesheet" href="styles/auth.css" />
-    <!-- Warm the authenticated shell at low priority while the user enters OTP. -->
+    <link rel="stylesheet" href="/styles/auth.css" />
     <link rel="prefetch" href="/chat.html" as="document" />
-    <link rel="prefetch" href="/styles/style.css" as="style" />
-    <link rel="prefetch" href="/styles/chat.css" as="style" />
-    <link rel="prefetch" href="/js/chat.js" as="script" />
-    <link rel="prefetch" href="/js/auth-guard.js" as="script" />
     <script src="/js/session-fetch.js"></script>
   </head>
   <body>
@@ -80,21 +29,21 @@
         <img src="/img/vixy-logo.png" alt="" class="auth-transition-logo" />
         <div class="auth-transition-copy">
           <strong>Verified</strong>
-          <span id="authTransitionText">Preparing your workspace…</span>
+          <span id="authTransitionText">Preparing your workspace...</span>
         </div>
         <span class="auth-transition-spinner" aria-hidden="true"></span>
       </div>
     </div>
-    <div class="auth-container">
-      <div class="auth-logo">
-        <div class="logo-icon">
-          <img src="/img/vixy-logo.png" alt="Vixy" class="logo-icon-img" />
-        </div>
-        <span class="logo-text">Vixy AI</span>
-      </div>
 
-      <div class="auth-card">
-        <!-- Send OTP via Email / Google Sign-In -->
+    <main class="auth-container">
+      <a class="auth-logo" href="/" aria-label="Back to Vixy home">
+        <span class="logo-icon"
+          ><img src="/img/vixy-logo.png" alt="" class="logo-icon-img"
+        /></span>
+        <span class="logo-text">Vixy AI</span>
+      </a>
+
+      <section class="auth-card" aria-labelledby="authTitle">
         <form
           id="stepEmail"
           class="form active"
@@ -102,16 +51,19 @@
           novalidate
         >
           <div>
-            <h1 class="form-title">Welcome to Vixy AI</h1>
+            <h1 class="form-title" id="authTitle">Welcome to Vixy</h1>
             <p class="form-subtitle">Sign in or create an account</p>
           </div>
-
           <div id="emailMsg" class="form-msg" role="alert"></div>
-
           <div class="field">
-            <label for="auth_email">Email Address</label>
+            <label for="auth_email">Email address</label>
             <div class="input-wrapper">
-              <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <svg
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+                aria-hidden="true"
+              >
                 <path
                   stroke-width="2"
                   d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"
@@ -127,26 +79,23 @@
               />
             </div>
           </div>
-
           <button
             type="button"
             id="sendOtpBtn"
             class="submit-btn"
             onclick="sendOtp()"
           >
-            <span id="sendOtpBtnText">Continue with Email</span>
-            <div id="sendOtpSpinner" class="spinner"></div>
+            <span id="sendOtpBtnText">Continue with email</span
+            ><span id="sendOtpSpinner" class="spinner"></span>
           </button>
-
           <div class="divider"><span>OR</span></div>
-
           <button
             type="button"
             id="googleBtn"
             class="google-btn"
             onclick="loginWithGoogle()"
           >
-            <svg viewBox="0 0 24 24" width="18" height="18">
+            <svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true">
               <path
                 fill="#4285F4"
                 d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"
@@ -168,22 +117,23 @@
           </button>
         </form>
 
-        <!-- Verify 6-digit OTP Code -->
         <form id="stepOtp" class="form" onsubmit="return false;" novalidate>
           <div>
-            <h1 class="form-title">Enter Verification Code</h1>
+            <h2 class="form-title">Check your inbox</h2>
             <p class="form-subtitle">
-              We sent a 6-digit code to
-              <strong id="sentEmailSpan" style="color: var(--text)"></strong>
+              We sent a 6-digit code to <strong id="sentEmailSpan"></strong>
             </p>
           </div>
-
           <div id="otpMsg" class="form-msg" role="alert"></div>
-
           <div class="field">
-            <label for="auth_otp">6-Digit Code</label>
+            <label for="auth_otp">Verification code</label>
             <div class="input-wrapper">
-              <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <svg
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+                aria-hidden="true"
+              >
                 <rect
                   x="3"
                   y="11"
@@ -206,27 +156,24 @@
               />
             </div>
           </div>
-
           <button
             type="button"
             id="verifyOtpBtn"
             class="submit-btn"
             onclick="verifyOtp()"
           >
-            <span id="verifyOtpBtnText">Verify & Continue</span>
-            <div id="verifyOtpSpinner" class="spinner"></div>
+            <span id="verifyOtpBtnText">Verify and continue</span
+            ><span id="verifyOtpSpinner" class="spinner"></span>
           </button>
-
           <button
             type="button"
             class="secondary-action"
             onclick="showStep('stepEmail')"
           >
-            ← Use a different email address
+            Use a different email
           </button>
         </form>
 
-        <!-- Choose Username (Onboarding) -->
         <form
           id="stepUsername"
           class="form"
@@ -234,19 +181,21 @@
           novalidate
         >
           <div>
-            <h1 class="form-title">One last thing..</h1>
+            <h2 class="form-title">Make it yours</h2>
             <p class="form-subtitle">
-              Choose a username so Vixy knows what to call you.<br />
-              You can always change this later in Settings.
+              Choose the name Vixy should use for you.
             </p>
           </div>
-
           <div id="usernameMsg" class="form-msg" role="alert"></div>
-
           <div class="field">
-            <label for="auth_username">Your Username</label>
+            <label for="auth_username">Your username</label>
             <div class="input-wrapper">
-              <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <svg
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+                aria-hidden="true"
+              >
                 <path
                   stroke-width="2"
                   d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"
@@ -256,34 +205,35 @@
               <input
                 id="auth_username"
                 type="text"
-                placeholder="e.g. alex_dev"
+                placeholder="e.g. Alex"
                 autocomplete="name"
                 maxlength="30"
                 required
               />
             </div>
             <span class="field-hint"
-              >2–30 characters · letters, numbers, spaces, _ - .</span
+              >2-30 characters. Letters, numbers, spaces, _ - .</span
             >
           </div>
-
           <button
             type="button"
             id="setUsernameBtn"
             class="submit-btn"
             onclick="saveUsernameAndContinue()"
           >
-            <span id="setUsernameBtnText">Start Chatting →</span>
-            <div id="setUsernameSpinner" class="spinner"></div>
+            <span id="setUsernameBtnText">Enter your workspace</span
+            ><span id="setUsernameSpinner" class="spinner"></span>
           </button>
         </form>
-      </div>
+      </section>
 
-      <div class="auth-footer">
+      <p class="auth-footer">
         By continuing, you agree to our Terms of Service and Privacy Policy.
-      </div>
-    </div>
+      </p>
+    </main>
 
-    <script type="module" src="/js/auth.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.14.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.14.0/firebase-auth-compat.js"></script>
+    <script src="/js/auth.js"></script>
   </body>
 </html>
