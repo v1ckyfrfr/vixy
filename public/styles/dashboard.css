@@ -21,7 +21,7 @@
   background: var(--surface-2);
 }
 
-/* Left accent stripe — subtle, not neon */
+/* Left accent stripe - subtle, not neon */
 .stat-card.accent-left {
   border-left: 2px solid var(--accent);
 }
