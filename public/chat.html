@@ -250,7 +250,7 @@
             <div class="user-popover-avatar" id="popoverAvatar">U</div>
             <div class="user-popover-details">
               <div class="user-popover-name" id="popoverName">User</div>
-              <div class="user-popover-email" id="popoverEmail">—</div>
+              <div class="user-popover-email" id="popoverEmail">-</div>
             </div>
           </div>
 
@@ -363,7 +363,7 @@
           <div class="user-avatar" id="sidebarAvatar">U</div>
           <div class="user-info">
             <div class="user-name" id="sidebarName">Loading...</div>
-            <div class="user-email" id="sidebarEmail">—</div>
+            <div class="user-email" id="sidebarEmail">-</div>
           </div>
           <svg
             class="user-menu-chevron"
@@ -1781,6 +1781,7 @@
               </div>
               <div class="project-tabs" id="projectTabs" role="tablist" hidden>
                 <button class="active" id="projectGeneralTab" type="button" role="tab" onclick="switchProjectPane('general')">General</button>
+                <button id="projectFilesTab" type="button" role="tab" onclick="switchProjectPane('files')">Files</button>
                 <button id="projectKnowledgeTab" type="button" role="tab" onclick="switchProjectPane('knowledge')">Knowledge</button>
               </div>
               <div class="project-pane" id="projectGeneralPane">
@@ -1806,6 +1807,30 @@
                   <button class="project-secondary-btn" type="button" onclick="addProjectKnowledge()">Add</button>
                 </div>
                 <div id="projectKnowledgeList" class="project-knowledge-list"></div>
+              </div>
+              <div class="project-pane project-files" id="projectFilesPanel" hidden>
+                <div class="project-files-head">
+                  <div>
+                    <h3>Project files</h3>
+                    <p>Upload source files or a folder. Vixy preserves paths and indexes supported text files for project-aware answers.</p>
+                  </div>
+                  <div class="project-file-actions">
+                    <button class="project-secondary-btn" type="button" onclick="triggerProjectFileUpload('files')" title="Upload files">
+                      <svg width="14" height="14" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" d="M12 16V4m0 0L8 8m4-4l4 4M5 14v5h14v-5"/></svg>
+                      <span>Files</span>
+                    </button>
+                    <button class="project-secondary-btn" type="button" onclick="triggerProjectFileUpload('folder')" title="Upload folder">
+                      <svg width="14" height="14" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-width="1.8" stroke-linejoin="round" d="M3 7a2 2 0 012-2h4l2 2h8a2 2 0 012 2v9a2 2 0 01-2 2H5a2 2 0 01-2-2V7z"/><path stroke-width="1.8" stroke-linecap="round" d="M12 11v6m-3-3h6"/></svg>
+                      <span>Folder</span>
+                    </button>
+                  </div>
+                </div>
+                <input id="projectFilesInput" type="file" multiple hidden onchange="handleProjectFileSelection(event)" />
+                <input id="projectFolderInput" type="file" multiple webkitdirectory directory hidden onchange="handleProjectFileSelection(event)" />
+                <div class="project-file-status" id="projectFileStatus" role="status"></div>
+                <div id="projectFilesList" class="project-files-list">
+                  <div class="project-files-empty">Open this tab to load project files.</div>
+                </div>
               </div>
             </form>
           </div>
