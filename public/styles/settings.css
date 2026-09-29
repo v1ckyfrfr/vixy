@@ -120,24 +120,6 @@
   border-color: rgba(200, 60, 60, 0.22);
 }
 
-.skill-starters {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 12px;
-  margin: 14px 0;
-  padding: 12px;
-  border: 1px solid var(--border-subtle);
-  border-radius: 10px;
-  background: var(--surface-2);
-}
-
-.skill-starter-actions {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 7px;
-}
-
 .skill-category-badge {
   display: inline-flex;
   margin-left: 6px;
@@ -601,11 +583,6 @@
     height: 2px;
   }
 
-  .skill-starters {
-    align-items: flex-start;
-    flex-direction: column;
-  }
-
   .settings-stack {
     max-width: 100%;
   }
@@ -752,7 +729,7 @@ html.light .settings-card-header {
 html.light .skill-item,
 html.light .skill-form,
 html.light .skill-notice,
-html.light .skill-starters,
+html.light .skill-upload-panel,
 html.light .report-notice {
   background: var(--surface-2);
   border-color: var(--border);
