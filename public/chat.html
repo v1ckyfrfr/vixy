@@ -51,6 +51,7 @@
          after the authenticated chat shell becomes interactive. -->
     <script src="js/theme.js"></script>
     <link rel="stylesheet" href="styles/chat.css" />
+    <link rel="stylesheet" href="styles/typography.css" />
     <script src="/js/session-fetch.js"></script>
   </head>
   <body>
@@ -420,7 +421,7 @@
               class="model-selector"
               id="modeSelectorBtn"
               onclick="toggleModeDropdown()"
-              aria-haspopup="true"
+              aria-haspopup="dialog"
               aria-expanded="false"
               title="Response Mode"
             >
@@ -437,7 +438,7 @@
               </svg>
             </button>
 
-            <div class="mode-dropdown" id="modeDropdown" role="menu">
+            <div class="mode-dropdown" id="modeDropdown" role="dialog" aria-label="Response effort">
               <div class="sheet-drag-handle"></div>
               <div class="mode-dropdown-header">
                 <span>Response Mode</span>
@@ -448,6 +449,24 @@
                 >
                   ✕
                 </button>
+              </div>
+              <div class="effort-slider-panel">
+                <div class="effort-slider-summary">
+                  <button class="effort-slider-fast" id="effortSliderFast" type="button" aria-label="Fast response mode" aria-pressed="false" title="Fast response mode">
+                    <svg aria-hidden="true" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" d="m13 2-9 11h7l-1 9 10-12h-7l0-8Z" /></svg>
+                  </button>
+                  <div class="effort-slider-copy">
+                    <strong id="effortSliderValue">Medium</strong>
+                    <span id="effortSliderModel">Selected model</span>
+                  </div>
+                  <button class="effort-slider-reset" id="effortSliderReset" type="button" aria-label="Reset response effort to Medium" title="Reset to Medium">
+                    <svg aria-hidden="true" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" d="M3 12a9 9 0 1 0 3-6.7M3 3v6h6" /></svg>
+                  </button>
+                </div>
+                <div class="effort-slider-track">
+                  <input id="responseEffortSlider" type="range" min="0" max="2" step="1" value="1" aria-label="Response effort" aria-valuetext="Medium" />
+                  <div class="effort-slider-ticks" aria-hidden="true"><span></span><span></span><span></span><span hidden></span></div>
+                </div>
               </div>
               <button
                 class="mode-option"
@@ -1292,10 +1311,12 @@
 
       <div class="chat-messages" id="chatBox">
         <div class="empty-state" id="emptyState">
-          <div class="empty-logo">
-            <img src="/img/vixy-logo.png" alt="Vixy" class="empty-logo-img" />
+          <div class="empty-greeting">
+            <div class="empty-logo">
+              <img src="/img/vixy-logo.png" alt="Vixy" class="empty-logo-img" />
+            </div>
+            <h1 class="empty-title">Hi there</h1>
           </div>
-          <h1 class="empty-title">What are you building today?</h1>
         </div>
       </div>
 
@@ -1395,9 +1416,7 @@
                 </span>
                 <div class="tools-item-info">
                   <span class="tools-item-title">Upload File or Image</span>
-                  <span class="tools-item-desc"
-                    >Attach image, PDF, code, or document</span
-                  >
+                  <span class="tools-item-desc">Attach files or images</span>
                 </div>
               </button>
 
@@ -1415,7 +1434,7 @@
                 </span>
                 <div class="tools-item-info">
                   <span class="tools-item-title">Think</span>
-                  <span class="tools-item-desc">Use deeper reasoning without changing the selected mode</span>
+                  <span class="tools-item-desc">Reason more deeply</span>
                 </div>
                 <span class="tools-item-badge" id="toolsThinkBadge">Off</span>
               </button>
@@ -1442,9 +1461,7 @@
                 </span>
                 <div class="tools-item-info">
                   <span class="tools-item-title">Web Search</span>
-                  <span class="tools-item-desc"
-                    >Search real-time news & web data</span
-                  >
+                  <span class="tools-item-desc">Search the live web</span>
                 </div>
                 <span class="tools-item-badge active" id="toolsWebSearchBadge"
                   >On</span
@@ -1482,9 +1499,7 @@
                 </span>
                 <div class="tools-item-info">
                   <span class="tools-item-title">Read Responses Aloud</span>
-                  <span class="tools-item-desc"
-                    >Auto text-to-speech for AI replies</span
-                  >
+                  <span class="tools-item-desc">Speak AI replies</span>
                 </div>
                 <span class="tools-item-badge" id="toolsAutoReadBadge"
                   >Off</span
@@ -1517,9 +1532,7 @@
                 </span>
                 <div class="tools-item-info">
                   <span class="tools-item-title">Generate AI Image</span>
-                  <span class="tools-item-desc"
-                    >Create high-quality images with Hugging Face</span
-                  >
+                  <span class="tools-item-desc">Create images with AI</span>
                 </div>
               </button>
               <button class="tools-menu-item" onclick="openDocModalFromMenu()">
@@ -1533,7 +1546,7 @@
                 </span>
                 <div class="tools-item-info">
                   <span class="tools-item-title">Document Generator</span>
-                  <span class="tools-item-desc">Create structured reports with DOCX and PDF export</span>
+                  <span class="tools-item-desc">Create DOCX or PDF reports</span>
                 </div>
               </button>
             </div>
@@ -1733,8 +1746,8 @@
           <button
             class="cap-pill cap-pill-documents"
             data-cap="documents"
-            onclick="openDocModalFromMenu()"
-            title="Generate a structured, downloadable document"
+            onclick="focusDocumentRequest()"
+            title="Ask Vixy to create a document directly in chat"
           >
             <span class="cap-pill-icon">
               <svg width="14" height="14" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -1831,6 +1844,13 @@
                 <div id="projectFilesList" class="project-files-list">
                   <div class="project-files-empty">Open this tab to load project files.</div>
                 </div>
+                <section id="projectFileViewer" class="project-file-viewer" aria-label="Project file content" hidden>
+                  <div class="project-file-viewer-head">
+                    <strong id="projectFileViewerPath"></strong>
+                    <button id="projectFileViewerClose" type="button" aria-label="Close file preview" title="Close file preview">&times;</button>
+                  </div>
+                  <pre><code id="projectFileViewerContent"></code></pre>
+                </section>
               </div>
             </form>
           </div>
